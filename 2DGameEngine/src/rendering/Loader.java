@@ -21,6 +21,17 @@ public class Loader {
 	private static ArrayList<Integer> vbos = new ArrayList<Integer>();
 	private static ArrayList<Integer> textures = new ArrayList<Integer>();
 	
+	private static RawModel quad;
+	
+	public static RawModel getQuad() {
+		if(quad == null) {
+//			float[] positions = new float[] {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
+			float[] positions = new float[] {0, 1, 0, 0, 1, 1, 1, 0};
+			quad = Loader.loadToVAO(positions);
+		}
+		return quad;
+	}
+	
 	public static RawModel loadToVAO(float[] positions) {
 		int vaoID = createVAO();
 		storeDataInAttributeList(0, positions);

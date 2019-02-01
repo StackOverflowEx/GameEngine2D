@@ -1,12 +1,12 @@
 package rendering;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector2f;
+
+import tools.Camera;
 
 public class MasterRenderer {
 
@@ -26,11 +26,17 @@ public class MasterRenderer {
 		for (Renderer renderer : renderers) {
 			renderer.render();
 		}
+		DisplayManager.setResized(false);
 	}
 
 	private void prepare() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glClearColor(1, 0, 0, 1);
+		
+		if(DisplayManager.isResized()) {
+			createProjectionMatrix();
+		}
+		Camera.calcViewMatrix();
 	}
 
 	public static void enableCulling() {
@@ -49,13 +55,11 @@ public class MasterRenderer {
 		return projectionMatrix;
 	}
 
-	private static void createProjectionMatrix() {
+	public static void createProjectionMatrix() {
 
-		IntBuffer widthb = BufferUtils.createIntBuffer(1);
-		IntBuffer heightb = BufferUtils.createIntBuffer(1);
-		GLFW.glfwGetWindowSize(DisplayManager.getWINDOW(), widthb, heightb);
+		Vector2f windowSize = DisplayManager.getWindowSize();
 
-		float aspectRatio = (float) widthb.get() / (float) heightb.get();
+		float aspectRatio = windowSize.x / windowSize.y;
 		float halfWidth = 1.0f;
 		float halfHeight = halfWidth / aspectRatio;
 		
@@ -70,9 +74,9 @@ public class MasterRenderer {
 
 		matrix.setIdentity();
 
-		matrix.m00 = 2 / (right - left);
-		matrix.m11 = 2 / (top - bottom);
-		matrix.m22 = -2 / (far - near);
+		matrix.m00 = 2f / (right - left);
+		matrix.m11 = 2f / (top - bottom);
+		matrix.m22 = -2f / (far - near);
 		matrix.m32 = (far + near) / (far - near);
 		matrix.m30 = (right + left) / (right - left);
 		matrix.m31 = (top + bottom) / (top - bottom);

@@ -3,6 +3,7 @@ package block;
 import org.lwjgl.util.vector.Vector2f;
 
 import models.RenderObject;
+import tools.Mouse;
 
 public class Block extends RenderObject{
 	
@@ -42,6 +43,10 @@ public class Block extends RenderObject{
 	
 	public Vector2f getGridPos() {
 		return gridPos;
+	}
+	
+	public static float getSCALE() {
+		return SCALE;
 	}
 	
 }

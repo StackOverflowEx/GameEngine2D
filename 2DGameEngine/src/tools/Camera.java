@@ -1,4 +1,4 @@
-package rendering;
+package tools;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
@@ -9,6 +9,7 @@ public class Camera {
 	private static Vector2f position = new Vector2f(0, 0);
 	private static float roll = 0;
 	private static float zoom = 1.0f;
+	private static Matrix4f view;
 
 	public static Vector2f getPosition() {
 		return position;
@@ -44,11 +45,18 @@ public class Camera {
 	}
 
 	public static Matrix4f getViewMatrix() {
+		if(view == null) {
+			calcViewMatrix();
+		}
+		return view;
+	}
+	
+	public static void calcViewMatrix() {
 		Matrix4f viewMatrix = new Matrix4f();
 		viewMatrix.setIdentity();
 		Matrix4f.rotate((float) Math.toRadians(roll), new Vector3f(0, 0, 1), viewMatrix, viewMatrix);
 		Vector2f negativeCameraPos = new Vector2f(-position.x, -position.y);
 		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
-		return viewMatrix;
+		view = viewMatrix;
 	}
 }

@@ -5,27 +5,25 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.GL13;
 
-import models.RawModel;
 import models.RenderObject;
 import models.TexturedModel;
-import rendering.Camera;
+import rendering.DisplayManager;
+import rendering.Loader;
 import rendering.MasterRenderer;
 import rendering.Renderer;
+import tools.Camera;
 
 public class BlockRenderer extends Renderer{
 	
 	private BlockShader shader;
 	private HashMap<TexturedModel, ArrayList<RenderObject>> objects;
-	private RawModel quad;
 	
-	public BlockRenderer(RawModel quad) {
+	public BlockRenderer() {
 		shader = new BlockShader("src/block/blockV.glsl", "src/block/blockF.glsl");
 		shader.start();
 		shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
 		shader.stop();
 		objects = new HashMap<TexturedModel, ArrayList<RenderObject>>();
-		
-		this.quad = quad;
 	}
 	
 	public void addRenderBlock(RenderObject renderObj) {
@@ -41,7 +39,10 @@ public class BlockRenderer extends Renderer{
 	public void render() {
 		shader.start();
 		shader.loadViewMatrix(Camera.getViewMatrix());
-		bindModel(quad, new int[] {0});
+		if(DisplayManager.isResized()) {
+			shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
+		}
+		bindModel(Loader.getQuad(), new int[] {0});
 		for(TexturedModel tm : objects.keySet()) {
 			bindTexture(tm.getTexture(), GL13.GL_TEXTURE0);
 			for(RenderObject ro : objects.get(tm)) {
@@ -51,7 +52,7 @@ public class BlockRenderer extends Renderer{
 				}else {
 					shader.loadTransformationMatrix(ro.getTransformationMatrix());
 				}
-				drawSTRIP(quad);
+				drawSTRIP(Loader.getQuad());
 			}
 		}
 		unbind(new int[] {0});
