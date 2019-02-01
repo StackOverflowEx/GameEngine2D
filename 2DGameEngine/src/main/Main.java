@@ -6,6 +6,8 @@ import org.lwjgl.util.vector.Vector2f;
 import block.Block;
 import block.BlockModel;
 import block.BlockRenderer;
+import events.EventHandler;
+import events.KeyboardEvents;
 import gui.GUI;
 import gui.GUIRenderer;
 import gui.GUITexture;
@@ -18,7 +20,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		DisplayManager.createDisplay(1240, 720, "Test");
+		DisplayManager.createDisplay(1240, 720, "Test", 0);
 		
 		MasterRenderer mr = new MasterRenderer();
 		BlockRenderer br = new BlockRenderer();
@@ -36,10 +38,11 @@ public class Main {
 		GUITexture gt = new GUITexture(Loader.loadTexture("res/grass.png"), Loader.loadTexture("res/waterDUDV.png"), Loader.loadTexture("res/grass.png"));
 		GUI g = new GUI(new Vector2f(0, 0), new Vector2f(1, 1), gt, GUIType.BACKGROUND);
 		gr.addGUI(g);
-		//EventHandler.registerListener(new CameraEvent());
+		EventHandler.registerListener(new KeyboardEvents());
 		
 		while(!GLFW.glfwWindowShouldClose(DisplayManager.getWINDOW())) {
-			//render
+			DisplayManager.pollEvents();
+			
 			mr.render();
 			
 			DisplayManager.updateDisplay();

@@ -15,7 +15,7 @@ public class GUI {
 	private GUIType type;
 	private Matrix4f[] transforms;
 	
-	private final float CORNER_SCALE = 0.1f;
+	private final float CORNER_SCALE = 0.02f;
 		
 	public GUI(Vector2f position, Vector2f size, GUITexture texture, GUIType type) {
 		super();
@@ -77,17 +77,59 @@ public class GUI {
 	public void loadTransformationMatricies() {	
 		Vector2f displaySize = getDisplayCoords(size);
 		Vector2f displayPos = getDisplayCoords(position);
-		Vector2f display = DisplayManager.getWindowSize();
 		
 		Vector2f worldPos = Mouse.getWorldPos(displayPos);
-		Vector2f worldScale = new Vector2f(displaySize.x / (display.x / 2.0f), displaySize.y / (display.y / 2));
+		Vector2f worldScale = Mouse.getWorldPos(displaySize);
+		worldScale.x = Math.abs(worldScale.x * 2.0f);
+		worldScale.y = Math.abs(worldScale.y * 2.0f);
 
-		float x, y;
+		float x, y, scaleX, scaleY;
+		//top left
 		x = worldPos.x;
 		y = worldPos.y - CORNER_SCALE;
-		//y is calculated correct. Moving the mouse to the same y value as calculated shows that everything is correctly calculated
-		System.out.println(y + " | " + Mouse.getWorldPos().y);
 		transforms[0] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(CORNER_SCALE, CORNER_SCALE));
+		//top right
+		x = worldPos.x + worldScale.x - CORNER_SCALE;
+		y = worldPos.y - CORNER_SCALE;
+		transforms[1] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(CORNER_SCALE, CORNER_SCALE));
+		//bottom right
+		x = worldPos.x + worldScale.x - CORNER_SCALE;
+		y = worldPos.y -worldScale.y;
+		transforms[2] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(CORNER_SCALE, CORNER_SCALE));
+		//bototm left
+		x = worldPos.x;
+		y = worldPos.y - worldScale.y;
+		transforms[3] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(CORNER_SCALE, CORNER_SCALE));
+		//top line
+		x = worldPos.x + CORNER_SCALE;
+		y = worldPos.y - CORNER_SCALE;
+		scaleX = worldScale.x - 2*CORNER_SCALE;
+		scaleY = CORNER_SCALE;
+		transforms[4] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(scaleX, scaleY));
+		//right line
+		x = worldPos.x + worldScale.x - CORNER_SCALE;
+		y = worldPos.y - worldScale.y + CORNER_SCALE;
+		scaleX = CORNER_SCALE;
+		scaleY = worldScale.y - 2*CORNER_SCALE;
+		transforms[5] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(scaleX, scaleY));
+		//bottom line
+		x = worldPos.x + CORNER_SCALE;
+		y = worldPos.y - worldScale.y;
+		scaleX = worldScale.x - 2*CORNER_SCALE;
+		scaleY = CORNER_SCALE;
+		transforms[6] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(scaleX, scaleY));
+		//left line
+		x = worldPos.x;
+		y = worldPos.y - worldScale.y + CORNER_SCALE;
+		scaleX = CORNER_SCALE;
+		scaleY = worldScale.y - 2*CORNER_SCALE;
+		transforms[7] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(scaleX, scaleY));
+		//body
+		x = worldPos.x + CORNER_SCALE;
+		y = worldPos.y - worldScale.y + CORNER_SCALE;
+		scaleX = worldScale.x - 2*CORNER_SCALE;
+		scaleY = worldScale.y - 2*CORNER_SCALE;
+		transforms[8] = Maths.getTransformationMatrix(new Vector2f(x, y), new Vector2f(scaleX, scaleY));
 	}
 
 }

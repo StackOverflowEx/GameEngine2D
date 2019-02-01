@@ -3,7 +3,6 @@ package block;
 import org.lwjgl.util.vector.Vector2f;
 
 import models.RenderObject;
-import tools.Mouse;
 
 public class Block extends RenderObject{
 	

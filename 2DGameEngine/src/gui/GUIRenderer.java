@@ -42,18 +42,18 @@ public class GUIRenderer extends Renderer{
 			}
 			bindTexture(gui.getTexture().getTopLeftCorner(), GL13.GL_TEXTURE0);
 			Matrix4f[] transforms = gui.getTransformations();
-			for(int i = 0; i < 1; i++) {
+			for(int i = 0; i < 4; i++) {
 				shader.loadTransformationMatrix(transforms[i]);
 				drawSTRIP(Loader.getQuad());
 			}
-//			bindTexture(gui.getTexture().getTopLine(), GL13.GL_TEXTURE0);
-//			for(int i = 4; i < 6; i++) {
-//				shader.loadTransformationMatrix(transforms[i]);
-//				drawSTRIP(Loader.getQuad());
-//			}
-//			bindTexture(gui.getTexture().getBackground(), GL13.GL_TEXTURE0);
-//			shader.loadTransformationMatrix(transforms[8]);
-//			drawSTRIP(Loader.getQuad());
+			bindTexture(gui.getTexture().getTopLine(), GL13.GL_TEXTURE0);
+			for(int i = 4; i < 8; i++) {
+				shader.loadTransformationMatrix(transforms[i]);
+				drawSTRIP(Loader.getQuad());
+			}
+			bindTexture(gui.getTexture().getBackground(), GL13.GL_TEXTURE0);
+			shader.loadTransformationMatrix(transforms[8]);
+			drawSTRIP(Loader.getQuad());
 		}
 		unbind(new int[] {0});
 		shader.stop();
