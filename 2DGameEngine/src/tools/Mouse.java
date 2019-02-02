@@ -24,6 +24,10 @@ public class Mouse {
 		return getWorldPos(getAbsCursorPos());
 	}
 	
+	public static Vector2f getWorldPosWithoutCamera() {
+		return getWorldPosWithoutCamera(getAbsCursorPos());
+	}
+	
 	public static Vector2f getWorldPos(Vector2f pos) {
 		Vector2f absPos = pos;
 		Vector2f windowSize = DisplayManager.getWindowSize();
@@ -46,6 +50,28 @@ public class Mouse {
 		Vector4f world = Matrix4f.transform(invertedView, eyeCoords, null);
 				
 		Vector2f worldPos = new Vector2f(world.x, world.y);
+		return worldPos;
+	}
+	
+	public static Vector2f getWorldPosWithoutCamera(Vector2f pos) {
+		Vector2f absPos = pos;
+		Vector2f windowSize = DisplayManager.getWindowSize();
+		
+		float x = (float) absPos.x;
+		float y = windowSize.y - (float) absPos.y;
+		
+		//normalise
+		x = (2.0f * x) / windowSize.x - 1f;
+		y = (2.0f * y) / windowSize.y -1f;
+				
+		//clipspace
+		Vector4f clipCoords = new Vector4f(x, y, 0f, 1f);
+		
+		//eyespace
+		Matrix4f invertedProjection = Matrix4f.invert(MasterRenderer.getProjectionMatrix(), null);
+		Vector4f eyeCoords = Matrix4f.transform(invertedProjection, clipCoords, null);
+				
+		Vector2f worldPos = new Vector2f(eyeCoords.x, eyeCoords.y);
 		return worldPos;
 	}
 	

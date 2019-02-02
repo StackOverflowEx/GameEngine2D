@@ -7,7 +7,6 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.glfw.GLFWWindowPosCallback;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -24,8 +23,9 @@ public class DisplayManager {
 	private static boolean fullscreen = false;
 	private static String title;
 	private static Vector2f pos;
+	private static Vector2f size;
 	
-	public static void createDisplay(int width, int height, String title, long monitor) {
+	public static void createDisplay(int width, int height, String title, long monitor, MasterRenderer mr) {
 		
 		if(!GLFW.glfwInit()) {
 			throw new IllegalStateException("Could not initalize GLFW");
@@ -48,21 +48,18 @@ public class DisplayManager {
 		GLFW.glfwShowWindow(WINDOW);
 		
 		GLFW.glfwSetKeyCallback(WINDOW, EventHandler.getKeyBoard());
+		GLFW.glfwSetMouseButtonCallback(WINDOW, EventHandler.getMouse());
 		
 		GLFW.glfwSetWindowSizeCallback(WINDOW, new GLFWWindowSizeCallback() {
 			
 			@Override
 			public void invoke(long arg0, int arg1, int arg2) {
-				resized = true;
-			}
-		});
-		
-		GLFW.glfwSetWindowPosCallback(WINDOW, new GLFWWindowPosCallback() {
-			
-			@Override
-			public void invoke(long window, int x, int y) {
-				pos.x = x;
-				pos.y = y;
+				//Double render to prevent wrong size of rendered frame
+				for(int i = 0; i < 2; i++) {
+					resized = true;
+					mr.render();
+					updateDisplay(true);
+				}
 			}
 		});
 		
@@ -92,19 +89,24 @@ public class DisplayManager {
 		resized = b;
 	}
 	
-//	public static void toggleFullscreen() {
-//		if(!fullscreen) {
-//			fullscreen = true;
-//			Vector2f size = getWindowSize();
-//			GLFW.glfwSetWindowMonitor(WINDOW, GLFW.glfwGetPrimaryMonitor(), 0, 0, vidMode.width(), vidMode.height(), 60);
-//		}else {
-//			fullscreen = false;
-//			Vector2f size = getWindowSize();
-//			GLFW.glfwSetWindowMonitor(WINDOW, 0, 0, 0, (int)size.x, (int)size.y, 1);
-//		}
-//	}
+	public static void toggleFullscreen() {
+		if(!fullscreen) {
+			fullscreen = true;
+			size = getWindowSize();
+			IntBuffer x = BufferUtils.createIntBuffer(1);
+			IntBuffer y = BufferUtils.createIntBuffer(1);
+			GLFW.glfwGetWindowPos(WINDOW, x, y);
+			pos = new Vector2f(x.get(), y.get());
+			GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+			GLFW.glfwSetWindowMonitor(WINDOW, GLFW.glfwGetPrimaryMonitor(), 0, 0, vidMode.width(), vidMode.height(), 60);
+			GLFW.glfwSetWindowTitle(WINDOW, title);
+		}else {
+			fullscreen = false;
+			GLFW.glfwSetWindowMonitor(WINDOW, 0, (int)pos.x + 1, (int)pos.y, (int)size.x, (int)size.y, 1);
+		}
+	}
 	
-	public static void updateDisplay() {
+	public static void updateDisplay(boolean resize) {
 		updateViewPort();
 		GLFW.glfwSwapBuffers(WINDOW);
 		if((System.currentTimeMillis() - time) < 1000) {
@@ -114,12 +116,11 @@ public class DisplayManager {
 			System.out.println("FPS: " + counter);
 			counter = 0;
 		}
+		if(!resize) {
+			GLFW.glfwPollEvents();
+		}
 	}
-	
-	public static void pollEvents() {
-		GLFW.glfwPollEvents();
-	}
-	
+		
 	public static Vector2f getWindowSize() {
 		IntBuffer wb = BufferUtils.createIntBuffer(1);
 		IntBuffer hb = BufferUtils.createIntBuffer(1);

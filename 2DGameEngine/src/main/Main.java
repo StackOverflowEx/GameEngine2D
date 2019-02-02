@@ -6,9 +6,9 @@ import org.lwjgl.util.vector.Vector2f;
 import block.Block;
 import block.BlockModel;
 import block.BlockRenderer;
-import events.EventHandler;
-import events.KeyboardEvents;
 import gui.GUI;
+import gui.GUIElement;
+import gui.GUIHandler;
 import gui.GUIRenderer;
 import gui.GUITexture;
 import gui.GUIType;
@@ -20,9 +20,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		DisplayManager.createDisplay(1240, 720, "Test", 0);
-		
 		MasterRenderer mr = new MasterRenderer();
+
+		DisplayManager.createDisplay(1240, 720, "Test", 0, mr);
+		
+//		MasterRenderer mr = new MasterRenderer();
 		BlockRenderer br = new BlockRenderer();
 		GUIRenderer gr = new GUIRenderer();
 //		mr.addRenderer(br);
@@ -36,17 +38,18 @@ public class Main {
 		br.addRenderBlock(b1);
 		
 		GUITexture gt = new GUITexture(Loader.loadTexture("res/grass.png"), Loader.loadTexture("res/waterDUDV.png"), Loader.loadTexture("res/grass.png"));
-		GUI g = new GUI(new Vector2f(0, 0), new Vector2f(1, 1), gt, GUIType.BACKGROUND);
-		gr.addGUI(g);
-		EventHandler.registerListener(new KeyboardEvents());
+		GUIElement g = new GUIElement(new Vector2f(0, 0), new Vector2f(1, 0.5f), gt, GUIType.BACKGROUND);
+		GUI gui = new GUI(true);
+		gui.addGUIElement(g);
+		GUIHandler.addGUI(gui);
 		
-		while(!GLFW.glfwWindowShouldClose(DisplayManager.getWINDOW())) {
-			DisplayManager.pollEvents();
-			
+		while(!GLFW.glfwWindowShouldClose(DisplayManager.getWINDOW())) {			
 			mr.render();
 			
-			DisplayManager.updateDisplay();
+						
+			DisplayManager.updateDisplay(false);
 		}
+		
 		
 		DisplayManager.closeDisplay();
 

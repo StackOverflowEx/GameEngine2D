@@ -1,7 +1,5 @@
 package gui;
 
-import java.util.ArrayList;
-
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
 import rendering.DisplayManager;
@@ -12,17 +10,12 @@ import rendering.Renderer;
 public class GUIRenderer extends Renderer{
 
 	private GUIShader shader;
-	private ArrayList<GUI> guis = new ArrayList<GUI>();
 	
 	public GUIRenderer() {
 		shader = new GUIShader("src/gui/guiV.glsl", "src/gui/guiF.glsl");
 		shader.start();
 		shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
 		shader.stop();
-	}
-	
-	public void addGUI(GUI gui) {
-		guis.add(gui);
 	}
 	
 	public void cleanUP() {
@@ -36,7 +29,7 @@ public class GUIRenderer extends Renderer{
 			shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
 		}
 		bindModel(Loader.getQuad(), new int[] {0});
-		for(GUI gui : guis) {
+		for(GUIElement gui : GUIHandler.getAllGuiElements(true)) {
 			if(DisplayManager.isResized()) {
 				gui.loadTransformationMatricies();
 			}
