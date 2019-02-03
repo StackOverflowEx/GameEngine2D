@@ -1,4 +1,4 @@
-#TO-DO List
+# TO-DO List
 
 - [ ] GUI events (click, hover, start hover, stop hover)
 - [ ] GUI with only one texture
