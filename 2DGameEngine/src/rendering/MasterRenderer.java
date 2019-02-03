@@ -43,6 +43,15 @@ public class MasterRenderer {
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 	}
+	
+	public static void enableAlpha() {
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public static void disableAlpha() {
+		GL11.glDisable(GL11.GL_BLEND);
+	}
 
 	public static void disableCulling() {
 		GL11.glDisable(GL11.GL_CULL_FACE);
@@ -53,6 +62,12 @@ public class MasterRenderer {
 			createProjectionMatrix();
 		}
 		return projectionMatrix;
+	}
+	
+	public void cleanUP() {
+		for(Renderer r : renderers) {
+			r.cleanUP();
+		}
 	}
 
 	public static void createProjectionMatrix() {

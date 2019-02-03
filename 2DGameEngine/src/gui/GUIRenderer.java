@@ -1,5 +1,6 @@
 package gui;
 
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
 import rendering.DisplayManager;
@@ -24,6 +25,7 @@ public class GUIRenderer extends Renderer{
 
 	@Override
 	protected void render() {
+		MasterRenderer.enableAlpha();
 		shader.start();
 		if(DisplayManager.isResized()) {
 			shader.loadProjectionMatrix(MasterRenderer.getProjectionMatrix());
@@ -33,22 +35,27 @@ public class GUIRenderer extends Renderer{
 			if(DisplayManager.isResized()) {
 				gui.loadTransformationMatricies();
 			}
-			bindTexture(gui.getTexture().getTopLeftCorner(), GL13.GL_TEXTURE0);
 			Matrix4f[] transforms = gui.getTransformations();
-			for(int i = 0; i < 4; i++) {
-				shader.loadTransformationMatrix(transforms[i]);
-				drawSTRIP(Loader.getQuad());
-			}
-			bindTexture(gui.getTexture().getTopLine(), GL13.GL_TEXTURE0);
-			for(int i = 4; i < 8; i++) {
-				shader.loadTransformationMatrix(transforms[i]);
-				drawSTRIP(Loader.getQuad());
+			if(transforms[1] != null) {
+				//corners
+				bindTexture(gui.getTexture().getTopLeftCorner(), GL13.GL_TEXTURE0);
+				for(int i = 1; i < 5; i++) {
+					shader.loadTransformationMatrix(transforms[i]);
+					drawSTRIP(Loader.getQuad());
+				}
+				//borders
+				bindTexture(gui.getTexture().getTopLine(), GL13.GL_TEXTURE0);
+				for(int i = 5; i < 9; i++) {
+					shader.loadTransformationMatrix(transforms[i]);
+					drawSTRIP(Loader.getQuad());
+				}
 			}
 			bindTexture(gui.getTexture().getBackground(), GL13.GL_TEXTURE0);
-			shader.loadTransformationMatrix(transforms[8]);
+			shader.loadTransformationMatrix(transforms[0]);
 			drawSTRIP(Loader.getQuad());
 		}
 		unbind(new int[] {0});
 		shader.stop();
+		MasterRenderer.disableAlpha();
 	}
 }

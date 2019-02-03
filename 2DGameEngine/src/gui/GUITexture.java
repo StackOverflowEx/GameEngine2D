@@ -8,6 +8,14 @@ public class GUITexture {
 	private Texture topLine;
 	private Texture background;
 	
+	/**
+	 * 
+	 * If topLeftCorner == null or topLine == null the GUIElement will only have one texture
+	 * 
+	 * @param topLeftCorner
+	 * @param topLine
+	 * @param background
+	 */
 	public GUITexture(Texture topLeftCorner, Texture topLine, Texture background) {
 		super();
 		this.topLeftCorner = topLeftCorner;

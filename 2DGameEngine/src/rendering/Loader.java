@@ -127,5 +127,17 @@ public class Loader {
 		
 		return new Texture(textureID);
 	}
+	
+	public static void cleanUP() {
+		for(int vao : vaos) {
+			GL30.glDeleteVertexArrays(vao);
+		}
+		for(int vbo : vbos) {
+			GL30.glDeleteBuffers(vbo);
+		}
+		for(int texture : textures) {
+			GL11.glDeleteTextures(texture);
+		}
+	}
 
 }

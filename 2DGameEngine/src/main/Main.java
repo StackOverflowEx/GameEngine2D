@@ -38,8 +38,8 @@ public class Main {
 		br.addRenderBlock(b);
 		br.addRenderBlock(b1);
 		
-		GUITexture gt = new GUITexture(Loader.loadTexture("res/grass.png"), Loader.loadTexture("res/waterDUDV.png"), Loader.loadTexture("res/grass.png"));
-		GUIElement g = new GUIElement(new Vector2f(0, 0), new Vector2f(1, 0.5f), gt, GUIType.BACKGROUND);
+		GUITexture gt = new GUITexture(Loader.loadTexture("res/corner.png"), Loader.loadTexture("res/line.png"), Loader.loadTexture("res/background.png"));
+		GUIElement g = new GUIElement(new Vector2f(0.1f, 0.1f), new Vector2f(0.5f, 0.5f), gt, GUIType.BACKGROUND);
 		GUI gui = new GUI(true);
 		gui.addGUIElement(g);
 		GUIHandler.addGUI(gui);		
@@ -53,7 +53,8 @@ public class Main {
 			DisplayManager.updateDisplay(false);
 		}
 		
-		
+		mr.cleanUP();
+		Loader.cleanUP();
 		DisplayManager.closeDisplay();
 
 	}
