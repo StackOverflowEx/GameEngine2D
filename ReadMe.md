@@ -4,6 +4,7 @@
 - [x] GUI with only one texture
 - [ ] rendering text
 - [ ] GUI label with text
+- [ ] Squared GUIs
 - [ ] rendering sky
 - [ ] playing sound
 - [ ] multi threading
