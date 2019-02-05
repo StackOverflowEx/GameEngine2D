@@ -1,8 +1,8 @@
 package gui;
 
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.vector.Matrix4f;
+
 import rendering.DisplayManager;
 import rendering.Loader;
 import rendering.MasterRenderer;

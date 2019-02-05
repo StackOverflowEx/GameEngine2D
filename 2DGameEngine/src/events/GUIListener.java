@@ -4,8 +4,10 @@ package events;
 import java.util.ArrayList;
 
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.util.vector.Vector2f;
 
 import gui.GUIElement;
+import tools.Camera;
 
 class GUIListener implements InputListener{
 	
@@ -16,7 +18,20 @@ class GUIListener implements InputListener{
 	}
 	
 	@Override
-	public void KeyEvent(int key, int action, int mods) {}
+	public void KeyEvent(int key, int action, int mods) {
+		if(key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_REPEAT) {
+			Camera.move(new Vector2f(-0.01f, 0));
+		}else if(key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_REPEAT) {
+			Camera.move(new Vector2f(+0.01f, 0));
+
+		}else if(key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_REPEAT) {
+			Camera.move(new Vector2f(0, 0.01f));
+
+		}else if(key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_REPEAT) {
+			Camera.move(new Vector2f(0, -0.01f));
+
+		}
+	}
 
 	@Override
 	public void MouseEvent(int key, int action, int mods) {

@@ -20,8 +20,7 @@ public class GUIElement {
 	private long id;
 	private long parent = -1;
 	
-	//0.02f
-	private final float CORNER_SCALE = 0.1f;
+	private final float CORNER_SCALE = 0.02f;
 	
 	public GUIElement(Vector2f position, Vector2f size, GUITexture texture, GUIType type) {
 		super();
@@ -92,6 +91,11 @@ public class GUIElement {
 	public static Vector2f getDisplayCoords(Vector2f percentage) {
 		Vector2f v = DisplayManager.getWindowSize();
 		return new Vector2f(v.x * percentage.x, v.y * percentage.y);	
+	}
+	
+	public static Vector2f getPercentageCoords(Vector2f displayCoords) {
+		Vector2f v = DisplayManager.getWindowSize();
+		return new Vector2f(displayCoords.x / v.x, displayCoords.y / v.y);	
 	}
 	
 	public void addInputListener(InputListener il) {

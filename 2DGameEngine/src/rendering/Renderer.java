@@ -28,12 +28,21 @@ public abstract class Renderer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTextureID());
 	}
 	
+	public void bindTexture(int tex, int unit) {
+		GL20.glActiveTexture(unit);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex);
+	}
+	
 	public void drawSTRIP(RawModel model) {
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, model.getVertexCount());
 	}
 	
 	public void draw(RawModel model) {
 		GL11.glDrawElements(GL11.GL_TRIANGLES, model.getVertexCount(), GL11.GL_UNSIGNED_INT, 0);
+	}
+	
+	public void drawArrays(RawModel model) {
+		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, model.getVertexCount());
 	}
 	
 	public void unbind(int[] enabledAttrib) {
