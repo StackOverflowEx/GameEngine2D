@@ -47,7 +47,7 @@ public class Main {
 		GUI gui = new GUI(true);
 		gui.addGUIElement(g);
 		
-		gui.addGUIElement(TextManager.loadFont("C:/Windows/Fonts/Arial.ttf"));
+		gui.addGUIElement(TextManager.loadFont("arial", "C:/Windows/Fonts/Arial.ttf", false, false));
 		GUIHandler.addGUI(gui);		
 		
 //		TextManager.loadFont("res/arial.ttf");

@@ -1,5 +1,7 @@
 package text;
 
+import java.util.ArrayList;
+
 import org.lwjgl.util.vector.Vector2f;
 
 import de.t0b1.freetype_wrapper.classes.FontAtlas;
@@ -11,22 +13,33 @@ import rendering.Loader;
 
 public class TextManager {
 	
-	public static GUIElement loadFont(String file) {
+	public static ArrayList<FontType> fonts = new ArrayList<FontType>(); 
+	
+	public static GUIElement loadFont(String name, String file, boolean bold, boolean italic) {
+				
+		long font = FontAtlas.addFont(file, 100.0f, italic, bold);
+		fonts.add(new FontType(font, name, bold, italic));
+		build();
 		
-		System.load("F:\\Repositorys\\GameEngine2D\\2DGameEngine\\lib\\freetype.dll");
-		System.out.println("asdfsadf");
-		
-		System.out.println(FontAtlas.hasUpdated());
-		long font = FontAtlas.addFont(file, 100.0f, false, false);
-		FontAtlas.build(0);
+		FontType type = fonts.get(0);
+		Text text = new Text("TestText", type);
+		text.generateModel();
 		
 		Texture rgbTex = FontAtlas.getTexDataAsRGBA32();
 		
 		GUITexture gt = new GUITexture(null, null, Loader.loadTexture(rgbTex));
 		GUIElement ge = new GUIElement(new Vector2f(0, 0), new Vector2f(1, 1), gt, GUIType.BACKGROUND);
 		
+		
 		return ge;
 				
+	}
+	
+	public static void build() {
+		FontAtlas.build(0);
+		for(FontType f : fonts) {
+			f.buildLookUpTable();
+		}
 	}
 
 }

@@ -6,6 +6,7 @@ import rendering.Renderer;
 public class TextRenderer extends Renderer {
 
 	private TextShader shader;
+//	private ArrayList<>
 
 	public TextRenderer() {
 		shader = new TextShader("src/text/textV.glsl", "src/text/textF.glsl");
