@@ -2,7 +2,6 @@ package main;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
 
 import block.Block;
 import block.BlockModel;
@@ -17,7 +16,6 @@ import gui.GUIType;
 import rendering.DisplayManager;
 import rendering.Loader;
 import rendering.MasterRenderer;
-import text.Text;
 import text.TextManager;
 import text.TextRenderer;
 
@@ -48,17 +46,19 @@ public class Main {
 		GUIElement g = new GUIElement(new Vector2f(0.1f, 0.1f), new Vector2f(0.5f, 0.5f), gt, GUIType.BACKGROUND);
 		GUI gui = new GUI(true);
 		gui.addGUIElement(g);
+		
+		gui.addGUIElement(TextManager.loadFont("C:/Windows/Fonts/Arial.ttf"));
 		GUIHandler.addGUI(gui);		
 		
-		TextManager.loadFont("res/arial.ttf");
-		Text t = new Text("Test", new Vector2f(0, 0), 1f, new Vector3f(1, 1, 0), "arial");
-		tr.addText(t);
+//		TextManager.loadFont("res/arial.ttf");
+//		Text t = new Text("Test", new Vector2f(0, 0), 1f, new Vector3f(1, 1, 0), "arial");
+//		tr.addText(t);
+		
 		
 		while(!GLFW.glfwWindowShouldClose(DisplayManager.getWINDOW())) {	
 			EventHandler.pollEvents();
 			
 			mr.render();
-			
 						
 			DisplayManager.updateDisplay(false);
 		}

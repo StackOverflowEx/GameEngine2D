@@ -11,8 +11,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
-import com.pvporbit.freetype.Face;
-
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import models.RawModel;
@@ -139,24 +137,28 @@ public class Loader {
 
 		return new Texture(textureID);
 	}
-
-	public static int loadGlyphTexture(Face face) {
-		GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-		int texture = GL11.glGenTextures();
-		textures.add(texture);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RED, face.getGlyphSlot().getBitmap().getWidth(),
-				face.getGlyphSlot().getBitmap().getRows(), 0, GL11.GL_RED, GL11.GL_UNSIGNED_BYTE,
-				face.getGlyphSlot().getBitmap().getBuffer());
+	
+	public static Texture loadTexture(de.t0b1.freetype_wrapper.classes.Texture tex) {
+		int width = tex.width;
+		int height = tex.height;
 		
-		 GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
-		 GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		 GL11. glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-		 
-		 GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-		 
-		 return texture;
+		
+		System.out.println(width + " | " + height);
+		
+		ByteBuffer buffer = BufferUtils.createByteBuffer(tex.data.length);
+		buffer.put(tex.data);
+		buffer.flip();
+		
+		int textureID = GL11.glGenTextures();
+		textures.add(textureID);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+
+		return new Texture(textureID);
 	}
+
 	
 	public static int createVBO(int attribute) {
 		int vbo = GL30.glGenBuffers();
