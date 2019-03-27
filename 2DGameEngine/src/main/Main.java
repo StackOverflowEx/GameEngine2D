@@ -16,6 +16,7 @@ import gui.GUIType;
 import rendering.DisplayManager;
 import rendering.Loader;
 import rendering.MasterRenderer;
+import text.Text;
 import text.TextManager;
 import text.TextRenderer;
 
@@ -47,12 +48,12 @@ public class Main {
 		GUI gui = new GUI(true);
 		gui.addGUIElement(g);
 		
-		gui.addGUIElement(TextManager.loadFont("arial", "C:/Windows/Fonts/Arial.ttf", false, false));
-		GUIHandler.addGUI(gui);		
-		
-//		TextManager.loadFont("res/arial.ttf");
-//		Text t = new Text("Test", new Vector2f(0, 0), 1f, new Vector3f(1, 1, 0), "arial");
-//		tr.addText(t);
+//		gui.addGUIElement(TextManager.loadFont("arial", "C:/Windows/Fonts/Arial.ttf", false, false));
+//		GUIHandler.addGUI(gui);		
+//		
+
+		TextManager.loadFont("arial", "C:/Windows/Fonts/Arial.ttf", false, false);
+		tr.addText(new Text("Test", TextManager.fonts.get(0)));
 		
 		
 		while(!GLFW.glfwWindowShouldClose(DisplayManager.getWINDOW())) {	

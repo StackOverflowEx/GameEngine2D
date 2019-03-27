@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import de.t0b1.freetype_wrapper.classes.Font;
 import de.t0b1.freetype_wrapper.classes.FontGlyph;
+import models.Texture;
+import rendering.Loader;
 
 public class FontType {
 	
@@ -11,17 +13,29 @@ public class FontType {
 	private String name;
 	private boolean bold;
 	private boolean italic;
+	private Texture tex;
 	private FontGlyph[] glyphs;
 	private HashMap<Character, Integer> lookUp = new HashMap<Character, Integer>();
 	
-	public FontType(long id, String name, boolean bold, boolean italic) {
+	public FontType(long id, String name, boolean bold, boolean italic, de.t0b1.freetype_wrapper.classes.Texture tex) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.bold = bold;
 		this.italic = italic;
+		if(tex != null) {
+			this.tex = Loader.loadTexture(tex);
+		}
 	}
 
+	public Texture getTexture() {
+		return tex;
+	}
+	
+	public void setTexture(de.t0b1.freetype_wrapper.classes.Texture tex) {
+		this.tex = Loader.loadTexture(tex);
+	}
+	
 	public long getId() {
 		return id;
 	}
