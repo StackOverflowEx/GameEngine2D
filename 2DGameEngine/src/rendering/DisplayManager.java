@@ -12,8 +12,6 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector2f;
 
-import events.EventHandler;
-
 public class DisplayManager {
 
 	private static long WINDOW;
@@ -46,9 +44,6 @@ public class DisplayManager {
 		GL.createCapabilities();
 
 		GLFW.glfwShowWindow(WINDOW);
-
-		GLFW.glfwSetKeyCallback(WINDOW, EventHandler.getKeyBoard());
-		GLFW.glfwSetMouseButtonCallback(WINDOW, EventHandler.getMouse());
 
 		GLFW.glfwSetWindowSizeCallback(WINDOW, new GLFWWindowSizeCallback() {
 

@@ -18,6 +18,6 @@
 	<classpathentry kind="lib" path="lib/lwjgl-stb.jar"/>
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
-	<classpathentry kind="lib" path="lib/FreeTypeWrapper.jar"/>
+	<classpathentry kind="lib" path="lib/legui-1.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -138,26 +138,26 @@ public class Loader {
 		return new Texture(textureID);
 	}
 	
-	public static Texture loadTexture(de.t0b1.freetype_wrapper.classes.Texture tex) {
-		int width = tex.width;
-		int height = tex.height;
-		
-		
-		System.out.println(width + " | " + height);
-		
-		ByteBuffer buffer = BufferUtils.createByteBuffer(tex.data.length);
-		buffer.put(tex.data);
-		buffer.flip();
-		
-		int textureID = GL11.glGenTextures();
-		textures.add(textureID);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-
-		return new Texture(textureID);
-	}
+//	public static Texture loadTexture(de.t0b1.freetype_wrapper.classes.Texture tex) {
+//		int width = tex.width;
+//		int height = tex.height;
+//		
+//		
+//		System.out.println(width + " | " + height);
+//		
+//		ByteBuffer buffer = BufferUtils.createByteBuffer(tex.data.length);
+//		buffer.put(tex.data);
+//		buffer.flip();
+//		
+//		int textureID = GL11.glGenTextures();
+//		textures.add(textureID);
+//		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
+//		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+//		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+//		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+//
+//		return new Texture(textureID);
+//	}
 
 	
 	public static int createVBO(int attribute) {
