@@ -80,6 +80,7 @@ public class MasterRenderer extends Thread{
 		
 		renderGUI();
 		
+		
 		if(frame != null) {
 			shader.start();
 			bindModel();
@@ -103,6 +104,7 @@ public class MasterRenderer extends Thread{
 			unbind();
 		}
 	}
+
 	
 	public void swapFrames() {
 		if(queuedFrame != null) {

@@ -58,19 +58,19 @@ public class NukManager {
 	private int uniform_tex;
 	private int uniform_proj;
 	
-	private TestGUI gui;
-	private Calculator calc;
+	private GUIWindowListener listener;
+	private ArrayList<GUI> guis;
+	
 
 	public NukManager() {
 		if (NukManager.nukManager == null) {
+			guis = new ArrayList<GUI>();
 			try {
 				this.ttf = Loader.ioResourceToByteBuffer("C:\\Windows\\Fonts\\Arial.ttf", 512 * 1024);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
-			gui = new TestGUI();
-			calc = new Calculator();
 			setupWindow();
 			setupFont();
 
@@ -80,8 +80,14 @@ public class NukManager {
 		}
 	}
 
+	public synchronized void addGUI(GUI gui) {
+		guis.add(gui);
+	}
+	
 	public void render() {
 		long win = Window.window.getWindowID();
+		
+		
 		nk_input_begin(ctx);
 
 		NkMouse mouse = ctx.input().mouse();
@@ -97,8 +103,15 @@ public class NukManager {
 			glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 		
-		gui.layout(ctx, 50, 50);
-		calc.layout(ctx, 300, 50);
+		listener.fireActions(ctx);
+		
+		synchronized (guis) {
+			for(GUI g : guis) {
+				if(g.isVisible()) {
+					g.render();
+				}
+			}
+		}
 		
 		nk_input_end(ctx);
 		
@@ -106,6 +119,7 @@ public class NukManager {
 		
 		draw(NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 	}
+
 
 	private void draw(int AA, int max_vertex_buffer, int max_element_buffer) {
 		int width = (int) Window.window.getWindowSize().x;
@@ -289,7 +303,8 @@ public class NukManager {
 	}
 
 	private NkContext setupWindow() {
-		EventManager.eventMangaer.registerEvent(new GUIWindowListener());
+		listener = new GUIWindowListener();
+		EventManager.eventMangaer.registerEvent(listener);
 		nk_init(ctx, ALLOCATOR, null);
 		ctx.clip().copy(new NkPluginCopyI() {
 
