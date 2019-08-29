@@ -29,6 +29,7 @@ public class TestGUI {
 			if (nk_begin(ctx, "Demo", nk_rect(x, y, 230, 250, rect), NK_WINDOW_BORDER | NK_WINDOW_MOVABLE
 					| NK_WINDOW_SCALABLE | NK_WINDOW_MINIMIZABLE | NK_WINDOW_TITLE)) {
 				nk_layout_row_static(ctx, 30, 80, 1);
+				System.out.println(nk_widget_has_mouse_click_down(ctx, NK_BUTTON_LEFT, true));
 				if (nk_button_label(ctx, "button")) {
 					System.out.println("pressed");
 				}
