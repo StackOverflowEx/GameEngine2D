@@ -19,7 +19,7 @@ public class MainBeat {
 	public static List<Entity> entities = new ArrayList<Entity>();
 
 	public static synchronized void init() {
-		entities.add(new Entity(new Vector2f(0, 0), new Model(Loader.loadTexture("D:\\Icons\\Icon2.png"), 0.02f), 0));
+		entities.add(new Entity(new Vector2f(0, 0), new Model(Loader.loadTexture("D:\\Icons\\test.png"), 0.02f), 0));
 		while(!Window.window.shouldClose()) {
 			GLFW.glfwWaitEvents();
 			Frame frame = BufferLoader.loadFrameBuffer(entities);

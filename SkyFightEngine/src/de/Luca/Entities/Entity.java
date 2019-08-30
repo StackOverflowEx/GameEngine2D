@@ -1,6 +1,7 @@
 package de.Luca.Entities;
 
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 public class Entity {
 	
@@ -36,5 +37,11 @@ public class Entity {
 	public void setLocation(Vector2f loc) {
 		this.location = loc;
 	}
+	
+	//pvt
+	public Vector4f getHitBox() {
+		return null;
+	}
+	
 
 }

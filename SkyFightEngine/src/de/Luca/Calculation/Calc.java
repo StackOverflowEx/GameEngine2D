@@ -9,6 +9,7 @@ import de.Luca.Window.Window;
 public class Calc {
 	
 	public static Matrix4f projectionMatrix;
+	public static Matrix4f viewMatrix;
 	
 	public static void calcProjectionMatrix() {
 		
@@ -42,13 +43,20 @@ public class Calc {
 		projectionMatrix = matrix;
 	}
 	
-	public static Matrix4f calcViewMatrix() {
+	public static Matrix4f getViewMatrix() {
+		if(viewMatrix == null) {
+			calcViewMatrix();
+		}
+		return viewMatrix;
+	}
+	
+	public static void calcViewMatrix() {
 		Matrix4f viewMatrix = new Matrix4f();
 		viewMatrix.identity();
-		viewMatrix = viewMatrix.rotate((float) Math.toRadians(Camera.roll), new Vector3f(0, 0, 1), viewMatrix);
-		Vector3f negativeCameraPos = new Vector3f(-Camera.position.x, -Camera.position.y, 1);
+		viewMatrix = viewMatrix.rotate((float) Math.toRadians(Camera.getRoll()), new Vector3f(0, 0, 1), viewMatrix);
+		Vector3f negativeCameraPos = new Vector3f(-Camera.getPosition().x, -Camera.getPosition().y, 1);
 		viewMatrix = viewMatrix.translate(negativeCameraPos, viewMatrix);
-		return viewMatrix;
+		Calc.viewMatrix = viewMatrix;
 	}
 	
 	public static Matrix4f getTransformationMatrix(Vector2f pos, Vector2f scale, float rotationZ) {

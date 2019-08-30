@@ -11,10 +11,12 @@ import org.lwjgl.glfw.GLFWKeyCallbackI;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 import org.lwjgl.glfw.GLFWScrollCallbackI;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowSizeCallbackI;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
 
+import de.Luca.Calculation.Calc;
 import de.Luca.EventManager.EventManager;
 import de.Luca.Events.CharInputEvent;
 import de.Luca.Events.CursorPositionEvent;
@@ -25,6 +27,7 @@ import de.Luca.Events.ScrollEvent;
 public class Window {
 	
 	public static Window window;
+	private boolean resized;
 	private long frameCountTime;
 	private long frameCount;
 	private boolean fullscreen = false;
@@ -35,6 +38,7 @@ public class Window {
 	//Wird einmal aufgerufen, um das Spielefenster zu erstellen	
 	public Window(int width, int height, String title) {
 		if(Window.window == null) {
+			resized = false;
 			frameCountTime = 0;
 			frameCount = 0;
 			
@@ -78,6 +82,10 @@ public class Window {
 		setupCallbacks();
 	}
 	
+	public boolean hasResized() {
+		return resized;
+	}
+	
 	private void setupCallbacks() {
 		GLFW.glfwSetKeyCallback(WINDOW_ID, new GLFWKeyCallbackI() {
 			
@@ -112,6 +120,14 @@ public class Window {
 			@Override
 			public void invoke(long window, int button, int action, int mods) {
 				EventManager.eventMangaer.fireEvent(new MouseButtonEvent(button, action, mods));
+			}
+		});
+		GLFW.glfwSetWindowSizeCallback(WINDOW_ID, new GLFWWindowSizeCallbackI() {
+			
+			@Override
+			public void invoke(long window, int width, int height) {
+				resized = true;
+				Calc.calcProjectionMatrix();
 			}
 		});
 	}

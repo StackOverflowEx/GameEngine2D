@@ -57,10 +57,9 @@ public class NukManager {
 	private int frag_shdr;
 	private int uniform_tex;
 	private int uniform_proj;
-	
+
 	private GUIWindowListener listener;
 	private ArrayList<GUI> guis;
-	
 
 	public NukManager() {
 		if (NukManager.nukManager == null) {
@@ -73,7 +72,7 @@ public class NukManager {
 
 			setupWindow();
 			setupFont();
-
+			addGUI(new MainScreen(true));
 			NukManager.nukManager = this;
 		} else {
 			throw new IllegalStateException("NukManager already created");
@@ -83,124 +82,119 @@ public class NukManager {
 	public synchronized void addGUI(GUI gui) {
 		guis.add(gui);
 	}
-	
-	public void render() {
-		long win = Window.window.getWindowID();
-		
-		
-		nk_input_begin(ctx);
 
-		NkMouse mouse = ctx.input().mouse();
-		if (mouse.grab()) {
-			glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-		} else if (mouse.grabbed()) {
-			float prevX = mouse.prev().x();
-			float prevY = mouse.prev().y();
-			glfwSetCursorPos(win, prevX, prevY);
-			mouse.pos().x(prevX);
-			mouse.pos().y(prevY);
-		} else if (mouse.ungrab()) {
-			glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
-		
+	public void render() {
+
+		nk_input_begin(ctx);		
+
 		listener.fireActions(ctx);
-		
+
 		synchronized (guis) {
-			for(GUI g : guis) {
-				if(g.isVisible()) {
+			for (GUI g : guis) {
+				if (g.isVisible()) {
 					g.render();
 				}
 			}
 		}
-		
+
 		nk_input_end(ctx);
-		
-		
-		
+
 		draw(NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 	}
-
 
 	private void draw(int AA, int max_vertex_buffer, int max_element_buffer) {
 		int width = (int) Window.window.getWindowSize().x;
 		int height = (int) Window.window.getWindowSize().y;
-		try (MemoryStack stack = stackPush()) {
-			// setup global state
-			glEnable(GL_BLEND);
-			glBlendEquation(GL_FUNC_ADD);
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glDisable(GL_CULL_FACE);
-			glDisable(GL_DEPTH_TEST);
-			glEnable(GL_SCISSOR_TEST);
-			glActiveTexture(GL_TEXTURE0);
+		 try (MemoryStack stack = stackPush()) {
+	            // setup global state
+	            glEnable(GL_BLEND);
+	            glBlendEquation(GL_FUNC_ADD);
+	            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	            glDisable(GL_CULL_FACE);
+	            glDisable(GL_DEPTH_TEST);
+	            glEnable(GL_SCISSOR_TEST);
+	            glActiveTexture(GL_TEXTURE0);
 
-			// setup program
-			glUseProgram(prog);
-			glUniform1i(uniform_tex, 0);
-			glUniformMatrix4fv(uniform_proj, false, stack.floats(2.0f / width, 0.0f, 0.0f, 0.0f, 0.0f, -2.0f / height,
-					0.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f));
-			glViewport(0, 0, width, height);
-		}
+	            // setup program
+	            glUseProgram(prog);
+	            glUniform1i(uniform_tex, 0);
+	            glUniformMatrix4fv(uniform_proj, false, stack.floats(
+	                2.0f / width, 0.0f, 0.0f, 0.0f,
+	                0.0f, -2.0f / height, 0.0f, 0.0f,
+	                0.0f, 0.0f, -1.0f, 0.0f,
+	                -1.0f, 1.0f, 0.0f, 1.0f
+	            ));
+	            glViewport(0, 0, width, height);
+	        }
 
-		{
-			// convert from command queue into draw list and draw to screen
+	        {
+	            // convert from command queue into draw list and draw to screen
 
-			// allocate vertex and element buffer
-			glBindVertexArray(vao);
-			glBindBuffer(GL_ARRAY_BUFFER, vbo);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	            // allocate vertex and element buffer
+	            glBindVertexArray(vao);
+	            glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
-			glBufferData(GL_ARRAY_BUFFER, max_vertex_buffer, GL_STREAM_DRAW);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, max_element_buffer, GL_STREAM_DRAW);
+	            glBufferData(GL_ARRAY_BUFFER, max_vertex_buffer, GL_STREAM_DRAW);
+	            glBufferData(GL_ELEMENT_ARRAY_BUFFER, max_element_buffer, GL_STREAM_DRAW);
 
-			// load draw vertices & elements directly into vertex + element buffer
-			ByteBuffer vertices = Objects
-					.requireNonNull(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY, max_vertex_buffer, null));
-			ByteBuffer elements = Objects
-					.requireNonNull(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY, max_element_buffer, null));
-			try (MemoryStack stack = stackPush()) {
-				// fill convert configuration
-				NkConvertConfig config = NkConvertConfig.callocStack(stack).vertex_layout(VERTEX_LAYOUT).vertex_size(20)
-						.vertex_alignment(4).null_texture(null_texture).circle_segment_count(22).curve_segment_count(22)
-						.arc_segment_count(22).global_alpha(1.0f).shape_AA(AA).line_AA(AA);
+	            // load draw vertices & elements directly into vertex + element buffer
+	            ByteBuffer vertices = Objects.requireNonNull(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY, max_vertex_buffer, null));
+	            ByteBuffer elements = Objects.requireNonNull(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, GL_WRITE_ONLY, max_element_buffer, null));
+	            try (MemoryStack stack = stackPush()) {
+	                // fill convert configuration
+	                NkConvertConfig config = NkConvertConfig.callocStack(stack)
+	                    .vertex_layout(VERTEX_LAYOUT)
+	                    .vertex_size(20)
+	                    .vertex_alignment(4)
+	                    .null_texture(null_texture)
+	                    .circle_segment_count(22)
+	                    .curve_segment_count(22)
+	                    .arc_segment_count(22)
+	                    .global_alpha(1.0f)
+	                    .shape_AA(AA)
+	                    .line_AA(AA);
 
-				// setup buffers to load vertices and elements
-				NkBuffer vbuf = NkBuffer.mallocStack(stack);
-				NkBuffer ebuf = NkBuffer.mallocStack(stack);
+	                // setup buffers to load vertices and elements
+	                NkBuffer vbuf = NkBuffer.mallocStack(stack);
+	                NkBuffer ebuf = NkBuffer.mallocStack(stack);
 
-				nk_buffer_init_fixed(vbuf, vertices/* , max_vertex_buffer */);
-				nk_buffer_init_fixed(ebuf, elements/* , max_element_buffer */);
-				nk_convert(ctx, cmds, vbuf, ebuf, config);
-			}
-			glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-			glUnmapBuffer(GL_ARRAY_BUFFER);
+	                nk_buffer_init_fixed(vbuf, vertices/*, max_vertex_buffer*/);
+	                nk_buffer_init_fixed(ebuf, elements/*, max_element_buffer*/);
+	                nk_convert(ctx, cmds, vbuf, ebuf, config);
+	            }
+	            glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+	            glUnmapBuffer(GL_ARRAY_BUFFER);
 
-			// iterate over and execute each draw command
-			float fb_scale_x = (float) width / (float) width;
-			float fb_scale_y = (float) height / (float) height;
+	            // iterate over and execute each draw command
+	            float fb_scale_x = (float)width / (float)width;
+	            float fb_scale_y = (float)height / (float)height;
 
-			long offset = NULL;
-			for (NkDrawCommand cmd = nk__draw_begin(ctx, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, ctx)) {
-				if (cmd.elem_count() == 0) {
-					continue;
-				}
-				glBindTexture(GL_TEXTURE_2D, cmd.texture().id());
-				glScissor((int) (cmd.clip_rect().x() * fb_scale_x),
-						(int) ((height - (int) (cmd.clip_rect().y() + cmd.clip_rect().h())) * fb_scale_y),
-						(int) (cmd.clip_rect().w() * fb_scale_x), (int) (cmd.clip_rect().h() * fb_scale_y));
-				glDrawElements(GL_TRIANGLES, cmd.elem_count(), GL_UNSIGNED_SHORT, offset);
-				offset += cmd.elem_count() * 2;
-			}
-			nk_clear(ctx);
-		}
+	            long offset = NULL;
+	            for (NkDrawCommand cmd = nk__draw_begin(ctx, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, ctx)) {
+	                if (cmd.elem_count() == 0) {
+	                    continue;
+	                }
+                	glBindTexture(GL_TEXTURE_2D, cmd.texture().id());
+	                glScissor(
+	                    (int)(cmd.clip_rect().x() * fb_scale_x),
+	                    (int)((height - (int)(cmd.clip_rect().y() + cmd.clip_rect().h())) * fb_scale_y),
+	                    (int)(cmd.clip_rect().w() * fb_scale_x),
+	                    (int)(cmd.clip_rect().h() * fb_scale_y)
+	                );
+	                glDrawElements(GL_TRIANGLES, cmd.elem_count(), GL_UNSIGNED_SHORT, offset);
+	                offset += cmd.elem_count() * 2;
+	            }
+	            nk_clear(ctx);
+	        }
 
-		// default OpenGL state
-		glUseProgram(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-		glDisable(GL_BLEND);
-		glDisable(GL_SCISSOR_TEST);
+	        // default OpenGL state
+	        glUseProgram(0);
+	        glBindBuffer(GL_ARRAY_BUFFER, 0);
+	        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	        glBindVertexArray(0);
+	        glDisable(GL_BLEND);
+	        glDisable(GL_SCISSOR_TEST);
 	}
 
 	private void setupFont() {
@@ -414,6 +408,10 @@ public class NukManager {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);
+	}
+
+	public static NkColor createColor(MemoryStack stack, int r, int g, int b, int a) {
+		return NkColor.mallocStack(stack).set((byte) r, (byte) g, (byte) b, (byte) a);
 	}
 
 	public NkContext getContext() {

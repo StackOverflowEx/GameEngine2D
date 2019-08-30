@@ -1,5 +1,6 @@
 package de.Luca.Loading;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,9 +38,14 @@ public class Loader {
 	}
 
 	public static int loadTexture(ByteBuffer buffer, int width, int height) {
-
+		
 		int textureID = GL11.glGenTextures();
 		textures.add(textureID);
+		
+		if(buffer == null) {
+			return textureID;
+		}
+		
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
@@ -56,6 +62,12 @@ public class Loader {
 		int width = 0;
 		int height = 0;
 		ByteBuffer buffer = null;
+		
+		if(!new File(file).exists()) {
+			Texture texture = new Texture(buffer, width, height);
+			MasterRenderer.masterRenderer.queueTexture(texture);
+		}
+		
 		try {
 			FileInputStream in = new FileInputStream(file);
 			PNGDecoder decoder = new PNGDecoder(in);
