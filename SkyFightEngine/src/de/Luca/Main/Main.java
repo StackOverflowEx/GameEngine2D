@@ -4,6 +4,7 @@ import de.Luca.Calculation.MainBeat;
 import de.Luca.EventManager.EventManager;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Rendering.RenderLoop;
+import de.Luca.Utils.DefaultKeyListener;
 import de.Luca.Window.Window;
 
 public class Main {
@@ -14,6 +15,7 @@ public class Main {
 		new EventManager();
 		
 		MasterRenderer.masterRenderer.start();
+		EventManager.eventMangaer.registerEvent(new DefaultKeyListener());
 		
 		MainBeat.init();
 		

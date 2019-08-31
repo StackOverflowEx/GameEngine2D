@@ -18,13 +18,25 @@ public class MainBeat {
 	
 	public static List<Entity> entities = new ArrayList<Entity>();
 
-	public static synchronized void init() {
-		entities.add(new Entity(new Vector2f(0, 0), new Model(Loader.loadTexture("D:\\Icons\\test.png"), 0.02f), 0));
+	public static void init() {
+//		addEntity(new Entity(new Vector2f(0, 0), new Model(Loader.loadTexture("D:\\Icons\\test.png"), 0.05f), 0));
+		addEntity(new Entity(new Vector2f(-0.8f, -.5f), new Model(Loader.loadTexture("D:\\Icons\\Icon2T.png"), 1f), 0));
 		while(!Window.window.shouldClose()) {
-			GLFW.glfwWaitEvents();
+			GLFW.glfwPollEvents();
 			Frame frame = BufferLoader.loadFrameBuffer(entities);
 			MasterRenderer.masterRenderer.queueFrame(frame);
 		}
 	}
 	
+	public static void addEntity(Entity e) {
+		synchronized (entities) {
+			entities.add(e);
+		}
+	}
+	
+	public static void removeEntity(Entity e) {
+		synchronized (entities) {
+			entities.remove(e);
+		}
+	}
 }

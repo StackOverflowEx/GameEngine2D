@@ -72,7 +72,7 @@ public class NukManager {
 
 			setupWindow();
 			setupFont();
-			addGUI(new MainScreen(true));
+			addGUI(new MainScreen(true, Loader.loadTexture("D:\\Downloads\\button.png")));
 			NukManager.nukManager = this;
 		} else {
 			throw new IllegalStateException("NukManager already created");
@@ -98,7 +98,6 @@ public class NukManager {
 		}
 
 		nk_input_end(ctx);
-
 		draw(NK_ANTI_ALIASING_ON, MAX_VERTEX_BUFFER, MAX_ELEMENT_BUFFER);
 	}
 
@@ -170,11 +169,13 @@ public class NukManager {
 	            float fb_scale_x = (float)width / (float)width;
 	            float fb_scale_y = (float)height / (float)height;
 
+	            System.out.println("========");
 	            long offset = NULL;
 	            for (NkDrawCommand cmd = nk__draw_begin(ctx, cmds); cmd != null; cmd = nk__draw_next(cmd, cmds, ctx)) {
 	                if (cmd.elem_count() == 0) {
 	                    continue;
 	                }
+	                System.out.println(cmd.texture().id());
                 	glBindTexture(GL_TEXTURE_2D, cmd.texture().id());
 	                glScissor(
 	                    (int)(cmd.clip_rect().x() * fb_scale_x),
@@ -334,13 +335,27 @@ public class NukManager {
 
 	private void setupContext() {
 		String NK_SHADER_VERSION = Platform.get() == Platform.MACOSX ? "#version 150\n" : "#version 300 es\n";
-		String vertex_shader = NK_SHADER_VERSION + "uniform mat4 ProjMtx;\n" + "in vec2 Position;\n"
-				+ "in vec2 TexCoord;\n" + "in vec4 Color;\n" + "out vec2 Frag_UV;\n" + "out vec4 Frag_Color;\n"
-				+ "void main() {\n" + "   Frag_UV = TexCoord;\n" + "   Frag_Color = Color;\n"
-				+ "   gl_Position = ProjMtx * vec4(Position.xy, 0, 1);\n" + "}\n";
-		String fragment_shader = NK_SHADER_VERSION + "precision mediump float;\n" + "uniform sampler2D Texture;\n"
-				+ "in vec2 Frag_UV;\n" + "in vec4 Frag_Color;\n" + "out vec4 Out_Color;\n" + "void main(){\n"
-				+ "   Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n" + "}\n";
+		String vertex_shader = NK_SHADER_VERSION
+				+ "uniform mat4 ProjMtx;\n"
+				+ "in vec2 Position;\n"
+				+ "in vec2 TexCoord;\n"
+				+ "in vec4 Color;\n"
+				+ "out vec2 Frag_UV;\n"
+				+ "out vec4 Frag_Color;\n"
+				+ "void main() {\n"
+				+ "   Frag_UV = TexCoord;\n"
+				+ "   Frag_Color = Color;\n"
+				+ "   gl_Position = ProjMtx * vec4(Position.xy, 0, 1);\n"
+				+ "}\n";
+		String fragment_shader = NK_SHADER_VERSION 
+				+ "precision mediump float;\n"
+				+ "uniform sampler2D Texture;\n"
+				+ "in vec2 Frag_UV;\n"
+				+ "in vec4 Frag_Color;\n"
+				+ "out vec4 Out_Color;\n"
+				+ "void main(){\n"
+				+ "   Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n"
+				+ "}\n";
 
 		nk_buffer_init(cmds, ALLOCATOR, BUFFER_INITIAL_SIZE);
 		prog = glCreateProgram();

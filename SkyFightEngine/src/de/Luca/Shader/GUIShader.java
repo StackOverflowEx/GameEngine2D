@@ -1,17 +1,18 @@
 package de.Luca.Shader;
 
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 import de.Luca.Main.Main;
 
-public class EntityShader extends ShaderProgramm{
+public class GUIShader extends ShaderProgramm{
 
 	private int location_projectionMatrix;
-	private int location_viewMatrix;
 	private int location_transformationMatrix;
+	private int location_color;
 	
-	public EntityShader() {
-		super(Main.class.getResource("/de/Luca/Shader/vertex.glsl").getFile(), Main.class.getResource("/de/Luca/Shader/fragment.glsl").getFile());
+	public GUIShader() {
+		super(Main.class.getResource("/de/Luca/Shader/vertexGUI.glsl").getFile(), Main.class.getResource("/de/Luca/Shader/fragmentGUI.glsl").getFile());
 	}
 
 	@Override
@@ -24,7 +25,7 @@ public class EntityShader extends ShaderProgramm{
 	protected void getAllUniformLocations() {
 		location_projectionMatrix = getUniformLocation("projectionMatrix");
 		location_transformationMatrix = getUniformLocation("transformationMatrix");
-		location_viewMatrix = getUniformLocation("viewMatrix");
+		location_color = getUniformLocation("color");	
 	}
 
 	public void loadProjectionMatrix(Matrix4f mat) {
@@ -35,8 +36,8 @@ public class EntityShader extends ShaderProgramm{
 		loadMatrix(location_transformationMatrix, mat);
 	}
 	
-	public void loadViewMatrix(Matrix4f mat) {
-		loadMatrix(location_viewMatrix, mat);
+	public void loadColor(Vector4f color) {
+		load4DVector(location_color, color);
 	}
 	
 }
