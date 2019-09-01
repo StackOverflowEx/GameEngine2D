@@ -18,11 +18,11 @@ public class WorldPosition {
 	}
 	
 	public static Vector2f toOpenGLCoords(Vector2f pixel) {
-		float x = pixel.x;
-		float y = Window.window.getWindowSize().y - pixel.y;
-		x = (2.0f * x) / Window.window.getWindowSize().x - 1f;
-		y = (2.0f * y) / Window.window.getWindowSize().y -1f;
 		Vector2f windowSize = Window.window.getWindowSize();
+		float x = pixel.x;
+		float y = windowSize.y - pixel.y;
+		x = (2.0f * x) / windowSize.x - 1f;
+		y = (2.0f * y) / windowSize.y -1f;
 		float aspectRation = windowSize.x / windowSize.y;
 		return new Vector2f(x, y / aspectRation);
 	}

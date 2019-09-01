@@ -19,8 +19,10 @@ public class MainBeat {
 //		addEntity(new Entity(new Vector2f(0, 0), new Model(Loader.loadTexture("D:\\Icons\\test.png"), 0.05f), 0));
 //		addEntity(new Entity(new Vector2f(-1, -1), new Model(Loader.loadTexture("D:\\Icons\\Icon2T.png"), 2f), 0));
 		while(!Window.window.shouldClose()) {
+			long start = System.nanoTime();
 			GLFW.glfwPollEvents();
 			Frame frame = BufferLoader.loadFrameBuffer(entities);
+			while((float)((System.nanoTime() - start)) < Window.window.getAvgFrameTime()) {}
 			MasterRenderer.masterRenderer.queueFrame(frame);
 		}
 	}

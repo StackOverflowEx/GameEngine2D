@@ -33,12 +33,22 @@ public class Window {
 	private boolean fullscreen = false;
 	private int lastX, lastY, lastWidth, lastHeight;
 	
+	private int frametimePointer;
+	private float[] frametimes;
+	private long last;
+	
 	private long WINDOW_ID;
 	
 	//Wird einmal aufgerufen, um das Spielefenster zu erstellen	
 	public Window(int width, int height, String title) {
 		if(Window.window == null) {
 			resized = false;
+			
+			last = -1;
+			frametimes = new float[100];
+			frametimes[0] = 0;
+			frametimes[frametimes.length-1] = 0;
+			frametimePointer = 0;
 			frameCountTime = 0;
 			frameCount = 0;
 			
@@ -172,8 +182,29 @@ public class Window {
 		countFrame();
 	}
 	
+	public float getAvgFrameTime() {
+		float sum = 0;
+		for(float f : frametimes) {
+			sum += f;
+		}
+		return sum / 100f;
+	}
+	
 	//Diese Methode gibt jede Sekunde aus, mit wie vielen frames per second (FPS) das spiel läuft.
 	private void countFrame() {
+		
+		long nano = System.nanoTime();
+		float frametime = nano - last;
+		if(last == -1) {
+			frametime = 0.5f;
+		}
+		frametimes[frametimePointer] = frametime;
+		frametimePointer++;
+		if(frametimePointer == frametimes.length) {
+			frametimePointer = 0;
+		}
+		last = nano;
+		
 		if((System.currentTimeMillis() - frameCountTime) > 1000) {
 			System.out.println("FPS: " + frameCount);
 			frameCount = 0;

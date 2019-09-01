@@ -1,10 +1,9 @@
 package de.Luca.Rendering;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
-import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -17,7 +16,6 @@ import de.Luca.Entities.Texture;
 import de.Luca.Loading.Frame;
 import de.Luca.Loading.Loader;
 import de.Luca.Shader.EntityShader;
-import de.Luca.Text.Text;
 import de.Luca.Text.TextManager;
 
 public class MasterRenderer extends Thread {
@@ -26,7 +24,7 @@ public class MasterRenderer extends Thread {
 	private EntityShader shader;
 	private Frame frame;
 	private Frame queuedFrame;
-	private ArrayList<Texture> loadTextures;
+	private CopyOnWriteArrayList<Texture> loadTextures;
 	private Matrix4f projection, view;
 
 	public MasterRenderer(RenderLoop loop) {
@@ -37,18 +35,18 @@ public class MasterRenderer extends Thread {
 		GLFW.glfwMakeContextCurrent(0);
 		setName("Rendering Thread");
 		masterRenderer = this;
-		loadTextures = new ArrayList<Texture>();
-		;
+		loadTextures = new CopyOnWriteArrayList<Texture>();
 	}
 
 	public void queueFrame(Frame frame) {
-		if (queuedFrame != null) {
-			synchronized (this.queuedFrame) {
-				this.queuedFrame = frame;
-			}
-		} else {
-			this.queuedFrame = frame;
-		}
+//		if (queuedFrame != null) {
+//			synchronized (this.queuedFrame) {
+//				this.queuedFrame = frame;
+//			}
+//		} else {
+//			this.queuedFrame = frame;
+//		}
+		this.queuedFrame = frame;
 	}
 
 	public void queueTexture(Texture texture) {
@@ -56,24 +54,19 @@ public class MasterRenderer extends Thread {
 	}
 
 	private void loadTextures() {
-		synchronized (loadTextures) {
+//		synchronized (loadTextures) {
 			for (Texture texture : loadTextures) {
 				System.out.println("Loading texture");
 				int id = Loader.loadTexture(texture.getBuffer(), texture.getWidth(), texture.getHeight());
 				texture.setTextureID(id);
 			}
 			loadTextures.clear();
-		}
+//		}
 	}
 	
 	private void renderGUI() {
 
-		if (TextManager.manager == null) {
-			new TextManager();
-			TextManager.manager.generateFont("C:\\Windows\\Fonts\\Arial.ttf", 40f, "Arial");
-			TextManager.manager.addText(new Text(TextManager.manager.getFont("Arial"), 0, 0, "HEELLO", new Vector4f(0, 0, 0, 1)));
-		}
-		TextManager.manager.render();
+		TextManager.render();
 		
 	}
 	
@@ -110,7 +103,7 @@ public class MasterRenderer extends Thread {
 		}
 	}
 
-	public synchronized void render() {
+	public void render() {
 		loadTextures();
 		swapFrames();
 		if (shader == null) {

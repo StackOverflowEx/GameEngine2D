@@ -7,32 +7,40 @@ import de.Luca.Text.TextManager;
 
 public class BufferLoader {
 	
-	private static Frame oldFrame;
+	private static long last = 0;
+	private static int frame = 0;
 	
 	//VAO: 8-Quad für Rendering mit Texture - Quads für Fontrendering
 	public static Frame loadFrameBuffer(List<Entity> entities) {
 		
 		float[] textureCoords;
 		float[] verticies;
-		if(TextManager.manager != null) {
-			boolean changed = TextManager.manager.hasChanged();
-			if(!changed && (oldFrame != null && entities.equals(oldFrame.getEntities()))) {
-				return oldFrame;
-			}
-			float[][] buffer = TextManager.manager.getBuffer();
-			verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
-//			System.out.println("START VERTEX: " + buffer[1][]] + " | " + verticies[9]);
-			textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
-		}else {
-			if(oldFrame != null && entities.equals(oldFrame.getEntities())) {
-				return oldFrame;
-			}
-			verticies = new float[] { 0, 0, 0, 1, 1, 0, 1, 1 };
-			textureCoords = new float[] { 0, 1, 0, 0, 1, 1, 1, 0};
-		}
-		oldFrame = new Frame(entities, verticies, textureCoords);
-		return oldFrame;
+//		if(TextManager != null) {
+//			float[][] buffer = TextManager.manager.getBuffer();
+//			verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
+//			textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
+//		}else {
+//			verticies = new float[] { 0, 0, 0, 1, 1, 0, 1, 1 };
+//			textureCoords = new float[] { 0, 1, 0, 0, 1, 1, 1, 0};
+//		}
 		
+		float[][] buffer = TextManager.getBuffer();
+		verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
+		textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
+		
+		countFrame();
+		
+		return new Frame(entities, verticies, textureCoords);
+		
+	}
+	
+	private static void countFrame() {
+		if((System.currentTimeMillis() - last) > 1000) {
+			System.out.println("CPU Frames: " + frame);
+			last = System.currentTimeMillis();
+			frame = 0;
+		}
+		frame++;
 	}
 	
 	private static float[] combineBuffer(float[] first, float[] second) {
