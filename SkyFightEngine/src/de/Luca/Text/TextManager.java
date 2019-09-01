@@ -45,7 +45,7 @@ public class TextManager {
 		changed = true;
 	}
 
-	public static void generateFont(String file, float fontSize, String name, boolean italic, boolean bold) {
+	public static  void generateFont(String file, float fontSize, String name, boolean italic, boolean bold) {
 		long font = FontAtlas.addFont(file, fontSize, italic, bold);
 		FontAtlas.hasUpdated();
 		FontAtlas.build(0);
@@ -240,10 +240,13 @@ public class TextManager {
 
 				float width = glyph.x1 - glyph.x0;
 				float height = glyph.y1 - glyph.y0;
-
+				
+				long nano4 = System.nanoTime();
 				Vector2f quadScale = WorldPosition
 						.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));
-
+				if((System.nanoTime() - nano4) / 1000000f > 1)
+					System.out.println("Calc 3: " + ((System.nanoTime() - nano4) / 1000000f) + "ms");
+				
 				renderGlyph(glyph, x, y, quadScale, offset * 4);
 				offset += 1;
 				x += glyph.advanceX / (windowSize.x / 2f);
@@ -254,10 +257,10 @@ public class TextManager {
 	}
 
 	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {
-
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
 		shader.loadTransformationMatrix(transformation);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4 + offset, 4);
+
 	}
 
 }

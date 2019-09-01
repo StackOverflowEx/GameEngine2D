@@ -3,13 +3,11 @@ package de.Luca.Shader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.FloatBuffer;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
@@ -20,8 +18,6 @@ public abstract class ShaderProgramm {
 	private int programmID;
 	
 	public ShaderProgramm(String vertexFile, String fragmentFile) {
-		System.out.println(this.getClass().getName());
-		System.out.println(vertexFile + " | " + fragmentFile);
 		vertexShader = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
 		fragmentShader = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
 		programmID = GL20.glCreateProgram();
@@ -46,7 +42,10 @@ public abstract class ShaderProgramm {
 	protected abstract void getAllUniformLocations();
 	
 	public void start() {
+		long nano = System.nanoTime();
 		GL20.glUseProgram(programmID);
+		if((System.nanoTime() - nano) / 1000000f > 1)
+			System.out.println("Bound Shader: " + ((System.nanoTime() - nano) / 1000000f) + "ms");
 	}
 	
 	public void stop() {
@@ -66,7 +65,10 @@ public abstract class ShaderProgramm {
 	}
 	
 	protected void load4DVector(int location, Vector4f vector) {
+		long nano = System.nanoTime();
 		GL20.glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+		if((System.nanoTime() - nano) / 1000000f > 1)
+			System.out.println("Loaded 4D Vektor: " + ((System.nanoTime() - nano) / 1000000f) + "ms");
 	}
 	
 	protected void load2DVector(int location, Vector2f vector) {
@@ -91,9 +93,13 @@ public abstract class ShaderProgramm {
 	}
 	
 	protected void loadMatrix(int location, Matrix4f matrix) {
-		FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
+		long nano = System.nanoTime();
+		float[] matrixBuffer = new float[16];
+		if((System.nanoTime() - nano) / 1000000f > 1)
+			System.out.println("Loaded Matrix (Alloc Buffer): " + ((System.nanoTime() - nano) / 1000000f) + "ms");
 		matrix.get(matrixBuffer);
 		GL20.glUniformMatrix4fv(location, false, matrixBuffer);
+		
 	}
 	
 	@SuppressWarnings("resource")

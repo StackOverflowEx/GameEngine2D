@@ -36,6 +36,8 @@ public class Window {
 	private static float[] frametimes;
 	private static long last;
 	
+	private static Vector2f size;
+	
 	private static long WINDOW_ID;
 	
 	//Wird einmal aufgerufen, um das Spielefenster zu erstellen	
@@ -68,7 +70,7 @@ public class Window {
 		if(WINDOW_ID == MemoryUtil.NULL) {
 			throw new IllegalStateException("Could not create window");
 		}
-		
+				
 		//Spielefenster wird mittig auf den Bildschrim gesetzt
 		GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		float x = (vidMode.width() - width) / 2.0f;
@@ -135,31 +137,33 @@ public class Window {
 			@Override
 			public void invoke(long window, int width, int height) {
 				resized = true;
+				size = new Vector2f(width, height);
 				Calc.calcProjectionMatrix();
 			}
 		});
 	}
 	
 	public static Vector2f getWindowSize() {
-		IntBuffer x = BufferUtils.createIntBuffer(1);
-		IntBuffer y = BufferUtils.createIntBuffer(1);
-		GLFW.glfwGetWindowSize(WINDOW_ID, x, y);
-		return new Vector2f(x.get(), y.get());
+		if(size == null) {
+			int[] x = new int[1];
+			int[] y = new int[1];
+			GLFW.glfwGetWindowSize(WINDOW_ID, x, y);
+			size = new Vector2f(x[0], y[0]);
+		}
+		return size;
 	}
 	
 	public static void toggleFullscreen() {
 		if (!fullscreen) {
 			fullscreen = true;
-			IntBuffer x = BufferUtils.createIntBuffer(1);
-			IntBuffer y = BufferUtils.createIntBuffer(1);
+			int[] x = new int[1];
+			int[] y = new int[1];
 			GLFW.glfwGetWindowPos(WINDOW_ID, x, y);
-			lastX = x.get();
-			lastY = y.get();
-			x = BufferUtils.createIntBuffer(1);
-			y = BufferUtils.createIntBuffer(1);
+			lastX = x[0];
+			lastY = y[0];
 			GLFW.glfwGetWindowSize(WINDOW_ID, x, y);
-			lastWidth = x.get();
-			lastHeight = y.get();
+			lastWidth = x[0];
+			lastHeight = y[0];
 			GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 			GLFW.glfwSetWindowMonitor(WINDOW_ID, GLFW.glfwGetPrimaryMonitor(), 0, 0, vidMode.width(), vidMode.height(),
 					60);
@@ -211,11 +215,11 @@ public class Window {
 	
 	//Der Viewport wird aktualisiert. Das ist nötig, da sich die Fenstergröße ändern kann und somit auch der Viewport
 	private static void updateViewPort() {
-		IntBuffer pWidth = BufferUtils.createIntBuffer(1);
-		IntBuffer pHeight = BufferUtils.createIntBuffer(1);
+		int[] pWidth = new int[1];
+		int[] pHeight = new int[1];
 
 		GLFW.glfwGetFramebufferSize(WINDOW_ID, pWidth, pHeight);
-		GL11.glViewport(0, 0, pWidth.get(0), pHeight.get(0));
+		GL11.glViewport(0, 0, pWidth[0], pHeight[0]);
 	}
 	
 	//Schließt das Fenster und beendet GLFW

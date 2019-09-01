@@ -106,19 +106,13 @@ public class MasterRenderer extends Thread {
 		GL11.glClearColor(1, 0.5f, 0, 1);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
-
+		
 		if (frame != null) {
 			bindModel();
 
-			long nano = System.nanoTime();
 			drawEntities();
 			GUIManager.render();
 			TextManager.render();
-			float ms = ((System.nanoTime() - nano) / 1000000f);
-//			System.out.println("Rendered: " + ms + "ms");
-			if(ms > 0.5) {
-				System.out.println("Stutter detected");
-			}
 
 			unbind();
 		}

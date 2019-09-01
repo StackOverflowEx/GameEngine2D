@@ -1,9 +1,6 @@
 package de.Luca.Utils;
 
-import java.nio.DoubleBuffer;
-
 import org.joml.Vector2f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
 import de.Luca.Window.Window;
@@ -11,10 +8,10 @@ import de.Luca.Window.Window;
 public class WorldPosition {
 
 	public static Vector2f getAbsCursorPos() {
-		DoubleBuffer xb = BufferUtils.createDoubleBuffer(1);
-		DoubleBuffer yb = BufferUtils.createDoubleBuffer(1);
+		double[] xb = new double[1];
+		double[] yb = new double[1];
 		GLFW.glfwGetCursorPos(Window.getWindowID(), xb, yb);
-		return new Vector2f((float)xb.get(), (float)yb.get());
+		return new Vector2f((float)xb[0], (float)yb[0]);
 	}
 	
 	public static Vector2f toOpenGLCoords(Vector2f pixel) {

@@ -12,6 +12,7 @@ public class DefaultButtonAnimation implements HoverCallback, ClickCallback{
 			if(mouseOn) {
 				if(button.getHoverTexture() != null) {
 					button.setTexture(button.getHoverTexture());
+					System.out.println(button.getHoverTexture().getTextureID() + " | "  + button.getDefaultTexture().getTextureID());
 				}else {
 					button.setCurrentColor(new Vector4f(button.getColor().x() - 0.1f, button.getColor().y() - 0.1f, button.getColor().z() - 0.1f, button.getColor().w()));
 				}
