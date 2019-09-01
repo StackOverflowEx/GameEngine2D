@@ -26,7 +26,7 @@ public class Text {
 		this.color = color;
 		this.visible = true;
 		
-		bounds = Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);;
+		bounds = Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);
 		
 		Vector2f wc = WorldPosition.toOpenGLCoords(new Vector2f(x, y));
 		openGLx = wc.x();
@@ -44,6 +44,8 @@ public class Text {
 	public Vector2D getBounds() {
 		return bounds;
 	}
+	
+	
 	
 	public Vector2D getTextSize() {
 		return Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);
@@ -81,6 +83,12 @@ public class Text {
 
 	public int getY() {
 		return y;
+	}
+	
+	public void reCalcOpenGL() {
+		Vector2f wc = WorldPosition.toOpenGLCoords(new Vector2f(x, y));
+		openGLx = wc.x();
+		openGLy = wc.y();
 	}
 
 	public void setY(int y) {

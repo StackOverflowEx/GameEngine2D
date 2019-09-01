@@ -14,7 +14,7 @@ public class Calc {
 	public static void calcProjectionMatrix() {
 		
 
-		Vector2f windowSize = Window.window.getWindowSize();
+		Vector2f windowSize = Window.getWindowSize();
 
 		float aspectRatio = windowSize.x / windowSize.y;
 		float halfWidth = 1.0f;

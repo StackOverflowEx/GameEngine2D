@@ -10,14 +10,14 @@ public class RenderLoop implements Runnable{
 
 	@Override
 	public void run() {
-		GLFW.glfwMakeContextCurrent(Window.window.getWindowID());
+		GLFW.glfwMakeContextCurrent(Window.getWindowID());
 		GL.createCapabilities();
 				
-		while(!Window.window.shouldClose()) {
-			MasterRenderer.masterRenderer.render();
-			Window.window.updateWindow();
+		while(!Window.shouldClose()) {
+			MasterRenderer.render();
+			Window.updateWindow();
 		}
-		Window.window.closeWindow();
+		Window.closeWindow();
 	}
 
 }

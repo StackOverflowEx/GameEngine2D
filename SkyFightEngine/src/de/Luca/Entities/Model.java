@@ -1,17 +1,18 @@
 package de.Luca.Entities;
 
+import org.joml.Vector2f;
 
 public class Model {
 
 	private Texture texture;
-	private float scale;
+	private Vector2f scale;
 	
-	public Model(Texture texture, float scale) {
+	public Model(Texture texture, Vector2f scale) {
 		this.texture = texture;
 		this.scale = scale;
 	}
 	
-	public Model(float scale) {
+	public Model(Vector2f scale) {
 		this.scale = scale;
 	}
 	
@@ -19,13 +20,15 @@ public class Model {
 		return texture;
 	}
 	
-	public void setTexture(Texture texture) {
-		if(this.texture == null) {
-			this.texture = texture;
-		}
+	public void setScale(Vector2f scale) {
+		this.scale = scale;
 	}
 	
-	public float getScale() {
+	public void setTexture(Texture texture) {
+		this.texture = texture;
+	}
+	
+	public Vector2f getScale() {
 		return scale;
 	}
 	

@@ -2,7 +2,7 @@ package de.Luca.Loading;
 
 import java.util.List;
 
-import de.Luca.Entities.Entity;
+import de.Luca.Entities.RenderModel;
 import de.Luca.Text.TextManager;
 
 public class BufferLoader {
@@ -10,8 +10,15 @@ public class BufferLoader {
 	private static long last = 0;
 	private static int frame = 0;
 	
+	private static Frame oldFrame;
+	
 	//VAO: 8-Quad für Rendering mit Texture - Quads für Fontrendering
-	public static Frame loadFrameBuffer(List<Entity> entities) {
+	public static Frame loadFrameBuffer(List<RenderModel> entities) {
+		
+		if(!TextManager.hasChanged() && oldFrame != null && entities.equals(oldFrame.getEntities())) {
+//			System.out.println("No Changes");
+			return oldFrame;
+		}
 		
 		float[] textureCoords;
 		float[] verticies;
@@ -26,11 +33,12 @@ public class BufferLoader {
 		
 		float[][] buffer = TextManager.getBuffer();
 		verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
-		textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
+		textureCoords = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[1]);
 		
 		countFrame();
 		
-		return new Frame(entities, verticies, textureCoords);
+		oldFrame = new Frame(entities, verticies, textureCoords);
+		return oldFrame;
 		
 	}
 	

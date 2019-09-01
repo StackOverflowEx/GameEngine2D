@@ -3,7 +3,7 @@ package de.Luca.Entities;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-public class Entity {
+public class RenderModel {
 	
 	//Die Weltkoordinaten des Entity
 	private Vector2f location;
@@ -12,7 +12,7 @@ public class Entity {
 	//Entity roll
 	private float roll;
 	
-	public Entity(Vector2f location, Model model, float roll) {
+	public RenderModel(Vector2f location, Model model, float roll) {
 		this.location = location;
 		this.model = model;
 		this.roll = roll;
@@ -29,7 +29,7 @@ public class Entity {
 	public Vector2f getLocation() {
 		return location;
 	}
-
+	
 	public Model getModel() {
 		return model;
 	}

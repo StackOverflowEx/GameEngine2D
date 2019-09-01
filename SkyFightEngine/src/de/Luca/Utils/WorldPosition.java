@@ -13,12 +13,12 @@ public class WorldPosition {
 	public static Vector2f getAbsCursorPos() {
 		DoubleBuffer xb = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer yb = BufferUtils.createDoubleBuffer(1);
-		GLFW.glfwGetCursorPos(Window.window.getWindowID(), xb, yb);
+		GLFW.glfwGetCursorPos(Window.getWindowID(), xb, yb);
 		return new Vector2f((float)xb.get(), (float)yb.get());
 	}
 	
 	public static Vector2f toOpenGLCoords(Vector2f pixel) {
-		Vector2f windowSize = Window.window.getWindowSize();
+		Vector2f windowSize = Window.getWindowSize();
 		float x = pixel.x;
 		float y = windowSize.y - pixel.y;
 		x = (2.0f * x) / windowSize.x - 1f;

@@ -1,11 +1,11 @@
 package de.Luca.GUI;
 
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GUI {
 	
 	private int x, y, width, height;
-	private ArrayList<GUIComponent> components;
+	private CopyOnWriteArrayList<GUIComponent> components;
 	private boolean visible;
 	
 	public GUI(int x, int y, int width, int height) {
@@ -14,7 +14,12 @@ public class GUI {
 		this.width = width;
 		this.height = height;
 		this.visible = false;
-		this.components = new ArrayList<GUIComponent>();
+		this.components = new CopyOnWriteArrayList<GUIComponent>();
+		GUIManager.addGUI(this);
+	}
+	
+	public CopyOnWriteArrayList<GUIComponent> getComponents() {
+		return components;
 	}
 	
 	public void setVisible(boolean visible) {
@@ -26,15 +31,13 @@ public class GUI {
 	}
 	
 	public void addComponent(GUIComponent c) {
-		synchronized (components) {
-			components.add(c);
-		}
+		components.add(c);
+		c.setGUI(this);
 	}
 	
 	public void removeComponent(GUIComponent c) {
-		synchronized (components) {
-			components.remove(c);
-		}
+		components.remove(c);
+		c.setGUI(null);
 	}
 
 	public int getX() {

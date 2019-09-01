@@ -105,7 +105,7 @@ public class Loader {
 		
 		if(file == null || !new File(file).exists()) {
 			Texture texture = new Texture(buffer, width, height);
-			MasterRenderer.masterRenderer.queueTexture(texture);
+			MasterRenderer.queueTexture(texture);
 		}
 		
 		try {
@@ -124,7 +124,7 @@ public class Loader {
 		}
 
 		Texture texture = new Texture(buffer, width, height);
-		MasterRenderer.masterRenderer.queueTexture(texture);
+		MasterRenderer.queueTexture(texture);
 
 		return texture;
 	}

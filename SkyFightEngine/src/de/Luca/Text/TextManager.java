@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import de.Luca.Calculation.Calc;
 import de.Luca.Entities.Texture;
 import de.Luca.Rendering.MasterRenderer;
-import de.Luca.Shader.GUIShader;
+import de.Luca.Shader.TextShader;
 import de.Luca.Utils.WorldPosition;
 import de.Luca.Window.Window;
 import de.t0b1.freetype_wrapper.classes.Font;
@@ -26,7 +26,7 @@ public class TextManager {
 
 	private static ConcurrentHashMap<String, Long> fonts;
 	private static CopyOnWriteArrayList<Text> texts;
-	private static GUIShader shader;
+	private static TextShader shader;
 	private static Texture tex;
 	private static ConcurrentHashMap<Long, HashMap<Character, FontGlyph>> glyphs;
 	private static float[][] buffer;
@@ -40,7 +40,7 @@ public class TextManager {
 		fonts = new ConcurrentHashMap<String, Long>();
 		glyphs = new ConcurrentHashMap<Long, HashMap<Character, FontGlyph>>();
 		texts = new CopyOnWriteArrayList<Text>();
-		shader = new GUIShader();
+		shader = new TextShader();
 		buffer = new float[2][];
 		changed = true;
 	}
@@ -53,7 +53,7 @@ public class TextManager {
 		buffer.put(FontAtlas.getTexDataAsRGBA32().data);
 		buffer.flip();
 		tex = new Texture(buffer, FontAtlas.getTexDataAsRGBA32().width, FontAtlas.getTexDataAsRGBA32().height);
-		MasterRenderer.masterRenderer.queueTexture(tex);
+		MasterRenderer.queueTexture(tex);
 
 		udpateFontGlyphs();
 		glyphs.put(font, sortFontGlyphs(Font.getAllGlyphs(font)));
@@ -87,9 +87,7 @@ public class TextManager {
 	}
 
 	public static void addText(Text text) {
-//		synchronized (texts) {
 		texts.add(text);
-//		}
 		changed = true;
 	}
 
@@ -100,9 +98,7 @@ public class TextManager {
 	}
 
 	public static void removeText(Text text) {
-//		synchronized (texts) {
 		texts.remove(text);
-//		}
 		changed = true;
 	}
 
@@ -121,7 +117,6 @@ public class TextManager {
 			return buffer;
 		}
 		changed = false;
-//		buffer[0] = genVertexBuffer();
 		buffer[0] = genVertexBuffer();
 		buffer[1] = genTextureBuffer();
 		return buffer;
@@ -129,29 +124,25 @@ public class TextManager {
 
 	public static FontGlyph getGlyph(long font, char c) {
 		return glyphs.get(font).get(c);
-//		return Font.findChar(font, c);
 	}
 
 	private static float[] genTextureBuffer() {
 		int size = 0;
-//		synchronized (texts) {
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
 			}
 			size += t.getText().toCharArray().length * 8;
 		}
-//		}
 		float[] textureCoords = new float[size];
 		int pointer = 0;
-//		synchronized (texts) {
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
 			}
 			for (char c : t.getText().toCharArray()) {
 				System.out.println(pointer + 8);
-				FontGlyph glyph = getGlyph(t.getFont(), c);// glyphs[c];
+				FontGlyph glyph = getGlyph(t.getFont(), c);
 				textureCoords[pointer] = glyph.u0;
 				textureCoords[pointer + 1] = glyph.v1;
 				textureCoords[pointer + 2] = glyph.u0;
@@ -161,30 +152,23 @@ public class TextManager {
 				textureCoords[pointer + 6] = glyph.u1;
 				textureCoords[pointer + 7] = glyph.v0;
 				System.out.println("GLYPH: " + glyph.codepoint);
-//					for(int i = 0; i < 8; i++) {
-//						System.out.println(textureCoords[pointer + i]);
-//					}
 				pointer += 8;
 
 			}
 		}
-//		}
 		return textureCoords;
 	}
 
 	private static float[] genVertexBuffer() {
 		int size = 0;
-//		synchronized (texts) {
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
 			}
 			size += t.getText().toCharArray().length * 8;
 		}
-//		}
 		float[] verticies = new float[size];
 		int pointer = 0;
-//		synchronized (texts) {
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
@@ -201,7 +185,6 @@ public class TextManager {
 				pointer += 8;
 			}
 		}
-//		}
 		return verticies;
 	}
 	
@@ -219,93 +202,32 @@ public class TextManager {
 		}
 	}
 
-	private static void processProjectionMatrix() {
+	private static boolean processProjectionMatrix() {
 		boolean load = updateProjectionMatrix();
 		if (load) {
 			shader.loadProjectionMatrix(projection);
 		}
+		return load;
 	}
-//
-//	private static float[] getCalculatedVertexBuffer() {
-//		int size = 0;
-//		for (Text t : texts) {
-//			if (!t.isVisible()) {
-//				continue;
-//			}
-//			size += t.getText().toCharArray().length * 8;
-//		}
-//		
-//		float[] verticies = new float[size];
-//		int pointer = 0;
-//		
-//		Vector2f windowSize = Window.window.getWindowSize();
-//		updateProjectionMatrix();
-//		float[] quad = new float[] {0, 0, 0, 1, 1, 0, 1, 1};
-//		for(Text t : texts) {
-//			if (!t.isVisible()) {
-//				continue;
-//			}
-//			
-//			Vector2f wc = t.getOpenGLPos();
-//			float x = wc.x();
-//			float y = wc.y();
-//			for (char c : t.getText().toCharArray()) {
-//				FontGlyph glyph = getGlyph(t.getFont(), c);
-//				
-//				float width = glyph.x1 - glyph.x0;
-//				float height = glyph.y1 - glyph.y0;
-//
-//				Vector2f quadScale = WorldPosition
-//						.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));
-//
-//				Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
-//
-//				Matrix4f matrix = new Matrix4f(Calc.getProjectionMatrix());
-//				System.out.println(matrix);
-//				matrix = matrix.mul(transformation);
-//				Vector4f v1 = new Vector4f(quad[0], quad[1], 0f, 1f);
-//				v1 = v1.mul(matrix);
-//				Vector4f v2 = new Vector4f(quad[2], quad[3], 0f, 1f);
-//				v2 = v2.mul(matrix);
-//				Vector4f v3 = new Vector4f(quad[4], quad[5], 0f, 1f);
-//				v3 = v3.mul(matrix);
-//				Vector4f v4 = new Vector4f(quad[6], quad[7], 0f, 1f);
-//				v4 = v4.mul(matrix);
-//								
-//				verticies[pointer] = v1.x;
-//				verticies[pointer + 1] = v1.y;
-//				verticies[pointer + 2] = v2.x;
-//				verticies[pointer + 3] = v2.y;
-//				verticies[pointer + 4] = v3.x;
-//				verticies[pointer + 5] = v3.y;
-//				verticies[pointer + 6] = v4.x;
-//				verticies[pointer + 7] = v4.y;
-//				pointer += 8;
-//				
-//				x += glyph.advanceX / (windowSize.x / 2f);
-//			}
-//			
-//		}
-//		
-//		return verticies;
-//	}
 
 	public static void render() {
-		Vector2f windowSize = Window.window.getWindowSize();
+		Vector2f windowSize = Window.getWindowSize();
 		if (tex == null) {
-			throw new IllegalStateException("No Font initialized");
+			return;
 		}
 		if (tex.getTextureID() == -1) {
 			return;
 		}
 		shader.start();
-		processProjectionMatrix();
-		MasterRenderer.masterRenderer.bindTexture(tex.getTextureID());
-//		synchronized (texts) {
+		boolean b = processProjectionMatrix();
+		MasterRenderer.bindTexture(tex.getTextureID());
 		int offset = 0;
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
+			}
+			if(b) {
+				t.reCalcOpenGL();
 			}
 			if (t.getColor().x != 1 || t.getColor().y != 1 || t.getColor().z != 1 || t.getColor().w != 1) {
 				shader.loadColor(t.getColor());
@@ -327,7 +249,7 @@ public class TextManager {
 				x += glyph.advanceX / (windowSize.x / 2f);
 			}
 		}
-//		}
+		MasterRenderer.bindTexture(0);
 		shader.stop();
 	}
 

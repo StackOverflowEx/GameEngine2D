@@ -3,7 +3,6 @@ package de.Luca.Rendering;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -11,8 +10,9 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import de.Luca.Calculation.Calc;
-import de.Luca.Entities.Entity;
+import de.Luca.Entities.RenderModel;
 import de.Luca.Entities.Texture;
+import de.Luca.GUI.GUIManager;
 import de.Luca.Loading.Frame;
 import de.Luca.Loading.Loader;
 import de.Luca.Shader.EntityShader;
@@ -20,7 +20,7 @@ import de.Luca.Text.TextManager;
 
 public class MasterRenderer extends Thread {
 
-	public static MasterRenderer masterRenderer;
+	private static MasterRenderer masterRenderer;
 	private EntityShader shader;
 	private Frame frame;
 	private Frame queuedFrame;
@@ -38,72 +38,65 @@ public class MasterRenderer extends Thread {
 		loadTextures = new CopyOnWriteArrayList<Texture>();
 	}
 
-	public void queueFrame(Frame frame) {
-//		if (queuedFrame != null) {
-//			synchronized (this.queuedFrame) {
-//				this.queuedFrame = frame;
-//			}
-//		} else {
-//			this.queuedFrame = frame;
-//		}
-		this.queuedFrame = frame;
+	public static void queueFrame(Frame frame) {
+		masterRenderer.queuedFrame = frame;
 	}
 
-	public void queueTexture(Texture texture) {
-		loadTextures.add(texture);
+	public static void queueTexture(Texture texture) {
+		masterRenderer.loadTextures.add(texture);
 	}
 
-	private void loadTextures() {
-//		synchronized (loadTextures) {
-			for (Texture texture : loadTextures) {
-				System.out.println("Loading texture");
-				int id = Loader.loadTexture(texture.getBuffer(), texture.getWidth(), texture.getHeight());
-				texture.setTextureID(id);
-			}
-			loadTextures.clear();
-//		}
+	public static void begin() {
+		masterRenderer.start();
 	}
-	
-	private void renderGUI() {
 
-		TextManager.render();
-		
+	private static void loadTextures() {
+		for (Texture texture : masterRenderer.loadTextures) {
+			System.out.println("Loading texture");
+			int id = Loader.loadTexture(texture.getBuffer(), texture.getWidth(), texture.getHeight());
+			texture.setTextureID(id);
+		}
+		masterRenderer.loadTextures.clear();
 	}
-	
+
 	private void processMatricies() {
-		
+
 		boolean loadProjection = true;
 		boolean loadView = true;
-		
-		if(projection == null) {
+
+		if (projection == null) {
 			projection = Calc.getProjectionMatrix();
-		}else {
-			if(projection == Calc.getProjectionMatrix()) {
+		} else {
+			if (projection == Calc.getProjectionMatrix()) {
 				loadProjection = false;
-			}else {
+			} else {
 				projection = Calc.getProjectionMatrix();
 			}
 		}
-		
-		if(view == null) {
+
+		if (view == null) {
 			view = Calc.getViewMatrix();
-		}else {
-			if(view == Calc.getViewMatrix()) {
+		} else {
+			if (view == Calc.getViewMatrix()) {
 				loadView = false;
-			}else {
+			} else {
 				view = Calc.getViewMatrix();
 			}
 		}
-		
-		if(loadProjection) {
+
+		if (loadProjection) {
 			shader.loadProjectionMatrix(projection);
 		}
-		if(loadView) {
+		if (loadView) {
 			shader.loadViewMatrix(view);
 		}
 	}
 
-	public void render() {
+	public static void render() {
+		masterRenderer.draw();
+	}
+
+	public void draw() {
 		loadTextures();
 		swapFrames();
 		if (shader == null) {
@@ -116,33 +109,48 @@ public class MasterRenderer extends Thread {
 
 		if (frame != null) {
 			bindModel();
-			shader.start();
 
-			processMatricies();
-
-			for (int i = 0; i < frame.getBufferedEntities(); i++) {
-				Entity entity = frame.getEntities().get(i);
-				if (entity.getModel().getTexture().getTextureID() != -1) {
-					bindTexture(entity.getModel().getTexture().getTextureID());
-					Matrix4f transformationMatrix = Calc.getTransformationMatrix(entity.getLocation(),
-							new Vector2f(entity.getModel().getScale(), entity.getModel().getScale()), entity.getRoll());
-					shader.loadTransformationMatrix(transformationMatrix);
-					drawVAO();
-				}
+			long nano = System.nanoTime();
+			drawEntities();
+			GUIManager.render();
+			TextManager.render();
+			float ms = ((System.nanoTime() - nano) / 1000000f);
+//			System.out.println("Rendered: " + ms + "ms");
+			if(ms > 0.5) {
+				System.out.println("Stutter detected");
 			}
 
-			shader.stop();
-			renderGUI();
+			unbind();
 		}
 
-		unbind();
 	}
 
-	public void swapFrames() {
+	private void drawEntities() {
+		shader.start();
+		processMatricies();
+
+		for (int i = 0; i < frame.getBufferedEntities(); i++) {
+			RenderModel entity = frame.getEntities().get(i);
+			if (entity.getModel().getTexture().getTextureID() != -1) {
+				bindTexture(entity.getModel().getTexture().getTextureID());
+				Matrix4f transformationMatrix = Calc.getTransformationMatrix(entity.getLocation(),
+						entity.getModel().getScale(), entity.getRoll());
+				shader.loadTransformationMatrix(transformationMatrix);
+				drawVAO();
+			}
+		}
+		shader.stop();
+	}
+
+	public static void swapFrames() {
+		masterRenderer.nswapFrames();
+	}
+
+	public void nswapFrames() {
 		if (queuedFrame != null) {
-			if(frame != queuedFrame) {
-				if(frame != null) {
-					if(frame.getVaoID() != -1) {
+			if (frame != queuedFrame) {
+				if (frame != null) {
+					if (frame.getVaoID() != -1) {
 						Loader.cleanVAO(frame.getVaoID());
 					}
 				}
@@ -152,12 +160,12 @@ public class MasterRenderer extends Thread {
 		}
 	}
 
-	public void drawVAO() {
+	private void drawVAO() {
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 	}
 
-	public void bindModel() {
-		if(frame.getVaoID() == -1) {
+	private void bindModel() {
+		if (frame.getVaoID() == -1) {
 			frame.setVaoID(Loader.loadToVAO(frame.getVerticies(), frame.getTextureCoords()));
 		}
 		GL30.glBindVertexArray(frame.getVaoID());
@@ -165,12 +173,12 @@ public class MasterRenderer extends Thread {
 		GL30.glEnableVertexAttribArray(1);
 	}
 
-	public void bindTexture(int id) {
+	public static void bindTexture(int id) {
 		GL20.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 	}
 
-	public void unbind() {
+	private void unbind() {
 		GL30.glDisableVertexAttribArray(0);
 		GL30.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);

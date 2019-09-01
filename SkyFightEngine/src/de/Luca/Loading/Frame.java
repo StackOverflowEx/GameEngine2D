@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import de.Luca.Entities.Entity;
+import de.Luca.Entities.RenderModel;
 
 public class Frame {
 	
 	private UUID frameID;
-	private List<Entity> entities;
+	private List<RenderModel> entities;
 	private float[] verticies;
 	private float[] textureCoords;
 	private int vaoID;
 	
-	public Frame(List<Entity> entities, float[] verticies, float[] textureCoords) {
-		this.entities = new ArrayList<Entity>();
+	public Frame(List<RenderModel> entities, float[] verticies, float[] textureCoords) {
+		this.entities = new ArrayList<RenderModel>();
 		this.entities.addAll(entities);
 		this.frameID = UUID.randomUUID();
 		this.verticies = verticies;
@@ -43,7 +43,7 @@ public class Frame {
 		return frameID;
 	}
 	
-	public List<Entity> getEntities(){
+	public List<RenderModel> getEntities(){
 		return entities;
 	}
 	

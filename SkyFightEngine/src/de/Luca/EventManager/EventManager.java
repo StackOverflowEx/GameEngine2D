@@ -5,30 +5,21 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.Luca.Events.Event;
 
 public class EventManager {
+		
+	private static ConcurrentHashMap<Listener, HashMap<Class<? extends Event>, List<Method>>> listeners = new ConcurrentHashMap<Listener, HashMap<Class<? extends Event>, List<Method>>>();
 	
-	public static EventManager eventMangaer;
-	
-	private HashMap<Listener, HashMap<Class<? extends Event>, List<Method>>> listeners = new HashMap<Listener, HashMap<Class<? extends Event>, List<Method>>>();
-	
-	
-	//Erstellt einen EventManager
-	public EventManager() {
-		if(eventMangaer != null) {
-			throw new IllegalAccessError("EventManager already created");
-		}
-		eventMangaer = this;
-	}
 	
 	//Es können Listener hinzugefügt werden, in welchen deklaiert werden kann, was bei bestimmten Events passiert.
-	public void registerEvent(Listener listener) {
+	public static void registerEvent(Listener listener) {
 		listeners.put(listener, createRegisteredListener(listener));
 	}
 	
-	public void fireEvent(Event e) {
+	public static void fireEvent(Event e) {
 		final Class<? extends Event> eventClass = e.getClass().asSubclass(Event.class);
 		for(Listener l : listeners.keySet()) {
 			if(listeners.get(l).containsKey(eventClass)) {
@@ -44,7 +35,7 @@ public class EventManager {
 	}
 	
 	//Adds all Methods with annotation "EventHandler" to List
-	private HashMap<Class<? extends Event>, List<Method>> createRegisteredListener(Listener listener) {
+	private static HashMap<Class<? extends Event>, List<Method>> createRegisteredListener(Listener listener) {
 		HashMap<Class<? extends Event>, List<Method>> methods = new HashMap<Class<? extends Event>, List<Method>>();
 		Method[] publicMethod = listener.getClass().getMethods();
 		for(Method m : publicMethod) {
@@ -71,7 +62,7 @@ public class EventManager {
 	}
 	
 	//Es können Listener entfernt werden.
-	public void removeListener(Listener listener) {
+	public static void removeListener(Listener listener) {
 		listeners.remove(listener);
 	}
 

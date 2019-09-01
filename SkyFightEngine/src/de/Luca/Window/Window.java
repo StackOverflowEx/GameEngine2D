@@ -26,42 +26,36 @@ import de.Luca.Events.ScrollEvent;
 
 public class Window {
 	
-	public static Window window;
-	private boolean resized;
-	private long frameCountTime;
-	private long frameCount;
-	private boolean fullscreen = false;
-	private int lastX, lastY, lastWidth, lastHeight;
+	private static boolean resized;
+	private static long frameCountTime;
+	private static long frameCount;
+	private static boolean fullscreen = false;
+	private static int lastX, lastY, lastWidth, lastHeight;
 	
-	private int frametimePointer;
-	private float[] frametimes;
-	private long last;
+	private static int frametimePointer;
+	private static float[] frametimes;
+	private static long last;
 	
-	private long WINDOW_ID;
+	private static long WINDOW_ID;
 	
 	//Wird einmal aufgerufen, um das Spielefenster zu erstellen	
-	public Window(int width, int height, String title) {
-		if(Window.window == null) {
-			resized = false;
-			
-			last = -1;
-			frametimes = new float[100];
-			frametimes[0] = 0;
-			frametimes[frametimes.length-1] = 0;
-			frametimePointer = 0;
-			frameCountTime = 0;
-			frameCount = 0;
-			
-			init(width, height, title);
-			Window.window = this;
-			System.out.println(window);
-		}else {
-			throw new IllegalStateException("Window already created");
-		}
+	
+	public static void init(int width, int height, String title) {
+		resized = false;
+		
+		last = -1;
+		frametimes = new float[100];
+		frametimes[0] = 0;
+		frametimes[frametimes.length-1] = 0;
+		frametimePointer = 0;
+		frameCountTime = 0;
+		frameCount = 0;
+		
+		create(width, height, title);
 	}
 	
 	//Diese Methode ist für das eigentliche erstellen des Spielefensters zuständig (GLFW)
-	private void init(int width, int height, String title) {
+	private static void create(int width, int height, String title) {
 		
 		//GLFW wird initalisiert
 		if(!GLFW.glfwInit()) {
@@ -96,44 +90,44 @@ public class Window {
 		setupCallbacks();
 	}
 	
-	public boolean hasResized() {
+	public static boolean hasResized() {
 		return resized;
 	}
 	
-	private void setupCallbacks() {
+	private static void setupCallbacks() {
 		GLFW.glfwSetKeyCallback(WINDOW_ID, new GLFWKeyCallbackI() {
 			
 			@Override
 			public void invoke(long window, int key, int scanCode, int action, int mods) {
-				EventManager.eventMangaer.fireEvent(new KeyEvent(key, scanCode, action, mods));
+				EventManager.fireEvent(new KeyEvent(key, scanCode, action, mods));
 			}
 		});
 		GLFW.glfwSetScrollCallback(WINDOW_ID, new GLFWScrollCallbackI() {
 			
 			@Override
 			public void invoke(long window, double xOffset, double yOffset) {
-				EventManager.eventMangaer.fireEvent(new ScrollEvent(xOffset, yOffset));
+				EventManager.fireEvent(new ScrollEvent(xOffset, yOffset));
 			}
 		});
 		GLFW.glfwSetCharCallback(WINDOW_ID, new GLFWCharCallbackI() {
 			
 			@Override
 			public void invoke(long window, int codepoint) {
-				EventManager.eventMangaer.fireEvent(new CharInputEvent(codepoint));
+				EventManager.fireEvent(new CharInputEvent(codepoint));
 			}
 		});
 		GLFW.glfwSetCursorPosCallback(WINDOW_ID, new GLFWCursorPosCallbackI() {
 			
 			@Override
 			public void invoke(long window, double xpos, double ypos) {
-				EventManager.eventMangaer.fireEvent(new CursorPositionEvent(xpos, ypos));
+				EventManager.fireEvent(new CursorPositionEvent(xpos, ypos));
 			}
 		});
 		GLFW.glfwSetMouseButtonCallback(WINDOW_ID, new GLFWMouseButtonCallbackI() {
 			
 			@Override
 			public void invoke(long window, int button, int action, int mods) {
-				EventManager.eventMangaer.fireEvent(new MouseButtonEvent(button, action, mods));
+				EventManager.fireEvent(new MouseButtonEvent(button, action, mods));
 			}
 		});
 		GLFW.glfwSetWindowSizeCallback(WINDOW_ID, new GLFWWindowSizeCallbackI() {
@@ -146,14 +140,14 @@ public class Window {
 		});
 	}
 	
-	public Vector2f getWindowSize() {
+	public static Vector2f getWindowSize() {
 		IntBuffer x = BufferUtils.createIntBuffer(1);
 		IntBuffer y = BufferUtils.createIntBuffer(1);
 		GLFW.glfwGetWindowSize(WINDOW_ID, x, y);
 		return new Vector2f(x.get(), y.get());
 	}
 	
-	public void toggleFullscreen() {
+	public static void toggleFullscreen() {
 		if (!fullscreen) {
 			fullscreen = true;
 			IntBuffer x = BufferUtils.createIntBuffer(1);
@@ -161,6 +155,8 @@ public class Window {
 			GLFW.glfwGetWindowPos(WINDOW_ID, x, y);
 			lastX = x.get();
 			lastY = y.get();
+			x = BufferUtils.createIntBuffer(1);
+			y = BufferUtils.createIntBuffer(1);
 			GLFW.glfwGetWindowSize(WINDOW_ID, x, y);
 			lastWidth = x.get();
 			lastHeight = y.get();
@@ -173,7 +169,7 @@ public class Window {
 		}
 	}
 	
-	public void updateWindow() {
+	public static void updateWindow() {
 		//Der Viewport wird aktualisiert.
 		updateViewPort();
 		//Ein neuer Frame wird im Fenster angezeigt.
@@ -182,7 +178,7 @@ public class Window {
 		countFrame();
 	}
 	
-	public float getAvgFrameTime() {
+	public static float getAvgFrameTime() {
 		float sum = 0;
 		for(float f : frametimes) {
 			sum += f;
@@ -191,7 +187,7 @@ public class Window {
 	}
 	
 	//Diese Methode gibt jede Sekunde aus, mit wie vielen frames per second (FPS) das spiel läuft.
-	private void countFrame() {
+	private static void countFrame() {
 		
 		long nano = System.nanoTime();
 		float frametime = nano - last;
@@ -214,7 +210,7 @@ public class Window {
 	}
 	
 	//Der Viewport wird aktualisiert. Das ist nötig, da sich die Fenstergröße ändern kann und somit auch der Viewport
-	private void updateViewPort() {
+	private static void updateViewPort() {
 		IntBuffer pWidth = BufferUtils.createIntBuffer(1);
 		IntBuffer pHeight = BufferUtils.createIntBuffer(1);
 
@@ -223,17 +219,19 @@ public class Window {
 	}
 	
 	//Schließt das Fenster und beendet GLFW
-	public void closeWindow() {
+	private static boolean closed = false;;
+	public static void closeWindow() {
+		closed = true;
 		GLFW.glfwDestroyWindow(WINDOW_ID);
 		GLFW.glfwTerminate();
 	}
 	
-	public long getWindowID() {
+	public static long getWindowID() {
 		return WINDOW_ID;
 	}
 	
-	public boolean shouldClose() {
-		return GLFW.glfwWindowShouldClose(WINDOW_ID);
+	public static boolean shouldClose() {
+		return closed || GLFW.glfwWindowShouldClose(WINDOW_ID);
 	}
 
 }

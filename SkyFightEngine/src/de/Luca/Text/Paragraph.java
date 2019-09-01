@@ -11,12 +11,14 @@ public class Paragraph {
 	private int x, y;
 	private Vector2f bounds;
 	private boolean visible = true;
+	private TEXT_ALIGN align;
 		
 	public Paragraph(int x, int y, String[] lines, long font, Vector4f color) {
 		texts = new ArrayList<Text>();
 		this.x = x;
 		this.y = y;
 		processLines(lines, font, color, TEXT_ALIGN.LEFT);
+		this.align = TEXT_ALIGN.LEFT;
 	}
 	
 	public Paragraph(int x, int y, String[] lines, long font, Vector4f color, TEXT_ALIGN align) {
@@ -24,6 +26,7 @@ public class Paragraph {
 		this.x = x;
 		this.y = y;
 		processLines(lines, font, color, align);
+		this.align = align;
 	}
 	
 	public Paragraph(int x, int y, Text[] texts) {
@@ -109,10 +112,50 @@ public class Paragraph {
 	
 	public void setX(int x) {
 		this.x = x;
+		processTexts();
 	}
 	
 	public void setY(int y) {
 		this.y = y;
+		processTexts();
+	}
+	
+	public void setPosition(Vector2f pos) {
+		this.x = (int) pos.x;
+		this.y = (int) pos.y;
+		processTexts();
+	}
+	
+	private void processTexts() {
+		int yOffset = 0;
+		float longest = 0;
+		for(Text line : texts) {
+			line.setX(x);
+			line.setY(y + yOffset);
+			yOffset += line.getBounds().y;
+			if(line.getBounds().x > longest) {
+				longest = line.getBounds().x;
+			}
+		}
+		
+		bounds = new Vector2f(longest, yOffset);
+		
+		if(align.equals(TEXT_ALIGN.CENTER)) {
+			for(Text t : texts) {
+				float width = t.getBounds().x;
+				float xOffset = (longest - width) / 2.0f;
+				t.setX((int) (t.getX() + xOffset));
+			}
+		}
+		
+		if(align.equals(TEXT_ALIGN.RIGHT)) {
+			for(Text t : texts) {
+				float width = t.getBounds().x;
+				float xOffset = (longest - width);
+				t.setX((int) (t.getX() + xOffset));
+			}
+		}
+		
 	}
 	
 	public int getX() {
