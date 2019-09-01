@@ -13,7 +13,6 @@ public class BufferLoader {
 	//VAO: 8-Quad für Rendering mit Texture - Quads für Fontrendering
 	public static Frame loadFrameBuffer(List<Entity> entities) {
 		
-		float[] textureCoords;
 		float[] verticies;
 //		if(TextManager != null) {
 //			float[][] buffer = TextManager.manager.getBuffer();
@@ -26,11 +25,16 @@ public class BufferLoader {
 		
 		float[][] buffer = TextManager.getBuffer();
 		verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
-		textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
+//		textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
+		System.out.println("VERTEXBUFFER");
+		for(float f : verticies) {
+			System.out.print(f + ", ");
+		}
+		System.out.println();
 		
 		countFrame();
 		
-		return new Frame(entities, verticies, textureCoords);
+		return new Frame(entities, verticies);
 		
 	}
 	

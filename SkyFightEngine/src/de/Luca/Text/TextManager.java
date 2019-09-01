@@ -121,8 +121,8 @@ public class TextManager {
 			return buffer;
 		}
 		changed = false;
+		buffer[0] = genTexAndVerBuffer();
 //		buffer[0] = genVertexBuffer();
-		buffer[0] = genVertexBuffer();
 		buffer[1] = genTextureBuffer();
 		return buffer;
 	}
@@ -132,6 +132,54 @@ public class TextManager {
 //		return Font.findChar(font, c);
 	}
 
+	private static float[] genTexAndVerBuffer() {
+		int size = 0;
+//		synchronized (texts) {
+		for (Text t : texts) {
+			if (!t.isVisible()) {
+				continue;
+			}
+			size += t.getText().toCharArray().length * 16;
+		}
+//		}
+		float[] textureCoords = new float[size];
+		int pointer = 0;
+//		synchronized (texts) {
+		for (Text t : texts) {
+			if (!t.isVisible()) {
+				continue;
+			}
+			for (char c : t.getText().toCharArray()) {
+				System.out.println(pointer + 8);
+				FontGlyph glyph = getGlyph(t.getFont(), c);// glyphs[c];
+				textureCoords[pointer] = 0;
+				textureCoords[pointer + 1] = 0;
+				textureCoords[pointer + 2] = 0;
+				textureCoords[pointer + 3] = 1;
+				textureCoords[pointer + 4] = 1;
+				textureCoords[pointer + 5] = 0;
+				textureCoords[pointer + 6] = 1;
+				textureCoords[pointer + 7] = 1;
+				textureCoords[pointer + 8] = glyph.u0;
+				textureCoords[pointer + 9] = glyph.v1;
+				textureCoords[pointer + 10] = glyph.u0;
+				textureCoords[pointer + 11] = glyph.v0;
+				textureCoords[pointer + 12] = glyph.u1;
+				textureCoords[pointer + 13] = glyph.v1;
+				textureCoords[pointer + 14] = glyph.u1;
+				textureCoords[pointer + 15] = glyph.v0;
+				System.out.println("GLYPH: " + glyph.codepoint);
+//					for(int i = 0; i < 8; i++) {
+//						System.out.println(textureCoords[pointer + i]);
+//					}
+				pointer += 16;
+
+			}
+		}
+//		}
+		return textureCoords;
+	}
+	
 	private static float[] genTextureBuffer() {
 		int size = 0;
 //		synchronized (texts) {
@@ -222,7 +270,11 @@ public class TextManager {
 	private static void processProjectionMatrix() {
 		boolean load = updateProjectionMatrix();
 		if (load) {
-			shader.loadProjectionMatrix(projection);
+			GL11.glMatrixMode(GL11.GL_PROJECTION);
+			float[] m = new float[16];
+			projection.get(m);
+			GL11.glLoadMatrixf(m);
+//			shader.loadProjectionMatrix(projection);
 		}
 	}
 //
@@ -298,7 +350,7 @@ public class TextManager {
 		if (tex.getTextureID() == -1) {
 			return;
 		}
-		shader.start();
+//		shader.start();
 		processProjectionMatrix();
 		MasterRenderer.masterRenderer.bindTexture(tex.getTextureID());
 //		synchronized (texts) {
@@ -308,7 +360,7 @@ public class TextManager {
 				continue;
 			}
 			if (t.getColor().x != 1 || t.getColor().y != 1 || t.getColor().z != 1 || t.getColor().w != 1) {
-				shader.loadColor(t.getColor());
+//				shader.loadColor(t.getColor());
 			}
 			Vector2f wc = t.getOpenGLPos();
 			float x = wc.x();
@@ -328,13 +380,22 @@ public class TextManager {
 			}
 		}
 //		}
-		shader.stop();
+//		shader.stop();
 	}
 
 	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {
 
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
-		shader.loadTransformationMatrix(transformation);
+		float[] m = new float[16];
+		transformation.get(m);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glLoadIdentity();
+		GL11.glLoadMatrixf(m);
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		GL11.glVertexPointer(2, GL11.GL_FLOAT, 0, 0);
+		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 8*4);
+//		shader.loadTransformationMatrix(transformation);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4 + offset, 4);
 	}
 

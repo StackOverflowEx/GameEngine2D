@@ -75,6 +75,15 @@ public class Loader {
 		return vaoID;
 	}
 	
+	public static int loadToVAO(float[] verticies) {
+		int vaoID = createVAO();
+//		System.out.println("VAO " + vaoID);
+		int vboID1 = storeDataInAttributeList(0, verticies);
+		vbos.put(vaoID, new int[] {vboID1});
+		unbindVAO();
+		return vaoID;
+	}
+	
 	public static int storeIndicies(int[] indices) {
 		int vboID = GL30.glGenBuffers();
 		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, vboID);

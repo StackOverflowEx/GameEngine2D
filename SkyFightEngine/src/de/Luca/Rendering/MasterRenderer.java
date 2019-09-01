@@ -158,11 +158,11 @@ public class MasterRenderer extends Thread {
 
 	public void bindModel() {
 		if(frame.getVaoID() == -1) {
-			frame.setVaoID(Loader.loadToVAO(frame.getVerticies(), frame.getTextureCoords()));
+			frame.setVaoID(Loader.loadToVAO(frame.getVerticies()));
 		}
 		GL30.glBindVertexArray(frame.getVaoID());
 		GL30.glEnableVertexAttribArray(0);
-		GL30.glEnableVertexAttribArray(1);
+//		GL30.glEnableVertexAttribArray(1);
 	}
 
 	public void bindTexture(int id) {
@@ -172,7 +172,7 @@ public class MasterRenderer extends Thread {
 
 	public void unbind() {
 		GL30.glDisableVertexAttribArray(0);
-		GL30.glDisableVertexAttribArray(1);
+//		GL30.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);
 	}
 }
