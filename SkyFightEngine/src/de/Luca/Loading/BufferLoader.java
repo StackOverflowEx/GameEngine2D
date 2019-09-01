@@ -30,7 +30,6 @@ public class BufferLoader {
 			verticies = new float[] { 0, 0, 0, 1, 1, 0, 1, 1 };
 			textureCoords = new float[] { 0, 1, 0, 0, 1, 1, 1, 0};
 		}
-		System.out.println("VERTICIES: " + verticies.length);
 		oldFrame = new Frame(entities, verticies, textureCoords);
 		return oldFrame;
 		

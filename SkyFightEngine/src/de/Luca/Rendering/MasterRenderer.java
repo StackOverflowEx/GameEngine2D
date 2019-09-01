@@ -27,6 +27,7 @@ public class MasterRenderer extends Thread {
 	private Frame frame;
 	private Frame queuedFrame;
 	private ArrayList<Texture> loadTextures;
+	private Matrix4f projection, view;
 
 	public MasterRenderer(RenderLoop loop) {
 		super(loop);
@@ -70,10 +71,43 @@ public class MasterRenderer extends Thread {
 		if (TextManager.manager == null) {
 			new TextManager();
 			TextManager.manager.generateFont("C:\\Windows\\Fonts\\Arial.ttf", 40f, "Arial");
-			TextManager.manager.addText(new Text(TextManager.manager.getFont("Arial"), 0, 0, "HELLO", new Vector4f(0, 0, 0, 1)));
+			TextManager.manager.addText(new Text(TextManager.manager.getFont("Arial"), 0, 0, "HEELLO", new Vector4f(0, 0, 0, 1)));
 		}
 		TextManager.manager.render();
 		
+	}
+	
+	private void processMatricies() {
+		
+		boolean loadProjection = true;
+		boolean loadView = true;
+		
+		if(projection == null) {
+			projection = Calc.getProjectionMatrix();
+		}else {
+			if(projection == Calc.getProjectionMatrix()) {
+				loadProjection = false;
+			}else {
+				projection = Calc.getProjectionMatrix();
+			}
+		}
+		
+		if(view == null) {
+			view = Calc.getViewMatrix();
+		}else {
+			if(view == Calc.getViewMatrix()) {
+				loadView = false;
+			}else {
+				view = Calc.getViewMatrix();
+			}
+		}
+		
+		if(loadProjection) {
+			shader.loadProjectionMatrix(projection);
+		}
+		if(loadView) {
+			shader.loadViewMatrix(view);
+		}
 	}
 
 	public synchronized void render() {
@@ -85,24 +119,18 @@ public class MasterRenderer extends Thread {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glClearColor(1, 0.5f, 0, 1);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glEnable( GL11.GL_BLEND );
+		GL11.glEnable(GL11.GL_BLEND);
 
 		if (frame != null) {
 			bindModel();
 			shader.start();
 
-			Matrix4f viewMatrix = Calc.getViewMatrix();
-			shader.loadViewMatrix(viewMatrix);
-			Matrix4f projectionMatrix = Calc.getProjectionMatrix();
-			shader.loadProjectionMatrix(projectionMatrix);
+			processMatricies();
 
 			for (int i = 0; i < frame.getBufferedEntities(); i++) {
 				Entity entity = frame.getEntities().get(i);
 				if (entity.getModel().getTexture().getTextureID() != -1) {
 					bindTexture(entity.getModel().getTexture().getTextureID());
-//					if(TextManager.manager != null && TextManager.manager.getTexture().getTextureID() != -1) {
-//						bindTexture(TextManager.manager.getTexture().getTextureID());
-//					}
 					Matrix4f transformationMatrix = Calc.getTransformationMatrix(entity.getLocation(),
 							new Vector2f(entity.getModel().getScale(), entity.getModel().getScale()), entity.getRoll());
 					shader.loadTransformationMatrix(transformationMatrix);
@@ -136,7 +164,6 @@ public class MasterRenderer extends Thread {
 	}
 
 	public void bindModel() {
-//		GL30.glBindVertexArray(Loader.getQuadVAO());
 		if(frame.getVaoID() == -1) {
 			frame.setVaoID(Loader.loadToVAO(frame.getVerticies(), frame.getTextureCoords()));
 		}
@@ -145,7 +172,6 @@ public class MasterRenderer extends Thread {
 		GL30.glEnableVertexAttribArray(1);
 	}
 
-	// GL13.GL_TEXTURE0, ...
 	public void bindTexture(int id) {
 		GL20.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);

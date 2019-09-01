@@ -38,7 +38,6 @@ public class Calc {
 		matrix._m30((right + left) / (right - left));
 		matrix._m31((top + bottom) / (top - bottom));
 		
-		System.out.println(matrix.toString());
 		
 		projectionMatrix = matrix;
 	}

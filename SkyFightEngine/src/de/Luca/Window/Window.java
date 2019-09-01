@@ -71,13 +71,17 @@ public class Window {
 		float y = (vidMode.height() - height) / 2.0f;
 		GLFW.glfwSetWindowPos(WINDOW_ID, (int) x, (int) y);
 		
+		//OPENGL-Debug
+//		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_DEBUG_CONTEXT, GLFW.GLFW_TRUE);
+		
 		//Der GLFW Kontext wird an den Thread gebunden, damit später Buffer mit OpenGL gerendert werden können
 		GLFW.glfwMakeContextCurrent(WINDOW_ID);
 		GL.createCapabilities();
+//		Callback debugProc = GLUtil.setupDebugMessageCallback();
 		
 		//Das Fenster wird angezeigt und V-Sync deaktiviert
 		GLFW.glfwShowWindow(WINDOW_ID);
-		GLFW.glfwSwapInterval(1);
+		GLFW.glfwSwapInterval(0);
 		
 		setupCallbacks();
 	}

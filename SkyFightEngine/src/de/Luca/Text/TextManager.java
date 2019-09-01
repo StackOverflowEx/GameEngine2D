@@ -8,7 +8,6 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import de.Luca.Calculation.Calc;
 import de.Luca.Entities.Texture;
@@ -31,6 +30,7 @@ public class TextManager {
 	private HashMap<Long, HashMap<Character, FontGlyph>> glyphs;
 	private float[][] buffer;
 	private boolean changed;
+	private Matrix4f projection;
 	
 	public TextManager() {
 		if(manager == null) {
@@ -88,8 +88,10 @@ public class TextManager {
 		}
 	}
 	
-	public synchronized void addText(Text text) {
-		texts.add(text);
+	public void addText(Text text) {
+		synchronized (texts) {
+			texts.add(text);
+		}
 		changed = true;
 	}
 	
@@ -165,6 +167,22 @@ public class TextManager {
 		return verticies;
 	}
 	
+	private void processProjectionMatrix() {
+		boolean load = true;
+		if(projection == null) {
+			projection = Calc.getProjectionMatrix();
+		}else {
+			if(projection == Calc.getProjectionMatrix()) {
+				load = false;
+			}else {
+				projection = Calc.getProjectionMatrix();
+			}
+		}
+		if(load) {
+			shader.loadProjectionMatrix(projection);	
+		}
+	}
+	
 	public void render() {
 		Vector2f windowSize = Window.window.getWindowSize();
 		if(tex == null) {
@@ -174,7 +192,8 @@ public class TextManager {
 			return;
 		}
 		shader.start();
-		shader.loadProjectionMatrix(Calc.getProjectionMatrix());
+//		shader.loadProjectionMatrix(Calc.getProjectionMatrix());
+		processProjectionMatrix();
 		MasterRenderer.masterRenderer.bindTexture(tex.getTextureID());
 		synchronized (texts) {
 			int offset = 0;
@@ -186,30 +205,25 @@ public class TextManager {
 				for(char c : t.getText().toCharArray()) {
 					FontGlyph glyph = getGlyph(t.getFont(), c);
 
-					x += WorldPosition.toOpenGLCoords(new Vector2f(glyph.advanceX + windowSize.x() / 2f, 1f)).x();
-					
 					float width = glyph.x1 - glyph.x0;
 					float height = glyph.y1 - glyph.y0;	
 		 		
 					Vector2f quadScale = WorldPosition.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));
 										
-					renderGlyph(glyph, x, y, quadScale, offset * 8);
-					offset++;
-					x += quadScale.x;
+					renderGlyph(glyph, x, y, quadScale, offset * 4);
+					offset += 1;
+					x += glyph.advanceX / (windowSize.x/2f);
 				}
-				System.out.println();
 			}
 		}
 		shader.stop();
 	}
 	
-	private void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {	
-		
-		System.out.println(glyph.codepoint + " - " + x + " " + y + " >> " + quadScale.x + " " + quadScale.y + " " + offset + " - " + (8+offset));
+	private void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {		
 		
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
 		shader.loadTransformationMatrix(transformation);
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8 + offset, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4 + offset, 4);
 	}
 
 }
