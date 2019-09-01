@@ -10,6 +10,9 @@ out vec4 out_Color;
 void main(void){
 
 	out_Color = color * texture(tex, pass_textureCoords);
-	out_Color = vec4(1, pass_textureCoords.y, pass_textureCoords.x, 1);
+//	if(out_Color.a == 0){
+//		out_Color.a = 0.3;
+//	}
+	out_Color = vec4(0.2, pass_textureCoords.y, pass_textureCoords.x, 1);
 
 }

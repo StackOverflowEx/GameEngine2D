@@ -61,6 +61,7 @@ public class Calc {
 	
 	public static Matrix4f getTransformationMatrix(Vector2f pos, Vector2f scale, float rotationZ) {
 		Matrix4f matrix = new Matrix4f();
+		matrix = matrix.identity();
 		matrix = matrix.translate(new Vector3f(pos.x, pos.y, 0), matrix);
 		matrix = matrix.scale(new Vector3f(scale.x, scale.y, 1f), matrix);
 		matrix = matrix.rotate((float) Math.toRadians(rotationZ), new Vector3f(0, 0, 1), matrix);

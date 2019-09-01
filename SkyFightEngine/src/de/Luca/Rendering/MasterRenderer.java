@@ -19,7 +19,6 @@ import de.Luca.Loading.Loader;
 import de.Luca.Shader.EntityShader;
 import de.Luca.Text.Text;
 import de.Luca.Text.TextManager;
-import de.Luca.Window.Window;
 
 public class MasterRenderer extends Thread {
 
@@ -65,23 +64,15 @@ public class MasterRenderer extends Thread {
 			loadTextures.clear();
 		}
 	}
-
-//	private void renderGUI() {
-//		if (NukManager.nukManager == null) {
-//			new NukManager();
-//		}
-//		NukManager.nukManager.render();
-//	}
 	
 	private void renderGUI() {
 
 		if (TextManager.manager == null) {
 			new TextManager();
 			TextManager.manager.generateFont("C:\\Windows\\Fonts\\Arial.ttf", 40f, "Arial");
-			TextManager.manager.addText(new Text(TextManager.manager.getFont("Arial"), (int)(Window.window.getWindowSize().x / 2f), (int)(Window.window.getWindowSize().y / 2f), "Hello, World!", new Vector4f(0, 0, 0, 1)));
+			TextManager.manager.addText(new Text(TextManager.manager.getFont("Arial"), 0, 0, "HELLO", new Vector4f(0, 0, 0, 1)));
 		}
 		TextManager.manager.render();
-//		NukManager.nukManager.render();
 		
 	}
 
