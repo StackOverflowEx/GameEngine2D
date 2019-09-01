@@ -1,7 +1,7 @@
 # TO-DO List
 
-- [ ] implement GUIs with legui
-- [ ] rendering sky
-- [ ] playing sound
-- [ ] multi threading
-- [ ] optimisation & clean
+- [ ] implementing Labels, Checkboxes, Slider, Dropdown, Scrollpanel
+- [ ] rendering Background
+- [ ] adding SoundEngine
+- [ ] Playermodel (Hitbox, Animation (GIF))
+- [ ] optimisation

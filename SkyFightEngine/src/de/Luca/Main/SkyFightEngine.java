@@ -45,5 +45,13 @@ public class SkyFightEngine {
 		
 		MainBeat.init();
 	}
+	
+	public static void stop() {
+		TextManager.cleanUP();
+		MasterRenderer.cleanUP();
+		GUIManager.cleanUP();
+		Loader.cleanUP();
+		Window.closeWindow();
+	}
 
 }

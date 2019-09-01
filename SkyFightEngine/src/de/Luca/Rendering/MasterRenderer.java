@@ -50,6 +50,10 @@ public class MasterRenderer extends Thread {
 		masterRenderer.start();
 	}
 
+	public static void cleanUP(){
+		MasterRenderer.masterRenderer.shader.cleanUP();
+	}
+	
 	private static void loadTextures() {
 		for (Texture texture : masterRenderer.loadTextures) {
 			System.out.println("Loading texture");

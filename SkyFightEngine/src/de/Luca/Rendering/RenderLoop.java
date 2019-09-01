@@ -3,6 +3,7 @@ package de.Luca.Rendering;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 
+import de.Luca.Main.SkyFightEngine;
 import de.Luca.Window.Window;
 
 public class RenderLoop implements Runnable{
@@ -17,7 +18,7 @@ public class RenderLoop implements Runnable{
 			MasterRenderer.render();
 			Window.updateWindow();
 		}
-		Window.closeWindow();
+		SkyFightEngine.stop();
 	}
 
 }

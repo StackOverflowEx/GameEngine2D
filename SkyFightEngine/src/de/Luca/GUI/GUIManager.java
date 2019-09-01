@@ -32,6 +32,10 @@ public class GUIManager {
 		guis.remove(gui);
 	}
 	
+	public static void cleanUP() {
+		shader.cleanUP();
+	}
+	
 	public static void render() {
 		Vector2f windowSize = Window.getWindowSize();
 		shader.start();

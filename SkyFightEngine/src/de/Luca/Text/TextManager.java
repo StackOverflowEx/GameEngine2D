@@ -121,6 +121,10 @@ public class TextManager {
 		buffer[1] = genTextureBuffer();
 		return buffer;
 	}
+	
+	public static void cleanUP() {
+		shader.cleanUP();
+	}
 
 	public static FontGlyph getGlyph(long font, char c) {
 		return glyphs.get(font).get(c);
