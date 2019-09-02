@@ -6,14 +6,17 @@ import org.joml.Vector4f;
 import de.Luca.Entities.Model;
 import de.Luca.Entities.RenderModel;
 import de.Luca.Text.Paragraph;
-import de.Luca.Text.TextManager;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
+import de.Luca.Text.Text;
+import de.Luca.Text.TextManager;
 import de.Luca.Utils.WorldPosition;
 import de.Luca.Window.Window;
 
 public class GLabel extends GUIComponent{
 	
 	private Paragraph p;
+	private TEXT_ALIGN align;
+	private int margin;
 
 	public GLabel(int x, int y, int width, int height) {
 		super(x, y, width, height);
@@ -21,9 +24,22 @@ public class GLabel extends GUIComponent{
 	}
 	
 	public void setText(String text, long font, Vector4f color, TEXT_ALIGN align, int margin) {
+		this.align = align;
+		this.margin = margin;
 		removeText();
 		String[] lines = text.split("\n");
-		p = new Paragraph(this.getX() + margin, this.getY(), lines, font, color);
+		p = new Paragraph(this.getX() + margin, this.getY(), lines, font, color, align);
+		p.setVisible(isVisible());
+
+		calcText();
+		
+		TextManager.addParagraph(p);
+	}
+	
+	public void calcText() {
+		if(p == null) {
+			return;
+		}
 		Vector2f bounds = p.getBounds();
 		
 		float textHeight = bounds.y;
@@ -36,12 +52,33 @@ public class GLabel extends GUIComponent{
 			float textWidth = bounds.x;
 			p.setX((int) (p.getX() + this.getWidth() - textWidth) - margin);
 		}
-		
-		TextManager.addParagraph(p);
+		addedToGUI(this.getGUI());
 	}
 	
+	public void setTextAlign(TEXT_ALIGN align) {
+		this.align = align;
+		calcText();
+	}
+	
+	public Paragraph getParagraph() {
+		return p;
+	}
+	
+	public void setText(Paragraph p) {
+		String lines = "";
+		for(int i = 0; i < p.getTexts().size(); i++) {
+			if(i != 0) {
+				lines = lines + "\n";
+			}
+			lines = lines + p.getTexts().get(i).getText();
+		}
+		Text alphaText = p.getTexts().get(0);
+		setText(lines, alphaText.getFont(), alphaText.getColor(), align, margin);
+	}
+	
+	@Override
 	protected GUIComponent[] getComponents() {
-		return new GUIComponent[] {null};
+		return new GUIComponent[] {this};
 	}
 	
 	public void removeText() {
@@ -77,16 +114,23 @@ public class GLabel extends GUIComponent{
 
 	@Override
 	protected void dispose() {
+		setVisible(false);
 		removeText();
 		GUIListener.removeComponent(this);
+		this.getGUI().removeComponent(this);
 	}
 
 	@Override
 	protected void addedToGUI(GUI gui) {
-		if(p != null) {
+		if(p != null && gui != null) {
 			p.setX(p.getX() + gui.getX());
 			p.setY(p.getY() + gui.getY());
 		}
+	}
+
+	@Override
+	protected void reCalc() {
+		calcText();
 	}
 
 }

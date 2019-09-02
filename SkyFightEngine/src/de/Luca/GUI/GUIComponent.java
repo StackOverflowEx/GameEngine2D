@@ -18,6 +18,7 @@ public abstract class GUIComponent {
 	private Vector4f currentColor;
 	private GUI gui;
 	private boolean mouseOn;
+	private GUIComponent parent;
 	
 	private CopyOnWriteArrayList<ClickCallback> clickCallbacks;
 	private CopyOnWriteArrayList<HoverCallback> hoverHollbacks;
@@ -34,6 +35,14 @@ public abstract class GUIComponent {
 		currentColor = color;
 		GUIListener.addComponent(this);
 		setRenderModel();
+	}
+	
+	public GUIComponent getParent() {
+		return parent;
+	}
+	
+	protected void setParent(GUIComponent parent) {
+		this.parent = parent;
 	}
 	
 	public boolean isMouseOn() {
@@ -101,6 +110,7 @@ public abstract class GUIComponent {
 
 	public void setX(int x) {
 		this.x = x;
+		reCalc();
 	}
 
 	public int getY() {
@@ -109,6 +119,7 @@ public abstract class GUIComponent {
 
 	public void setY(int y) {
 		this.y = y;
+		reCalc();
 	}
 
 	public int getWidth() {
@@ -117,6 +128,7 @@ public abstract class GUIComponent {
 
 	public void setWidth(int width) {
 		this.width = width;
+		reCalc();
 	}
 
 	public int getHeight() {
@@ -125,6 +137,7 @@ public abstract class GUIComponent {
 
 	public void setHeight(int height) {
 		this.height = height;
+		reCalc();
 	}
 	
 	public void addClickCallback(ClickCallback cc) {
@@ -161,6 +174,8 @@ public abstract class GUIComponent {
 			click(GLFW.GLFW_MOUSE_BUTTON_LEFT, GLFW.GLFW_PRESS);
 		}
 	}
+	
+	protected abstract void reCalc();
 	
 	protected abstract void dispose();
 

@@ -59,6 +59,11 @@ public class GUIManager {
 	}
 	
 	private static void renderComponent(GUIComponent component, boolean b, Vector2f offset) {
+		
+		if(!component.isVisible()) {
+			return;
+		}
+		
 		if(b) {
 			component.setRenderModel();
 		}
@@ -82,15 +87,12 @@ public class GUIManager {
 	}
 	
 	private static void renderComponents(GUIComponent c, boolean b, Vector2f offset) {
-		if(c.getComponents().length == 1 && c.getComponents()[0] == null) {
+		if(c.getComponents().length == 1 && c.getComponents()[0] == c) {
 			renderComponent(c, b, offset);
+			return;
 		}
 		for(GUIComponent component : c.getComponents()) {
-			if(component.getComponents().length == 1 && component.getComponents()[0] == null) {
-				renderComponent(component, b, offset);
-			}else {
-				renderComponents(component, b, offset);
-			}
+			renderComponents(component, b, offset);
 		}
 	}
 	

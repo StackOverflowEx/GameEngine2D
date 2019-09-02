@@ -39,6 +39,7 @@ public class Text {
 	
 	public void setVisible(boolean visible) {
 		this.visible = visible; 
+		TextManager.setChanged();
 	}
 	
 	public Vector2D getBounds() {

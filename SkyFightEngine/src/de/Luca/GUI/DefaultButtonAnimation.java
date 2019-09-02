@@ -33,23 +33,26 @@ public class DefaultButtonAnimation implements HoverCallback, ClickCallback{
 		}
 		if(component instanceof GButton) {
 			GButton button = (GButton) component;
+					
+			if(action == GLFW.GLFW_RELEASE) {
+				if(button.getParent() != null && button.getParent() instanceof GDropDown) {
+					GDropDown dropdown = (GDropDown) button.getParent();
+					dropdown.clicked(button);
+				}
+			}
+			
 			if(action == GLFW.GLFW_PRESS) {
 				if(button.getPressTexture() != null) {
 					button.setTexture(button.getPressTexture());
 				}else {
 					button.setCurrentColor(new Vector4f(button.getColor().x() - 0.2f, button.getColor().y() - 0.2f, button.getColor().z() - 0.2f, button.getColor().w()));
-				}
+				}			
 			}else {
 				if(button.getHoverTexture() != null) {
 					button.setTexture(button.getHoverTexture());
 				}else {
 					button.setCurrentColor(new Vector4f(button.getColor().x() - 0.1f, button.getColor().y() - 0.1f, button.getColor().z() - 0.1f, button.getColor().w()));
 				}
-			}
-		}else if(component instanceof GCheckBox) {
-			GCheckBox box = (GCheckBox) component;
-			if(action == GLFW.GLFW_RELEASE) {
-				box.setClicked(!box.isChecked());
 			}
 		}
 	}

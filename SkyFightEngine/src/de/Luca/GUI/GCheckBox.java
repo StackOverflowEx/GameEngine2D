@@ -1,6 +1,7 @@
 package de.Luca.GUI;
 
 import org.joml.Vector4f;
+import org.lwjgl.glfw.GLFW;
 
 import de.Luca.Entities.RenderModel;
 import de.Luca.Entities.Texture;
@@ -23,10 +24,25 @@ public class GCheckBox extends GUIComponent{
 	public GCheckBox(int x, int y, int width, int height) {
 		super(x, y, width, height);
 		checked = false;
-		addClickCallback(new DefaultButtonAnimation());
+		
+		addClickCallback(new ClickCallback() {
+			
+			@Override
+			public void run(GUIComponent component, int key, int action) {
+				if(key != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+					return;
+				}
+				GCheckBox box = (GCheckBox) component;
+				if(action == GLFW.GLFW_RELEASE) {
+					box.setClicked(!box.isChecked());
+				}
+			}
+		});
 		
 		check = new GButton(x, y, width/6, height);
 		label = new GLabel(x + width/6, y, (width/6) * 5, height);
+		check.setParent(this);
+		check.setParent(label);
 	}
 	
 	public void setCheckdTextures(Texture checkedDefault, Texture checkedHover, Texture checkedPressed) {
@@ -106,8 +122,20 @@ public class GCheckBox extends GUIComponent{
 	protected void dispose() {
 		check.dispose();
 		label.dispose();
+		this.getGUI().removeComponent(this);
 	}
 	
-	
+	@Override
+	protected void reCalc() {
+		check.setX(getX());
+		check.setY(getY());
+		check.setWidth(getWidth()/6);
+		check.setHeight(getHeight());
+		
+		label.setX(getX() + getWidth()/6);
+		label.setY(getY());
+		label.setWidth((getWidth()/6) * 5);
+		label.setHeight(getHeight());
+	}
 
 }

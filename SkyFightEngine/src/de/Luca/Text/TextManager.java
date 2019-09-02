@@ -90,6 +90,10 @@ public class TextManager {
 		texts.add(text);
 		changed = true;
 	}
+	
+	public static void setChanged() {
+		changed = true;
+	}
 
 	public static void addParagraph(Paragraph p) {
 		for (Text t : p.getTexts()) {
@@ -260,7 +264,7 @@ public class TextManager {
 		shader.stop();
 	}
 
-	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {
+	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {		
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
 		shader.loadTransformationMatrix(transformation);
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4 + offset, 4);

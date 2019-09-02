@@ -37,7 +37,9 @@ public class GUI {
 	
 	public void removeComponent(GUIComponent c) {
 		components.remove(c);
-		c.setGUI(null);
+		if(c != null) {
+			c.setGUI(null);
+		}
 	}
 
 	public int getX() {

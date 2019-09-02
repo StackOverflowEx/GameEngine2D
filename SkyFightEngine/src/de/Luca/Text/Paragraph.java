@@ -29,14 +29,23 @@ public class Paragraph {
 		this.align = align;
 	}
 	
-	public Paragraph(int x, int y, Text[] texts) {
+	public Paragraph(int x, int y, Text[] texts, TEXT_ALIGN align) {
 		this.texts = new ArrayList<Text>();
 		this.x = x;
 		this.y = y;
 		for(Text t : texts) {
 			this.texts.add(t);
 		}
+		this.align = align;
 		calcBounds();
+	}
+	
+	public Paragraph clone() {
+		Text[] t = new Text[texts.size()];
+		for(int i = 0; i < t.length; i++) {
+			t[i] = texts.get(i);
+		}
+		return new Paragraph(x, y, t, align);
 	}
 	
 	public enum TEXT_ALIGN {
