@@ -1,7 +1,6 @@
-# TO-DO List
+# SkyFightEngine
 
-- [ ] implementing Labels, Checkboxes, Slider, Dropdown, Scrollpanel
-- [ ] rendering Background
-- [ ] adding SoundEngine
-- [ ] Playermodel (Hitbox, Animation (GIF))
-- [ ] optimisation
+## Credits:
+- Luca (Programming)
+- Andy (Design)
+- Tobi (Sounddesign)
