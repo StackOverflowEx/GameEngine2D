@@ -31,7 +31,6 @@ public abstract class GUIComponent {
 		this.width = width;
 		this.height = height;
 		this.mouseOn = false;
-		this.color = new Vector4f(.8f, .8f, .8f, 1);
 		currentColor = color;
 		GUIListener.addComponent(this);
 		setRenderModel();
@@ -50,7 +49,7 @@ public abstract class GUIComponent {
 		addedToGUI(gui);
 	}
 	
-	public abstract void addedToGUI(GUI gui);
+	protected abstract void addedToGUI(GUI gui);
 	
 	public Vector4f getCurrentColor() {
 		return currentColor;
@@ -62,12 +61,6 @@ public abstract class GUIComponent {
 	
 	public GUI getGUI() {
 		return gui;
-	}
-	
-	public enum TEXT_ALIGN {
-		CENTER,
-		RIGHT,
-		LEFT
 	}
 	
 	public Vector4f getColor() {
@@ -87,7 +80,9 @@ public abstract class GUIComponent {
 		this.model = genRenderModel();
 	}
 	
-	public abstract RenderModel genRenderModel();
+	protected abstract GUIComponent[] getComponents();
+	
+	protected abstract RenderModel genRenderModel();
 	
 	public boolean isVisible() {
 		return visible;
@@ -98,7 +93,7 @@ public abstract class GUIComponent {
 		visibleUpdate(visible);
 	}
 	
-	public abstract void visibleUpdate(boolean visible);
+	protected abstract void visibleUpdate(boolean visible);
 
 	public int getX() {
 		return x;
@@ -167,6 +162,6 @@ public abstract class GUIComponent {
 		}
 	}
 	
-	public abstract void dispose();
+	protected abstract void dispose();
 
 }

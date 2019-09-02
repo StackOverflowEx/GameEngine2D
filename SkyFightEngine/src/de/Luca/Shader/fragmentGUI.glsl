@@ -9,7 +9,7 @@ out vec4 out_Color;
 
 void main(void){
 
-	if(pass_color.w == 0){
+	if(pass_color.w == -1){
 		out_Color = texture(tex, pass_textureCoords);
 	}else {
 		out_Color = pass_color;

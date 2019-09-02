@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 
 import de.Luca.Calculation.MainBeat;
 import de.Luca.EventManager.EventManager;
-import de.Luca.GUI.GButton;
+import de.Luca.GUI.GCheckBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIListener;
 import de.Luca.GUI.GUIManager;
@@ -38,10 +38,10 @@ public class SkyFightEngine {
 		TextManager.addParagraph(Main.paragraph);
 		
 		GUI ui = new GUI(10, 10, 200, 300);
-		GButton button = new GButton(0, 0, 200, 30);
-		button.setText("Test", TextManager.getFont("Arial"), new Vector4f(0, 0, 0, 1));
-		button.setButtonTextures(Loader.loadTexture("D:\\Downloads\\default.png"), Loader.loadTexture("D:\\Downloads\\hover.png"), Loader.loadTexture("D:\\Downloads\\press.png"));
-		ui.addComponent(button);
+		GCheckBox box = new GCheckBox(10, 10, 240, 40);
+		box.getCheckBoxLabel().setColor(new Vector4f(1, 1, 1, 1));
+		box.setVisible(true);
+		ui.addComponent(box);
 		
 		MainBeat.init();
 	}

@@ -16,26 +16,19 @@ public class BufferLoader {
 	public static Frame loadFrameBuffer(List<RenderModel> entities) {
 		
 		if(!TextManager.hasChanged() && oldFrame != null && entities.equals(oldFrame.getEntities())) {
-//			System.out.println("No Changes");
+			countFrame();
 			return oldFrame;
 		}
 		
 		float[] textureCoords;
 		float[] verticies;
-//		if(TextManager != null) {
-//			float[][] buffer = TextManager.manager.getBuffer();
-//			verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
-//			textureCoords = combineBuffer(new float[] { 0, 1, 0, 0, 1, 1, 1, 0 }, buffer[1]);
-//		}else {
-//			verticies = new float[] { 0, 0, 0, 1, 1, 0, 1, 1 };
-//			textureCoords = new float[] { 0, 1, 0, 0, 1, 1, 1, 0};
-//		}
 		
 		float[][] buffer = TextManager.getBuffer();
 		verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
 		textureCoords = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[1]);
 		
 		countFrame();
+		frame++;
 		
 		oldFrame = new Frame(entities, verticies, textureCoords);
 		return oldFrame;
@@ -48,7 +41,6 @@ public class BufferLoader {
 			last = System.currentTimeMillis();
 			frame = 0;
 		}
-		frame++;
 	}
 	
 	private static float[] combineBuffer(float[] first, float[] second) {

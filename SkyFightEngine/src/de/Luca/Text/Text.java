@@ -103,6 +103,7 @@ public class Text {
 
 	public void setText(String text) {
 		this.text = text;
+		bounds = Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);
 	}
 	
 

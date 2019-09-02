@@ -1,9 +1,6 @@
 package de.Luca.Window;
 
-import java.nio.IntBuffer;
-
 import org.joml.Vector2f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCharCallbackI;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;

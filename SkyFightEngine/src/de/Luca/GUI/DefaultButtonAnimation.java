@@ -28,6 +28,9 @@ public class DefaultButtonAnimation implements HoverCallback, ClickCallback{
 
 	@Override
 	public void run(GUIComponent component, int key, int action) {
+		if(key != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			return;
+		}
 		if(component instanceof GButton) {
 			GButton button = (GButton) component;
 			if(action == GLFW.GLFW_PRESS) {
@@ -42,6 +45,11 @@ public class DefaultButtonAnimation implements HoverCallback, ClickCallback{
 				}else {
 					button.setCurrentColor(new Vector4f(button.getColor().x() - 0.1f, button.getColor().y() - 0.1f, button.getColor().z() - 0.1f, button.getColor().w()));
 				}
+			}
+		}else if(component instanceof GCheckBox) {
+			GCheckBox box = (GCheckBox) component;
+			if(action == GLFW.GLFW_RELEASE) {
+				box.setClicked(!box.isChecked());
 			}
 		}
 	}
