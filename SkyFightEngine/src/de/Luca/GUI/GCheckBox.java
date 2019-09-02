@@ -3,15 +3,10 @@ package de.Luca.GUI;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
-import de.Luca.Entities.RenderModel;
 import de.Luca.Entities.Texture;
 
-public class GCheckBox extends GUIComponent{
-	
-	
-	private GButton check;
-	private GLabel label;
-	
+public class GCheckBox extends GButton{
+		
 	private Texture checkedDefault;
 	private Texture checkedHover;
 	private Texture checkedPressed;
@@ -38,11 +33,6 @@ public class GCheckBox extends GUIComponent{
 				}
 			}
 		});
-		
-		check = new GButton(x, y, width/6, height);
-		label = new GLabel(x + width/6, y, (width/6) * 5, height);
-		check.setParent(this);
-		check.setParent(label);
 	}
 	
 	public void setCheckdTextures(Texture checkedDefault, Texture checkedHover, Texture checkedPressed) {
@@ -52,40 +42,32 @@ public class GCheckBox extends GUIComponent{
 	}
 	
 	protected GUIComponent[] getComponents() {
-		return new GUIComponent[] {check, label};
-	}
-	
-	public GButton getCheckBoxButton() {
-		return check;
-	}
-	
-	public GLabel getCheckBoxLabel() {
-		return label;
+		return new GUIComponent[] {this};
 	}
 	
 	private void updateTexture(boolean checked) {
 		if(checked) {
-			storeOld = new Texture[] {check.getDefaultTexture(), check.getHoverTexture(), check.getPressTexture()};
+			storeOld = new Texture[] {getDefaultTexture(), getHoverTexture(), getPressTexture()};
 			if(checkedDefault != null) {
-				check.setDefaultTexture(checkedDefault);
+				setDefaultTexture(checkedDefault);
 			}else {
-				oldColor = check.getColor();
-				check.setColor(new Vector4f(0, 1 , 0, 1));
+				oldColor = getColor();
+				setColor(new Vector4f(0, 1 , 0, 1));
 			}
 			if(checkedHover != null) {
-				check.setDefaultTexture(checkedHover);
+				setDefaultTexture(checkedHover);
 			}
 			if(checkedPressed != null) {
-				check.setDefaultTexture(checkedPressed);
+				setDefaultTexture(checkedPressed);
 			}
 		}else {
 			if(storeOld != null) {
-				check.setDefaultTexture(storeOld[0]);
-				check.setHoverTexture(storeOld[1]);
-				check.setPressTexture(storeOld[2]);
+				setDefaultTexture(storeOld[0]);
+				setHoverTexture(storeOld[1]);
+				setPressTexture(storeOld[2]);
 			}
 			if(oldColor != null) {
-				check.setColor(oldColor);
+				setColor(oldColor);
 			}
 			oldColor = null;
 			storeOld = null;
@@ -99,43 +81,6 @@ public class GCheckBox extends GUIComponent{
 	
 	public boolean isChecked() {
 		return checked;
-	}
-	
-	@Override
-	protected void addedToGUI(GUI gui) {
-		check.setGUI(gui);
-		check.setGUI(gui);
-	}
-	
-	@Override
-	protected RenderModel genRenderModel() {
-		return null;
-	}
-	
-	@Override
-	protected void visibleUpdate(boolean visible) {
-		check.setVisible(visible);
-		label.setVisible(visible);
-	}
-	
-	@Override
-	protected void dispose() {
-		check.dispose();
-		label.dispose();
-		this.getGUI().removeComponent(this);
-	}
-	
-	@Override
-	protected void reCalc() {
-		check.setX(getX());
-		check.setY(getY());
-		check.setWidth(getWidth()/6);
-		check.setHeight(getHeight());
-		
-		label.setX(getX() + getWidth()/6);
-		label.setY(getY());
-		label.setWidth((getWidth()/6) * 5);
-		label.setHeight(getHeight());
 	}
 
 }

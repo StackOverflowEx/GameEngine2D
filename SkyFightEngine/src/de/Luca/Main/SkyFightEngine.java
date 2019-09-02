@@ -1,11 +1,10 @@
 package de.Luca.Main;
 
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import de.Luca.Calculation.MainBeat;
 import de.Luca.EventManager.EventManager;
-import de.Luca.GUI.GDropDown;
+import de.Luca.GUI.GCheckBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIListener;
 import de.Luca.GUI.GUIManager;
@@ -37,9 +36,11 @@ public class SkyFightEngine {
 //		TextManager.addParagraph(Main.paragraph);
 		
 		GUI ui = new GUI(10, 10, 200, 300);
-		GDropDown dropDown = new GDropDown(10, 10, 100, 20);
-		dropDown.addElement("Test", TextManager.getFont("Arial"), new Vector4f(1, 1, 1, 1));
-		ui.addComponent(dropDown);
+//		GDropDown dropDown = new GDropDown(10, 10, 100, 20);
+//		dropDown.addElement("Test", TextManager.getFont("Arial"), new Vector4f(1, 1, 1, 1));
+//		ui.addComponent(dropDown);
+		GCheckBox box = new GCheckBox(10, 10, 50, 50);
+		ui.addComponent(box);
 		
 		MainBeat.init();
 	}
