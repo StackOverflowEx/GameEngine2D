@@ -1,6 +1,8 @@
 package de.Luca.GUI;
 
 
+import java.util.ArrayList;
+
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
@@ -15,12 +17,16 @@ public class GSlider extends GUIComponent{
 	private float value;
 	private float sliderScale;
 	private boolean selected;
+	private ArrayList<ValueChangeCallback> callbacks;
 	
 	public GSlider(int x, int y, int width, int height, boolean vertical) {
 		super(x, y, width, height);
+		callbacks = new ArrayList<ValueChangeCallback>();
 		flip = false;
 		slider = new GButton(0, 0, 0, 0);
 		label = new GLabel(0, 0, 0, 0);
+		slider.setParent(this);
+		label.setParent(this);
 		label.setColor(new Vector4f(0.9f, 0.9f, 0.9f, 1f));
 		flip = false;
 		sliderScale = 0.1f;
@@ -28,6 +34,20 @@ public class GSlider extends GUIComponent{
 		this.vertical = vertical;
 		calc();
 		addCallbacks();
+	}
+	
+	public void addValueChangeCallback(ValueChangeCallback vcc) {
+		callbacks.add(vcc);
+	}
+	
+	public void removeValueChangeCallback(ValueChangeCallback vcc) {
+		callbacks.remove(vcc);
+	}
+	
+	private void fireCallbacks(float value) {
+		for(ValueChangeCallback vcc : callbacks) {
+			vcc.run(value);
+		}
 	}
 	
 	public GLabel getLabel() {
@@ -52,6 +72,7 @@ public class GSlider extends GUIComponent{
 		if(percentage < 0)
 			percentage = 0;
 		
+
 		sliderScale = percentage / 100f;
 		calc();
 	}
@@ -68,7 +89,6 @@ public class GSlider extends GUIComponent{
 						guiSubX = getGUI().getX();
 						guiSubY = getGUI().getY();
 					}
-					System.out.println("==> MOUSEX: " + (mouseX - guiSubX));
 					setValue(getValue(mouseX - guiSubX, mouseY - guiSubY));
 				}
 			}
@@ -134,19 +154,19 @@ public class GSlider extends GUIComponent{
 		
 		if(vertical) {
 			if(flip) {
-				slider.setY((int) (travelValue - sliderTravel));
+				slider.setY(getY() + (int) (travelValue - sliderTravel));
 			}else {
-				slider.setY((int) (sliderTravel));
+				slider.setY(getY() + (int) (sliderTravel));
 			}
 		}else {
 			if(flip) {
-				slider.setX((int) (travelValue - sliderTravel));
+				slider.setX(getX() + (int) (travelValue - sliderTravel));
 			}else {
-				slider.setX((int) (sliderTravel));
+				slider.setX(getX() + (int) (sliderTravel));
 			}
 		}		
 		this.value = value;
-		System.out.println(getValue());
+		fireCallbacks(value);
 	}
 	
 	public float getValue() {
@@ -154,6 +174,10 @@ public class GSlider extends GUIComponent{
 	}
 	
 	protected float getValue(int x, int y) {
+		
+		if(sliderScale == 1) {
+			return 0;
+		}
 		
 		float addX = (slider.getWidth()/2);
 		float addY = (slider.getHeight()/2);

@@ -140,7 +140,7 @@ public class GDropDown extends GUIComponent{
 	protected void visibleUpdate(boolean visible) {
 		button.setVisible(visible);
 		for(GButton element : elements.values()) {
-			element.setVisible(visible);
+			element.setVisible(visible && open);
 		}
 	}
 

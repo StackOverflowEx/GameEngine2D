@@ -42,6 +42,9 @@ public class GLabel extends GUIComponent{
 		}
 		Vector2f bounds = p.getBounds();
 		
+		p.setX(this.getX() + margin);
+		p.setY(this.getY());
+		
 		float textHeight = bounds.y;
 		float offsetY = getHeight() - textHeight;
 		offsetY = offsetY / 2f;
@@ -52,7 +55,12 @@ public class GLabel extends GUIComponent{
 			float textWidth = bounds.x;
 			p.setX((int) (p.getX() + this.getWidth() - textWidth) - margin);
 		}
-		addedToGUI(this.getGUI());
+
+		if(getGUI() != null) {
+			p.setX(p.getX() + getGUI().getX());
+			p.setY(p.getY() + getGUI().getY());
+		}
+		
 	}
 	
 	public void setTextAlign(TEXT_ALIGN align) {
@@ -123,8 +131,7 @@ public class GLabel extends GUIComponent{
 	@Override
 	protected void addedToGUI(GUI gui) {
 		if(p != null && gui != null) {
-			p.setX(p.getX() + gui.getX());
-			p.setY(p.getY() + gui.getY());
+			calcText();
 		}
 	}
 

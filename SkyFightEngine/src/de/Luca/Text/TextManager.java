@@ -149,7 +149,6 @@ public class TextManager {
 				continue;
 			}
 			for (char c : t.getText().toCharArray()) {
-				System.out.println(pointer + 8);
 				FontGlyph glyph = getGlyph(t.getFont(), c);
 				textureCoords[pointer] = glyph.u0;
 				textureCoords[pointer + 1] = glyph.v1;
@@ -159,7 +158,6 @@ public class TextManager {
 				textureCoords[pointer + 5] = glyph.v1;
 				textureCoords[pointer + 6] = glyph.u1;
 				textureCoords[pointer + 7] = glyph.v0;
-				System.out.println("GLYPH: " + glyph.codepoint);
 				pointer += 8;
 
 			}
@@ -249,11 +247,8 @@ public class TextManager {
 				float width = glyph.x1 - glyph.x0;
 				float height = glyph.y1 - glyph.y0;
 				
-				long nano4 = System.nanoTime();
 				Vector2f quadScale = WorldPosition
 						.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));
-				if((System.nanoTime() - nano4) / 1000000f > 1)
-					System.out.println("Calc 3: " + ((System.nanoTime() - nano4) / 1000000f) + "ms");
 				
 				renderGlyph(glyph, x, y, quadScale, offset * 4);
 				offset += 1;

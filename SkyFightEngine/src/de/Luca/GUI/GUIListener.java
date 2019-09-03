@@ -27,8 +27,12 @@ public class GUIListener implements Listener{
 	
 	@EventHandler
 	public void onMove(CursorPositionEvent e) {
-		Vector2f mousePixel = new Vector2f((float)e.getXpos(), (float)e.getYpos());
+		Vector2f mousePixel = new Vector2f((float)e.getXpos(), (float)e.getYpos());	
 		for(GUIComponent component : components) {
+			
+			if(!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0 || component.getGUI() == null) {
+				continue;
+			}
 			
 			int height = component.getHeight();
 			if(component instanceof GDropDown) {
@@ -45,7 +49,7 @@ public class GUIListener implements Listener{
 				corner2.x += gui.getX();
 				corner2.y += gui.getY();
 			}
-
+			
 			component.hover(isMouseInside(mousePixel, corner1, corner2));
 		}
 	}
@@ -55,6 +59,10 @@ public class GUIListener implements Listener{
 		boolean clicked = false;
 		Vector2f mousePixel = WorldPosition.getAbsCursorPos();
 		for(GUIComponent component : components) {
+			
+			if(!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0 || component.getGUI() == null) {
+				continue;
+			}
 			
 			Vector2f corner1 = new Vector2f(component.getX(), component.getY());
 			Vector2f corner2 = new Vector2f(component.getX() + component.getWidth(), component.getY() + component.getHeight());

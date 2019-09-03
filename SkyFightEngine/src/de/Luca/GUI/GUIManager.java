@@ -64,11 +64,16 @@ public class GUIManager {
 		if(!component.isVisible()) {
 			return;
 		}
+		
+		if(component.getWidth() == 0 || component.getHeight() == 0) {
+			return;
+		}
 				
 		if(b) {
 			component.setRenderModel();
 		}
 		
+
 		RenderModel model = component.getRenderModel();
 		Texture tex = model.getModel().getTexture();
 		if(tex != null) {
