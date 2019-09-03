@@ -23,7 +23,7 @@ public class GCheckBox extends GButton{
 		addClickCallback(new ClickCallback() {
 			
 			@Override
-			public void run(GUIComponent component, int key, int action) {
+			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if(key != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 					return;
 				}

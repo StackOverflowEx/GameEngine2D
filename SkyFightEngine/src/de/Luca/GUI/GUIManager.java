@@ -52,18 +52,19 @@ public class GUIManager {
 		int yOffset = gui.getY();
 		
 		Vector2f offset = WorldPosition.toOpenGLCoords(new Vector2f(xOffset + windowSize.x / 2f, yOffset + windowSize.y / 2f));
+		Vector2f pixelOffset = new Vector2f(xOffset, yOffset);
 		
 		for(GUIComponent c : gui.getComponents()) {				
-			renderComponents(c, b, offset);
+			renderComponents(c, b, offset, pixelOffset);
 		}
 	}
 	
-	private static void renderComponent(GUIComponent component, boolean b, Vector2f offset) {
+	private static void renderComponent(GUIComponent component, boolean b, Vector2f offset, Vector2f pixelOffset) {
 		
 		if(!component.isVisible()) {
 			return;
 		}
-		
+				
 		if(b) {
 			component.setRenderModel();
 		}
@@ -86,13 +87,26 @@ public class GUIManager {
 		MasterRenderer.bindTexture(0);
 	}
 	
-	private static void renderComponents(GUIComponent c, boolean b, Vector2f offset) {
+	private static void renderComponents(GUIComponent c, boolean b, Vector2f offset, Vector2f pixelOffset) {
 		if(c.getComponents().length == 1 && c.getComponents()[0] == c) {
-			renderComponent(c, b, offset);
+			renderComponent(c, b, offset, pixelOffset);
 			return;
 		}
+		
+		if(c instanceof GSlider) {
+			GSlider slider = (GSlider) c;
+			if(slider.isSelected()) {
+				if(!GUIListener.isMouseDown()) {
+					slider.setSelected(false);
+				}else {
+					Vector2f mouse = WorldPosition.getAbsCursorPos();
+					slider.setValue(slider.getValue((int)(mouse.x - pixelOffset.x), (int)(mouse.y - pixelOffset.y))); 
+				}
+			}
+		}
+		
 		for(GUIComponent component : c.getComponents()) {
-			renderComponents(component, b, offset);
+			renderComponents(component, b, offset, pixelOffset);
 		}
 	}
 	

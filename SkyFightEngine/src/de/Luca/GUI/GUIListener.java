@@ -3,6 +3,7 @@ package de.Luca.GUI;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Vector2f;
+import org.lwjgl.glfw.GLFW;
 
 import de.Luca.EventManager.EventHandler;
 import de.Luca.EventManager.Listener;
@@ -21,6 +22,8 @@ public class GUIListener implements Listener{
 	public static void removeComponent(GUIComponent component) {
 		components.remove(component);
 	}
+	
+	private static boolean mouseDown = false;
 	
 	@EventHandler
 	public void onMove(CursorPositionEvent e) {
@@ -65,11 +68,18 @@ public class GUIListener implements Listener{
 			}
 
 			if(isMouseInside(mousePixel, corner1, corner2)) {
-				component.click(e.getButton(), e.getAction());
+				component.click(e.getButton(), e.getAction(), (int)mousePixel.x, (int)mousePixel.y);
 				clicked = true;
 			}
 		}
+		
+		mouseDown = e.getAction() == GLFW.GLFW_PRESS;
+		
 		e.setCancelled(clicked);
+	}
+	
+	public static boolean isMouseDown() {
+		return mouseDown;
 	}
 	
 	public static boolean isMouseInside(Vector2f mousePixel, Vector2f corner1, Vector2f corner2) {

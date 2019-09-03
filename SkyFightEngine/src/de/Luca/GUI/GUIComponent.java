@@ -3,11 +3,8 @@ package de.Luca.GUI;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Vector4f;
-import org.lwjgl.glfw.GLFW;
-
 import de.Luca.Entities.RenderModel;
 import de.Luca.Entities.Texture;
-import de.Luca.Window.Window;
 
 public abstract class GUIComponent {
 	
@@ -58,6 +55,7 @@ public abstract class GUIComponent {
 		addedToGUI(gui);
 	}
 	
+	
 	protected abstract void addedToGUI(GUI gui);
 	
 	public Vector4f getCurrentColor() {
@@ -107,9 +105,19 @@ public abstract class GUIComponent {
 	public int getX() {
 		return x;
 	}
+	
+	public void setBounds(int x, int y, int width, int height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		setRenderModel();
+		reCalc();
+	}
 
 	public void setX(int x) {
 		this.x = x;
+		setRenderModel();
 		reCalc();
 	}
 
@@ -119,6 +127,7 @@ public abstract class GUIComponent {
 
 	public void setY(int y) {
 		this.y = y;
+		setRenderModel();
 		reCalc();
 	}
 
@@ -128,6 +137,7 @@ public abstract class GUIComponent {
 
 	public void setWidth(int width) {
 		this.width = width;
+		setRenderModel();
 		reCalc();
 	}
 
@@ -137,6 +147,7 @@ public abstract class GUIComponent {
 
 	public void setHeight(int height) {
 		this.height = height;
+		setRenderModel();
 		reCalc();
 	}
 	
@@ -148,9 +159,9 @@ public abstract class GUIComponent {
 		clickCallbacks.remove(cc);
 	}
 	
-	public void click(int key, int action) {
+	public void click(int key, int action, int mouseX, int mouseY) {
 		for(ClickCallback cc : clickCallbacks) {
-			cc.run(this, key, action);
+			cc.run(this, key, action, mouseX, mouseY);
 		}
 	}
 	
@@ -169,9 +180,6 @@ public abstract class GUIComponent {
 		this.mouseOn = mouseOn;
 		for(HoverCallback cc : hoverHollbacks) {
 			cc.run(this, mouseOn);
-		}
-		if(mouseOn && GLFW.glfwGetMouseButton(Window.getWindowID(), GLFW.GLFW_MOUSE_BUTTON_LEFT) == GLFW.GLFW_PRESS) {
-			click(GLFW.GLFW_MOUSE_BUTTON_LEFT, GLFW.GLFW_PRESS);
 		}
 	}
 	
