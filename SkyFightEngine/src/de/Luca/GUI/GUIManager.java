@@ -41,6 +41,9 @@ public class GUIManager {
 		shader.start();
 		boolean b = processMatrix();
 		for(GUI gui : guis) {
+			if(!gui.isVisible()) {
+				continue;
+			}
 			renderGUI(gui, windowSize, b);
 		}
 		shader.stop();

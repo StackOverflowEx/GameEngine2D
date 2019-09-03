@@ -48,16 +48,18 @@ public class SkyFightEngine {
 //		slider.flipSides();
 //		ui.addComponent(slider);
 		
-		GLabel label = new GLabel(0, 0, 200, 200);
+		GLabel label = new GLabel(0, 0, 150, 150);
 		label.setColor(new Vector4f(0, 0, 1, 1));
-		GLabel label2 = new GLabel(200, 0, 200, 200);
+		GLabel label2 = new GLabel(150, 0, 150, 150);
 		label2.setColor(new Vector4f(0, 1, 0, 1));
-		GLabel label3 = new GLabel(400, 0, 200, 200);
+		GLabel label3 = new GLabel(300, 0, 150, 150);
 		label3.setColor(new Vector4f(1, 0, 0, 1));
-		GLabel label4 = new GLabel(0, 0, 200, 200);
+		GLabel label4 = new GLabel(0, 0, 150, 150);
 		label4.setColor(new Vector4f(1, 1, 1, 1));
+		GLabel label5 = new GLabel(0, 0, 150, 150);
+		label5.setColor(new Vector4f(0, 0, 0, 1));
 		
-		GPanel panel = new GPanel(0, 0, 600, 200);
+		GPanel panel = new GPanel(0, 0, 600, 150);
 		panel.addComponent(label);
 		panel.addComponent(label2);
 		panel.addComponent(label3);
@@ -68,7 +70,9 @@ public class SkyFightEngine {
 		sp.setSlider(SLIDER_POSITION.TOP, 30);
 		sp.addItem(panel);
 		sp.addItem(label4);
+		sp.addItem(label5);
 		ui.addComponent(sp);
+		ui.setVisible(true);
 		
 		MainBeat.init();
 	}
