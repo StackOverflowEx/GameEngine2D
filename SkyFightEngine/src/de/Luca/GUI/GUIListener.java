@@ -9,11 +9,13 @@ import de.Luca.EventManager.EventHandler;
 import de.Luca.EventManager.Listener;
 import de.Luca.Events.CursorPositionEvent;
 import de.Luca.Events.MouseButtonEvent;
+import de.Luca.Events.ScrollEvent;
 import de.Luca.Utils.WorldPosition;
 
 public class GUIListener implements Listener{
 	
 	private static CopyOnWriteArrayList<GUIComponent> components = new CopyOnWriteArrayList<GUIComponent>();
+	private static Vector2f mousePosition;
 	
 	public static void addComponent(GUIComponent component) {
 		components.add(component);
@@ -23,11 +25,47 @@ public class GUIListener implements Listener{
 		components.remove(component);
 	}
 	
+	public static Vector2f getMousePosition() {
+		return mousePosition;
+	}
+	
 	private static boolean mouseDown = false;
+	
+	@EventHandler
+	public void onScroll(ScrollEvent e) {
+		Vector2f mousePixel = WorldPosition.getAbsCursorPos();
+		for(GUIComponent component : components) {
+			
+			if(!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0 || component.getGUI() == null) {
+				continue;
+			}
+			
+			int height = component.getHeight();
+			if(component instanceof GDropDown) {
+				height = ((GDropDown) component).getRealHeight();
+			}
+			
+			Vector2f corner1 = new Vector2f(component.getX(), component.getY());
+			Vector2f corner2 = new Vector2f(component.getX() + component.getWidth(), component.getY() + height);
+			
+			if(component.getGUI() != null) {
+				GUI gui = component.getGUI();
+				corner1.x += gui.getX();
+				corner1.y += gui.getY();
+				corner2.x += gui.getX();
+				corner2.y += gui.getY();
+			}
+			
+			if(isMouseInside(mousePixel, corner1, corner2)) {
+				component.scroll(e.getxOffset(), e.getyOffset());
+			}
+		}
+	}
 	
 	@EventHandler
 	public void onMove(CursorPositionEvent e) {
 		Vector2f mousePixel = new Vector2f((float)e.getXpos(), (float)e.getYpos());	
+		mousePosition = new Vector2f((float)e.getXpos(), (float)e.getYpos());
 		for(GUIComponent component : components) {
 			
 			if(!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0 || component.getGUI() == null) {

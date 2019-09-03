@@ -3,15 +3,20 @@ package de.Luca.Utils;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
+import de.Luca.GUI.GUIListener;
 import de.Luca.Window.Window;
 
 public class WorldPosition {
 
 	public static Vector2f getAbsCursorPos() {
-		double[] xb = new double[1];
-		double[] yb = new double[1];
-		GLFW.glfwGetCursorPos(Window.getWindowID(), xb, yb);
-		return new Vector2f((float)xb[0], (float)yb[0]);
+		if(GUIListener.getMousePosition() == null) {
+			double[] xb = new double[1];
+			double[] yb = new double[1];
+			GLFW.glfwGetCursorPos(Window.getWindowID(), xb, yb);
+			return new Vector2f((float)xb[0], (float)yb[0]);
+		}else {
+			return GUIListener.getMousePosition();
+		}
 	}
 	
 	public static Vector2f toOpenGLCoords(Vector2f pixel) {

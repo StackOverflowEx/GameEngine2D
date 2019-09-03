@@ -107,6 +107,38 @@ public class GSlider extends GUIComponent{
 				}
 			}
 		});
+		addScrollCallback(new ScrollCallback() {
+			
+			@Override
+			public void run(double xOffset, double yOffset) {
+				float add = (float) (sliderScale * yOffset) / 2f;
+				if(vertical) {
+					if(flip) {
+						setValue(getValue() + add);
+					}else {
+						setValue(getValue() - add);
+					}
+				}else {
+					if(flip) {
+						setValue(getValue() - add);
+					}else {
+						setValue(getValue() + add);
+					}
+				}
+			}
+		});
+	}
+	
+	public float getSliderScale() {
+		return sliderScale;
+	}
+	
+	public boolean isVertical() {
+		return vertical;
+	}
+	
+	public boolean isFlipped() {
+		return flip;
 	}
 	
 	public void flipSides() {

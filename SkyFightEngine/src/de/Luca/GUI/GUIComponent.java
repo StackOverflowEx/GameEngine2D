@@ -19,11 +19,13 @@ public abstract class GUIComponent {
 	
 	private CopyOnWriteArrayList<ClickCallback> clickCallbacks;
 	private CopyOnWriteArrayList<HoverCallback> hoverHollbacks;
+	private CopyOnWriteArrayList<ScrollCallback> scrollHollbacks;
 
 	public GUIComponent(int x, int y, int width, int height) {
 		super();
 		clickCallbacks = new CopyOnWriteArrayList<ClickCallback>();
 		hoverHollbacks = new CopyOnWriteArrayList<HoverCallback>();
+		scrollHollbacks = new CopyOnWriteArrayList<ScrollCallback>();
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -180,6 +182,20 @@ public abstract class GUIComponent {
 		this.mouseOn = mouseOn;
 		for(HoverCallback cc : hoverHollbacks) {
 			cc.run(this, mouseOn);
+		}
+	}
+	
+	public void addScrollCallback(ScrollCallback sc) {
+		scrollHollbacks.add(sc);
+	}
+	
+	public void removeScrollCallback(ScrollCallback sc) {
+		scrollHollbacks.remove(sc);
+	}
+	
+	public void scroll(double xOffset, double yOffset) {
+		for(ScrollCallback sc : scrollHollbacks) {
+			sc.run(xOffset, yOffset);
 		}
 	}
 	

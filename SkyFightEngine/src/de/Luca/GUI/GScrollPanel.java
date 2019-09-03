@@ -48,6 +48,26 @@ public class GScrollPanel extends GUIComponent{
 				calcPanel();
 			}
 		});
+		addScrollCallback(new ScrollCallback() {
+			
+			@Override
+			public void run(double xOffset, double yOffset) {
+				float add = (float) (sliderLR.getSliderScale() * yOffset) / 2f;
+				if(sliderLR.isVertical()) {
+					if(sliderLR.isFlipped()) {
+						sliderLR.setValue(sliderLR.getValue() + add);
+					}else {
+						sliderLR.setValue(sliderLR.getValue() - add);
+					}
+				}else {
+					if(sliderLR.isFlipped()) {
+						sliderLR.setValue(sliderLR.getValue() - add);
+					}else {
+						sliderLR.setValue(sliderLR.getValue() + add);
+					}
+				}
+			}
+		});
 	}
 	
 	private int getHightAll() {
