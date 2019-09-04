@@ -2,7 +2,7 @@ package de.Luca.GUI;
 
 import org.joml.Vector4f;
 
-import de.Luca.Entities.Texture;
+import de.Luca.Models.Texture;
 
 public class GButton extends GLabel{
 		

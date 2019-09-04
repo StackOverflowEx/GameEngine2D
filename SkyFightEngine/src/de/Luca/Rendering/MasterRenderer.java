@@ -10,11 +10,11 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import de.Luca.Calculation.Calc;
-import de.Luca.Entities.RenderModel;
-import de.Luca.Entities.Texture;
 import de.Luca.GUI.GUIManager;
 import de.Luca.Loading.Frame;
 import de.Luca.Loading.Loader;
+import de.Luca.Models.RenderModel;
+import de.Luca.Models.Texture;
 import de.Luca.Shader.EntityShader;
 import de.Luca.Text.TextManager;
 
@@ -26,18 +26,26 @@ public class MasterRenderer extends Thread {
 	private Frame queuedFrame;
 	private CopyOnWriteArrayList<Texture> loadTextures;
 	private Matrix4f projection, view;
+	private Background background;
 
 	public MasterRenderer(RenderLoop loop) {
 		super(loop);
 		if (masterRenderer != null) {
 			throw new IllegalStateException("MasterRenderer already created");
 		}
-		GLFW.glfwMakeContextCurrent(0);
-		setName("Rendering Thread");
 		masterRenderer = this;
 		loadTextures = new CopyOnWriteArrayList<Texture>();
+		
+		background = new Background(Loader.loadTexture("D:\\Downloads\\background.png"));
+		
+		GLFW.glfwMakeContextCurrent(0);
+		setName("Rendering Thread");
 	}
 
+	public static Texture getDefaultBackgroundTexture() {
+		return MasterRenderer.masterRenderer.background.getDefaultTexture();
+	}
+	
 	public static void queueFrame(Frame frame) {
 		masterRenderer.queuedFrame = frame;
 	}
@@ -114,6 +122,7 @@ public class MasterRenderer extends Thread {
 		if (frame != null) {
 			bindModel();
 
+			drawBackground();
 			drawEntities();
 			GUIManager.render();
 			TextManager.render();
@@ -121,6 +130,18 @@ public class MasterRenderer extends Thread {
 			unbind();
 		}
 
+	}
+	
+	public static void switchBackground(Texture switchTex, long durationMillis) {
+		MasterRenderer.masterRenderer.background.switchTexture(switchTex, durationMillis);
+	}
+	
+	private void drawBackground() {
+		background.getShader().start();
+		background.bindTexture();
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+		
+		background.getShader().stop();
 	}
 
 	private void drawEntities() {
@@ -159,7 +180,7 @@ public class MasterRenderer extends Thread {
 	}
 
 	private void drawVAO() {
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
 	}
 
 	private void bindModel() {

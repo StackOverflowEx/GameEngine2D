@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import de.Luca.Entities.RenderModel;
+import de.Luca.Models.RenderModel;
 
 public class Frame {
 	

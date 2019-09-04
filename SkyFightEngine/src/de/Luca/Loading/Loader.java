@@ -27,7 +27,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
-import de.Luca.Entities.Texture;
+import de.Luca.Models.Texture;
 import de.Luca.Rendering.MasterRenderer;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;

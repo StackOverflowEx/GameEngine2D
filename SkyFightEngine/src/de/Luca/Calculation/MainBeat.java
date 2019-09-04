@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.lwjgl.glfw.GLFW;
 
-import de.Luca.Entities.RenderModel;
 import de.Luca.Loading.BufferLoader;
 import de.Luca.Loading.Frame;
+import de.Luca.Models.RenderModel;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Window.Window;
 

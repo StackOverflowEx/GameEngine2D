@@ -2,7 +2,7 @@ package de.Luca.Loading;
 
 import java.util.List;
 
-import de.Luca.Entities.RenderModel;
+import de.Luca.Models.RenderModel;
 import de.Luca.Text.TextManager;
 
 public class BufferLoader {
@@ -24,8 +24,8 @@ public class BufferLoader {
 		float[] verticies;
 		
 		float[][] buffer = TextManager.getBuffer();
-		verticies = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
-		textureCoords = combineBuffer(new float[] { 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[1]);
+		verticies = combineBuffer(new float[] {-1, -1, -1, 1, 1, -1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
+		textureCoords = combineBuffer(new float[] {0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[1]);
 		
 		countFrame();
 		frame++;

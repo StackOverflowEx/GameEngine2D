@@ -3,8 +3,8 @@ package de.Luca.GUI;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
-import de.Luca.Entities.Model;
-import de.Luca.Entities.RenderModel;
+import de.Luca.Models.Model;
+import de.Luca.Models.RenderModel;
 import de.Luca.Text.Paragraph;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Text.Text;

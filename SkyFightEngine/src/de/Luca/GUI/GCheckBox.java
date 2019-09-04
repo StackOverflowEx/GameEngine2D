@@ -3,7 +3,7 @@ package de.Luca.GUI;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
-import de.Luca.Entities.Texture;
+import de.Luca.Models.Texture;
 
 public class GCheckBox extends GButton{
 		

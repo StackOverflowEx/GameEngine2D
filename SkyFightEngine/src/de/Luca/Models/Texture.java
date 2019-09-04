@@ -1,4 +1,4 @@
-package de.Luca.Entities;
+package de.Luca.Models;
 
 import java.nio.ByteBuffer;
 

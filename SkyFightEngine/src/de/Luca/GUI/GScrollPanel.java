@@ -2,7 +2,7 @@ package de.Luca.GUI;
 
 import java.util.ArrayList;
 
-import de.Luca.Entities.RenderModel;
+import de.Luca.Models.RenderModel;
 
 public class GScrollPanel extends GUIComponent{
 	

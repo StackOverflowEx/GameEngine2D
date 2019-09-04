@@ -4,11 +4,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import de.Luca.Calculation.Calc;
-import de.Luca.Entities.RenderModel;
-import de.Luca.Entities.Texture;
+import de.Luca.Models.RenderModel;
+import de.Luca.Models.Texture;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Shader.GUIShader;
 import de.Luca.Utils.WorldPosition;
@@ -80,6 +81,7 @@ public class GUIManager {
 		RenderModel model = component.getRenderModel();
 		Texture tex = model.getModel().getTexture();
 		if(tex != null) {
+			shader.loadColor(new Vector4f(0, 0, 0, -1));
 			MasterRenderer.bindTexture(tex.getTextureID());
 		}else {
 			shader.loadColor(component.getCurrentColor());
@@ -90,7 +92,7 @@ public class GUIManager {
 		shader.loadTransformationMatrix(transformation);
 		
 		//RENDER
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
 		
 		MasterRenderer.bindTexture(0);
 	}

@@ -2,7 +2,7 @@ package de.Luca.GUI;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import de.Luca.Entities.RenderModel;
+import de.Luca.Models.RenderModel;
 
 
 public class GPanel extends GUIComponent{

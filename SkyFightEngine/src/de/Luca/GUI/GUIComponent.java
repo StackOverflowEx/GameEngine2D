@@ -3,8 +3,9 @@ package de.Luca.GUI;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Vector4f;
-import de.Luca.Entities.RenderModel;
-import de.Luca.Entities.Texture;
+
+import de.Luca.Models.RenderModel;
+import de.Luca.Models.Texture;
 
 public abstract class GUIComponent {
 	

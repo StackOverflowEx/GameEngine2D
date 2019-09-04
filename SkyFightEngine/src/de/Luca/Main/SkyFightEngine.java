@@ -47,9 +47,9 @@ public class SkyFightEngine {
 //		GSlider slider = new GSlider(0, 0, 20, 200, true);
 //		slider.flipSides();
 //		ui.addComponent(slider);
-		
 		GLabel label = new GLabel(0, 0, 150, 150);
-		label.setColor(new Vector4f(0, 0, 1, 1));
+		label.setColor(new Vector4f(0,0,0,-1));
+		label.setTexture(Loader.loadTexture("D:\\Downloads\\PxButton1A.png"));
 		GLabel label2 = new GLabel(150, 0, 150, 150);
 		label2.setColor(new Vector4f(0, 1, 0, 1));
 		GLabel label3 = new GLabel(300, 0, 150, 150);

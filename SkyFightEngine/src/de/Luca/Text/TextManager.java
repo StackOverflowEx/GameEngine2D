@@ -11,7 +11,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import de.Luca.Calculation.Calc;
-import de.Luca.Entities.Texture;
+import de.Luca.Models.Texture;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Shader.TextShader;
 import de.Luca.Utils.WorldPosition;
@@ -262,7 +262,7 @@ public class TextManager {
 	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {		
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
 		shader.loadTransformationMatrix(transformation);
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4 + offset, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8 + offset, 4);
 
 	}
 

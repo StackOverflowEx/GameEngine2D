@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
-import de.Luca.Entities.RenderModel;
+import de.Luca.Models.RenderModel;
 
 public class GSlider extends GUIComponent{
 
