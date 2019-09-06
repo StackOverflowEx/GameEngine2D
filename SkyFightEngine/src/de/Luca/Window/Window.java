@@ -33,6 +33,8 @@ public class Window {
 	private static float[] frametimes;
 	private static long last;
 	
+	private static long lastFrame;
+	
 	private static Vector2f size;
 	
 	private static long WINDOW_ID;
@@ -49,6 +51,7 @@ public class Window {
 		frametimePointer = 0;
 		frameCountTime = 0;
 		frameCount = 0;
+		lastFrame = -1;
 		
 		create(width, height, title);
 	}
@@ -177,6 +180,14 @@ public class Window {
 		GLFW.glfwSwapBuffers(WINDOW_ID);
 		//Ein Frame wird registriert und verrechnet.
 		countFrame();
+		lastFrame = System.currentTimeMillis();
+	}
+	
+	public static long getFrameTime() {
+		if(lastFrame == -1) {
+			return lastFrame;
+		}
+		return (System.currentTimeMillis() - lastFrame);
 	}
 	
 	public static float getAvgFrameTime() {

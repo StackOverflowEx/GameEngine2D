@@ -15,6 +15,13 @@ public class Camera {
 		moved = true;
 	}
 	
+	public static void setPos(float x, float y) {
+		position.x = x;
+		position.y = y;
+		Calc.calcViewMatrix();
+		moved = true;
+	}
+	
 	public static void roll(float droll) {
 		roll += droll;
 		Calc.calcViewMatrix();

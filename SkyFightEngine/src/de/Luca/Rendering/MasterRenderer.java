@@ -9,30 +9,35 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import de.Luca.Blocks.BlockManager;
 import de.Luca.Calculation.Calc;
+import de.Luca.Entities.EntityManager;
 import de.Luca.GUI.GUIManager;
 import de.Luca.Loading.Frame;
 import de.Luca.Loading.Loader;
-import de.Luca.Models.RenderModel;
 import de.Luca.Models.Texture;
-import de.Luca.Shader.EntityShader;
+import de.Luca.Shader.BlockShader;
 import de.Luca.Text.TextManager;
 
 public class MasterRenderer extends Thread {
 
 	private static MasterRenderer masterRenderer;
-	private EntityShader shader;
+	private BlockShader shader;
 	private Frame frame;
 	private Frame queuedFrame;
 	private CopyOnWriteArrayList<Texture> loadTextures;
 	private Matrix4f projection, view;
 	private Background background;
+	private boolean ProjectionChanged;
+	private boolean viewChanged;
 
 	public MasterRenderer(RenderLoop loop) {
 		super(loop);
 		if (masterRenderer != null) {
 			throw new IllegalStateException("MasterRenderer already created");
 		}
+		this.ProjectionChanged = true;
+		this.viewChanged = true;
 		masterRenderer = this;
 		loadTextures = new CopyOnWriteArrayList<Texture>();
 		
@@ -70,38 +75,53 @@ public class MasterRenderer extends Thread {
 		}
 		masterRenderer.loadTextures.clear();
 	}
+	
+	public static boolean hasProjectionChanged() {
+		return masterRenderer.ProjectionChanged;
+	}
+	
+	public static boolean hasViewChanged() {
+		return masterRenderer.viewChanged;
+	}
+	
+	public static Matrix4f getProjection() {
+		return masterRenderer.projection;
+	}
+	
+	public static Matrix4f getView() {
+		return masterRenderer.view;
+	}
 
 	private void processMatricies() {
 
 		boolean loadProjection = true;
 		boolean loadView = true;
+		Matrix4f calcProjection = Calc.getProjectionMatrix();
+		Matrix4f calcView = Calc.getViewMatrix();
 
 		if (projection == null) {
-			projection = Calc.getProjectionMatrix();
+			projection = calcProjection;
 		} else {
-			if (projection == Calc.getProjectionMatrix()) {
+			if (projection == calcProjection) {
 				loadProjection = false;
 			} else {
-				projection = Calc.getProjectionMatrix();
+				projection = calcProjection;
 			}
 		}
 
 		if (view == null) {
-			view = Calc.getViewMatrix();
+			view = calcView;
 		} else {
-			if (view == Calc.getViewMatrix()) {
+			if (view == calcView) {
 				loadView = false;
 			} else {
-				view = Calc.getViewMatrix();
+				view = calcView;
 			}
 		}
-
-		if (loadProjection) {
-			shader.loadProjectionMatrix(projection);
-		}
-		if (loadView) {
-			shader.loadViewMatrix(view);
-		}
+		
+		ProjectionChanged = loadProjection;
+		viewChanged = loadView;
+		
 	}
 
 	public static void render() {
@@ -112,18 +132,21 @@ public class MasterRenderer extends Thread {
 		loadTextures();
 		swapFrames();
 		if (shader == null) {
-			shader = new EntityShader();
+			shader = new BlockShader();
 		}
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glClearColor(1, 0.5f, 0, 1);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
+		processMatricies();
 		
 		if (frame != null) {
 			bindModel();
 
 			drawBackground();
-			drawEntities();
+//			drawEntities();
+			BlockManager.render();
+			EntityManager.render();
 			GUIManager.render();
 			TextManager.render();
 
@@ -144,22 +167,22 @@ public class MasterRenderer extends Thread {
 		background.getShader().stop();
 	}
 
-	private void drawEntities() {
-		shader.start();
-		processMatricies();
-
-		for (int i = 0; i < frame.getBufferedEntities(); i++) {
-			RenderModel entity = frame.getEntities().get(i);
-			if (entity.getModel().getTexture().getTextureID() != -1) {
-				bindTexture(entity.getModel().getTexture().getTextureID());
-				Matrix4f transformationMatrix = Calc.getTransformationMatrix(entity.getLocation(),
-						entity.getModel().getScale(), entity.getRoll());
-				shader.loadTransformationMatrix(transformationMatrix);
-				drawVAO();
-			}
-		}
-		shader.stop();
-	}
+//	private void drawEntities() {
+//		shader.start();
+//		processMatricies();
+//
+//		for (int i = 0; i < frame.getBufferedEntities(); i++) {
+//			RenderModel entity = frame.getEntities().get(i);
+//			if (entity.getModel().getTexture().getTextureID() != -1) {
+//				bindTexture(entity.getModel().getTexture().getTextureID());
+//				Matrix4f transformationMatrix = Calc.getTransformationMatrix(entity.getLocation(),
+//						entity.getModel().getScale(), entity.getRoll());
+//				shader.loadTransformationMatrix(transformationMatrix);
+//				drawVAO();
+//			}
+//		}
+//		shader.stop();
+//	}
 
 	public static void swapFrames() {
 		masterRenderer.nswapFrames();
@@ -179,9 +202,9 @@ public class MasterRenderer extends Thread {
 		}
 	}
 
-	private void drawVAO() {
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
-	}
+//	private void drawVAO() {
+//		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
+//	}
 
 	private void bindModel() {
 		if (frame.getVaoID() == -1) {

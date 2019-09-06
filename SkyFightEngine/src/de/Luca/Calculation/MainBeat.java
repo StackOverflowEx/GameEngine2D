@@ -19,6 +19,7 @@ public class MainBeat {
 		while(!Window.shouldClose()) {
 			long start = System.nanoTime();
 			GLFW.glfwPollEvents();
+			PlayerCalc.calc();
 			Frame frame = BufferLoader.loadFrameBuffer(entities);
 			while((float)((System.nanoTime() - start)) < Window.getAvgFrameTime()) {}
 			MasterRenderer.queueFrame(frame);
