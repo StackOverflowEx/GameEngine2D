@@ -106,7 +106,7 @@ public class BlockManager {
 					MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());
 					Matrix4f transformation = Calc.getTransformationMatrix(b.getOpenGLPos(), model.getModel().getScale(), model.getRoll());
 					shader.loadTransformationMatrix(transformation);
-					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
+					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8, 4);
 				}
 			}
 		}

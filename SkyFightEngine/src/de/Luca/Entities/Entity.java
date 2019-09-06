@@ -7,6 +7,7 @@ import org.joml.Vector4f;
 
 import de.Luca.Blocks.Block;
 import de.Luca.Blocks.BlockManager;
+import de.Luca.GIF.Animation;
 import de.Luca.Models.RenderModel;
 
 public abstract class Entity {
@@ -28,7 +29,9 @@ public abstract class Entity {
 		return renderModel;
 	}
 	
+	public abstract void updateAnimation();
 	
+	public abstract void startAnimation(int i, Animation a);
 	
 	public boolean isVisible() {
 		return visible;

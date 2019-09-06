@@ -262,7 +262,7 @@ public class TextManager {
 	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {		
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
 		shader.loadTransformationMatrix(transformation);
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8 + offset, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 12 + offset, 4);
 
 	}
 

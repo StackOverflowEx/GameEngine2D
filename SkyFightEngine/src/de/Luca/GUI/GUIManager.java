@@ -92,7 +92,7 @@ public class GUIManager {
 		shader.loadTransformationMatrix(transformation);
 		
 		//RENDER
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8, 4);
 		
 		MasterRenderer.bindTexture(0);
 	}

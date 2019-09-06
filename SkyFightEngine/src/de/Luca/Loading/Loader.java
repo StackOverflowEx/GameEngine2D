@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.GL_RGBA;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
+
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,34 +44,34 @@ public class Loader {
 	}
 
 	public static int loadTexture(ByteBuffer buffer, int width, int height) {
-		
+
 		int textureID = GL11.glGenTextures();
 		textures.add(textureID);
-		
-		if(buffer == null) {
+
+		if (buffer == null) {
 			return textureID;
 		}
-				
+
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-	    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
 		return textureID;
 
 	}
-	
-	//LB, LT, RB, RT
+
+	// LB, LT, RB, RT
 	public static int loadToVAO(float[] verticies, float[] textureCoords) {
 		int vaoID = createVAO();
 //		System.out.println("VAO " + vaoID);
 		int vboID1 = storeDataInAttributeList(0, verticies);
 		int vboID2 = storeDataInAttributeList(1, textureCoords);
-		vbos.put(vaoID, new int[] {vboID1, vboID2});
+		vbos.put(vaoID, new int[] { vboID1, vboID2 });
 		unbindVAO();
 		return vaoID;
 	}
-	
+
 	public static int storeIndicies(int[] indices) {
 		int vboID = GL30.glGenBuffers();
 		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, vboID);
@@ -77,16 +79,16 @@ public class Loader {
 		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
 		return vboID;
 	}
-	
+
 	private static IntBuffer storeDataInIntBuffer(int[] data) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;
 	}
-	
+
 	public static void cleanVAO(int vaoID) {
-		for(int i : vbos.get(vaoID)) {
+		for (int i : vbos.get(vaoID)) {
 			GL30.glDeleteBuffers(i);
 		}
 		GL30.glDeleteVertexArrays(vaoID);
@@ -97,12 +99,12 @@ public class Loader {
 		int width = 0;
 		int height = 0;
 		ByteBuffer buffer = null;
-		
-		if(file == null || !new File(file).exists()) {
+
+		if (file == null || !new File(file).exists()) {
 			Texture texture = new Texture(buffer, width, height);
 			MasterRenderer.queueTexture(texture);
 		}
-		
+
 		try {
 			FileInputStream in = new FileInputStream(file);
 			PNGDecoder decoder = new PNGDecoder(in);
@@ -124,10 +126,34 @@ public class Loader {
 		return texture;
 	}
 
+	public static Texture loadTexture(BufferedImage image) {
+		int[] pixels = new int[image.getWidth() * image.getHeight()];
+		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
+
+		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
+
+		for (int y = 0; y < image.getHeight(); y++) {
+			for (int x = 0; x < image.getWidth(); x++) {
+				int pixel = pixels[y * image.getWidth() + x];
+				buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
+				buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
+				buffer.put((byte) (pixel & 0xFF)); // Blue component
+				buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha component. Only for RGBA
+			}
+		}
+
+		buffer.flip();
+
+		Texture texture = new Texture(buffer, image.getWidth(), image.getHeight());
+		MasterRenderer.queueTexture(texture);
+
+		return texture;
+	}
+
 	public static int loadQuadVAO() {
 		int vaoID = createVAO();
 		int vboID = storeDataInAttributeList(0, new float[] { 0, 0, 0, 1, 1, 0, 1, 1 });
-		vbos.put(vaoID, new int[] {vboID});
+		vbos.put(vaoID, new int[] { vboID });
 		unbindVAO();
 		return vaoID;
 	}
@@ -203,8 +229,8 @@ public class Loader {
 			GL11.glDeleteTextures(texture);
 		}
 		textures.clear();
-		for(int vaos : vbos.keySet()) {
-			for(int vbos : vbos.get(vaos)) {
+		for (int vaos : vbos.keySet()) {
+			for (int vbos : vbos.get(vaos)) {
 				GL30.glDeleteBuffers(vbos);
 			}
 			GL30.glDeleteVertexArrays(vaos);

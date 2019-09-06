@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL30;
 
 import de.Luca.Blocks.BlockManager;
 import de.Luca.Calculation.Calc;
+import de.Luca.Effects.EffectManager;
 import de.Luca.Entities.EntityManager;
 import de.Luca.GUI.GUIManager;
 import de.Luca.Loading.Frame;
@@ -69,7 +70,6 @@ public class MasterRenderer extends Thread {
 	
 	private static void loadTextures() {
 		for (Texture texture : masterRenderer.loadTextures) {
-			System.out.println("Loading texture");
 			int id = Loader.loadTexture(texture.getBuffer(), texture.getWidth(), texture.getHeight());
 			texture.setTextureID(id);
 		}
@@ -147,6 +147,7 @@ public class MasterRenderer extends Thread {
 //			drawEntities();
 			BlockManager.render();
 			EntityManager.render();
+			EffectManager.render();
 			GUIManager.render();
 			TextManager.render();
 
@@ -162,7 +163,7 @@ public class MasterRenderer extends Thread {
 	private void drawBackground() {
 		background.getShader().start();
 		background.bindTexture();
-		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
+		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
 		
 		background.getShader().stop();
 	}

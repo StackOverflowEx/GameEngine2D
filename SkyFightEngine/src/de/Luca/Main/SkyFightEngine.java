@@ -8,9 +8,12 @@ import de.Luca.Blocks.BlockData;
 import de.Luca.Blocks.BlockManager;
 import de.Luca.Calculation.MainBeat;
 import de.Luca.Calculation.PlayerCalc;
+import de.Luca.Effects.Effect;
+import de.Luca.Effects.EffectManager;
 import de.Luca.Entities.EntityManager;
 import de.Luca.Entities.Player;
 import de.Luca.EventManager.EventManager;
+import de.Luca.GIF.Animation;
 import de.Luca.GUI.GUIListener;
 import de.Luca.GUI.GUIManager;
 import de.Luca.Loading.Loader;
@@ -32,6 +35,7 @@ public class SkyFightEngine {
 		GUIManager.init();
 		BlockManager.init();
 		EntityManager.init();
+		EffectManager.init();
 		EventManager.registerEvent(new GUIListener());
 		EventManager.registerEvent(new DefaultKeyListener());
 		
@@ -56,6 +60,9 @@ public class SkyFightEngine {
 		PlayerCalc.init(p);
 		EntityManager.addEntity(p);
 		
+		Animation a = new Animation("D:\\Downloads\\giphy.gif");
+		p.startAnimation(0, a);
+				
 		MainBeat.init();
 	}
 	
