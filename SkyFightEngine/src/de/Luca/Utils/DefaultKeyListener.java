@@ -15,6 +15,9 @@ public class DefaultKeyListener implements Listener{
 	
 	@EventHandler
 	public void onKeyPress(KeyEvent e) {
+		if(e.isCancelled()) {
+			return;
+		}
 		if(e.getAction() == GLFW.GLFW_PRESS) {
 			keysPressed.add(e.getKey() + "");
 			if(e.getKey() == GLFW.GLFW_KEY_F12) {

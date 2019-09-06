@@ -55,10 +55,10 @@ public class GCheckBox extends GButton{
 				setColor(new Vector4f(0, 1 , 0, 1));
 			}
 			if(checkedHover != null) {
-				setDefaultTexture(checkedHover);
+				setHoverTexture(checkedHover);
 			}
 			if(checkedPressed != null) {
-				setDefaultTexture(checkedPressed);
+				setPressTexture(checkedPressed);
 			}
 		}else {
 			if(storeOld != null) {

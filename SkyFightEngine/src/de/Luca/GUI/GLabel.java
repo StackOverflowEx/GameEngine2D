@@ -23,6 +23,14 @@ public class GLabel extends GUIComponent{
 		setColor(new Vector4f(0, 0, 0, 0));
 	}
 	
+	public TEXT_ALIGN getTextAlign() {
+		return align;
+	}
+	
+	public int getMargin() {
+		return margin;
+	}
+	
 	public void setText(String text, long font, Vector4f color, TEXT_ALIGN align, int margin) {
 		this.align = align;
 		this.margin = margin;
