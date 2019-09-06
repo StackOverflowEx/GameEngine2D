@@ -9,17 +9,21 @@ import de.Luca.Loading.BufferLoader;
 import de.Luca.Loading.Frame;
 import de.Luca.Models.RenderModel;
 import de.Luca.Rendering.MasterRenderer;
+import de.Luca.Sound.AudioManager;
 import de.Luca.Window.Window;
 
 public class MainBeat {
 	
 	public static List<RenderModel> entities = new ArrayList<RenderModel>();
 
-	public static void init() {
+	public static void init(BeatHandler bh) {
+		bh.init();
 		while(!Window.shouldClose()) {
 			long start = System.nanoTime();
 			GLFW.glfwPollEvents();
 			PlayerCalc.calc();
+			AudioManager.update();
+			bh.loop();
 			Frame frame = BufferLoader.loadFrameBuffer(entities);
 			while((float)((System.nanoTime() - start)) < Window.getAvgFrameTime()) {}
 			MasterRenderer.queueFrame(frame);

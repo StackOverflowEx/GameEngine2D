@@ -7,6 +7,7 @@ import org.lwjgl.opengl.GL11;
 import de.Luca.Blocks.Block;
 import de.Luca.Blocks.BlockData;
 import de.Luca.Blocks.BlockManager;
+import de.Luca.Calculation.BeatHandler;
 import de.Luca.Calculation.MainBeat;
 import de.Luca.Calculation.PlayerCalc;
 import de.Luca.Effects.EffectManager;
@@ -22,6 +23,7 @@ import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Rendering.RenderLoop;
+import de.Luca.Sound.AudioManager;
 import de.Luca.Text.TextManager;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.DefaultKeyListener;
@@ -29,11 +31,12 @@ import de.Luca.Window.Window;
 
 public class SkyFightEngine {
 		
-	public static void init() {
+	public static void init(BeatHandler bh) {
 		Window.init(1280, 720, "SkyFight");
 		
 		GL11.glGenTextures();
 		
+		AudioManager.init();
 		TextManager.init();
 		GUIManager.init();
 		BlockManager.init();
@@ -71,10 +74,11 @@ public class SkyFightEngine {
 		ui.addComponent(text);
 		ui.setVisible(true);
 				
-		MainBeat.init();
+		MainBeat.init(bh);
 	}
 	
 	public static void stop() {
+		AudioManager.cleanUP();
 		TextManager.cleanUP();
 		MasterRenderer.cleanUP();
 		GUIManager.cleanUP();

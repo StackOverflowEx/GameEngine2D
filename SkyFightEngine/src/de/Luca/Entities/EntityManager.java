@@ -44,6 +44,7 @@ public class EntityManager {
 				continue;
 			}
 			e.updateAnimation();
+			e.updateSound();
 			for(RenderModel model : e.getModels()) {
 				if(model.getModel().getTexture().getTextureID() != -1) {
 					MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());

@@ -22,7 +22,8 @@ public class PlayerCalc {
 	public static void calc() {
 		float addX = 0, addY = 0;
 		float sec = (System.currentTimeMillis() - lastCalc) / 1000f;
-		if(lastCalc == 1) {
+		if(lastCalc == -1) {
+			lastCalc = System.currentTimeMillis();
 			return;
 		}
 		if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_A)) {

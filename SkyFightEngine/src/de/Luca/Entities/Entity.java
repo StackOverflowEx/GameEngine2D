@@ -1,6 +1,7 @@
 package de.Luca.Entities;
 
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joml.Vector2f;
 import org.joml.Vector4f;
@@ -9,6 +10,9 @@ import de.Luca.Blocks.Block;
 import de.Luca.Blocks.BlockManager;
 import de.Luca.GIF.Animation;
 import de.Luca.Models.RenderModel;
+import de.Luca.Sound.AudioManager;
+import de.Luca.Sound.SoundData;
+import de.Luca.Sound.Source;
 
 public abstract class Entity {
 	
@@ -17,12 +21,54 @@ public abstract class Entity {
 	private boolean visible;
 	private boolean onGround;
 	private ArrayList<Block> colliding;
+	private ConcurrentHashMap<SoundData, Source> audioSources;
 	
 	public Entity(Vector2f worldPos, int yHeight, int xWidth) {
 		this.renderModel = new RenderModel[yHeight * xWidth];
+		audioSources = new ConcurrentHashMap<SoundData, Source>();
 		this.worldPos = worldPos;
 		this.visible = true;
 		this.onGround = true;
+	}
+	
+	public boolean isPlaying(SoundData d) {
+		return audioSources.containsKey(d);
+	}
+	
+	public void playSound(SoundData d, float maxAudibleDistance, boolean loop) {
+		Source source = AudioManager.genSource();
+		audioSources.put(d, source);
+		source.setMaxAudibleDistanace(maxAudibleDistance);
+		source.setLoop(loop);
+		source.playSound(d);
+	}
+	
+	public void stopSound(SoundData d) {
+		Source source = audioSources.get(d);
+		if(source != null) {
+			source.delete();
+			audioSources.remove(d);
+		}
+	}
+	
+	public void updateSound() {
+		for(SoundData sd : audioSources.keySet()) {
+			Source source = audioSources.get(sd);
+			if(!source.isPlaying()) {
+				if(!source.isLoop()) {
+					source.delete();
+					audioSources.remove(sd);
+					continue;
+				}else {
+					source.continuePlaying();
+				}
+			}
+			float distance = source.getDistanceToListener();
+			if(distance > source.getMaxAudibleDistance()) {
+				source.delete();
+				audioSources.remove(sd);
+			}
+		}
 	}
 	
 	public RenderModel[] getModels() {
