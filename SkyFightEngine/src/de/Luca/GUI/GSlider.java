@@ -265,7 +265,7 @@ public class GSlider extends GUIComponent{
 	}
 
 	@Override
-	protected void dispose() {
+	public void dispose() {
 		slider.dispose();
 		label.dispose();
 	}

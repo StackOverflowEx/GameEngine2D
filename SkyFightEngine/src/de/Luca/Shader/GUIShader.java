@@ -3,7 +3,8 @@ package de.Luca.Shader;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-import de.Luca.Main.Main;
+import de.Luca.Main.SkyFightEngine;
+
 
 public class GUIShader extends ShaderProgramm{
 
@@ -12,7 +13,7 @@ public class GUIShader extends ShaderProgramm{
 	private int location_color;
 	
 	public GUIShader() {
-		super(Main.class.getResource("/de/Luca/Shader/vertexGUI.glsl").getFile(), Main.class.getResource("/de/Luca/Shader/fragmentGUI.glsl").getFile());
+		super(SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/vertexGUI.glsl"), SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/fragmentGUI.glsl"));
 	}
 
 	@Override

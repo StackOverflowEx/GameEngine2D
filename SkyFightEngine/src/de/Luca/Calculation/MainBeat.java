@@ -21,7 +21,6 @@ public class MainBeat {
 		while(!Window.shouldClose()) {
 			long start = System.nanoTime();
 			GLFW.glfwPollEvents();
-			PlayerCalc.calc();
 			AudioManager.update();
 			bh.loop();
 			Frame frame = BufferLoader.loadFrameBuffer(entities);

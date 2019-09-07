@@ -2,7 +2,7 @@ package de.Luca.Shader;
 
 import org.joml.Matrix4f;
 
-import de.Luca.Main.Main;
+import de.Luca.Main.SkyFightEngine;
 
 public class BackgroundShader extends ShaderProgramm{
 
@@ -12,7 +12,7 @@ public class BackgroundShader extends ShaderProgramm{
 	private int location_afterTex;
 	
 	public BackgroundShader() {
-		super(Main.class.getResource("/de/Luca/Shader/vertexBackground.glsl").getFile(), Main.class.getResource("/de/Luca/Shader/fragmentBackground.glsl").getFile());
+		super(SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/vertexBackground.glsl"), SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/fragmentBackground.glsl"));
 	}
 
 	@Override

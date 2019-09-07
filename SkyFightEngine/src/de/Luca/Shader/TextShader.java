@@ -3,7 +3,7 @@ package de.Luca.Shader;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 
-import de.Luca.Main.Main;
+import de.Luca.Main.SkyFightEngine;
 
 public class TextShader extends ShaderProgramm{
 
@@ -12,7 +12,7 @@ public class TextShader extends ShaderProgramm{
 	private int location_color;
 	
 	public TextShader() {
-		super(Main.class.getResource("/de/Luca/Shader/vertexText.glsl").getFile(), Main.class.getResource("/de/Luca/Shader/fragmentText.glsl").getFile());
+		super(SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/vertexText.glsl"), SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/fragmentText.glsl"));
 	}
 
 	@Override

@@ -1,8 +1,9 @@
 package de.Luca.Shader;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -17,7 +18,7 @@ public abstract class ShaderProgramm {
 	private int fragmentShader;
 	private int programmID;
 	
-	public ShaderProgramm(String vertexFile, String fragmentFile) {
+	public ShaderProgramm(InputStream vertexFile, InputStream fragmentFile) {
 		vertexShader = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
 		fragmentShader = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
 		programmID = GL20.glCreateProgram();
@@ -102,11 +103,10 @@ public abstract class ShaderProgramm {
 		
 	}
 	
-	@SuppressWarnings("resource")
-	private static int loadShader(String file, int type){
+	private static int loadShader(InputStream file, int type){
 		StringBuilder shaderSource = new StringBuilder();
 		try{
-			BufferedReader reader = new BufferedReader(new FileReader(file));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(file));
 			String line;
 			while((line = reader.readLine()) != null){
 				shaderSource.append(line).append("\n");

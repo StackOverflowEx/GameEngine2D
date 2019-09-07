@@ -29,6 +29,7 @@ public abstract class Entity {
 		this.worldPos = worldPos;
 		this.visible = true;
 		this.onGround = true;
+		EntityManager.addEntity(this);
 	}
 	
 	public boolean isPlaying(SoundData d) {

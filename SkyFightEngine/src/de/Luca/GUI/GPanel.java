@@ -117,7 +117,7 @@ public class GPanel extends GUIComponent{
 	}
 
 	@Override
-	protected void dispose() {
+	public void dispose() {
 		for(GUIComponent c : components) {
 			c.dispose();
 		}

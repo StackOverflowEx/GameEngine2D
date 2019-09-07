@@ -202,6 +202,6 @@ public abstract class GUIComponent {
 	
 	protected abstract void reCalc();
 	
-	protected abstract void dispose();
+	public abstract void dispose();
 
 }

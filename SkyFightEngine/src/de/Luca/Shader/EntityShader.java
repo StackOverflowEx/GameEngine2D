@@ -2,7 +2,7 @@ package de.Luca.Shader;
 
 import org.joml.Matrix4f;
 
-import de.Luca.Main.Main;
+import de.Luca.Main.SkyFightEngine;
 
 public class EntityShader extends ShaderProgramm{
 
@@ -11,7 +11,7 @@ public class EntityShader extends ShaderProgramm{
 	private int location_transformationMatrix;
 	
 	public EntityShader() {
-		super(Main.class.getResource("/de/Luca/Shader/vertex.glsl").getFile(), Main.class.getResource("/de/Luca/Shader/fragment.glsl").getFile());
+		super(SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/vertex.glsl"), SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/fragment.glsl"));
 	}
 
 	@Override

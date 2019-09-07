@@ -129,7 +129,7 @@ public class GLabel extends GUIComponent{
 	}
 
 	@Override
-	protected void dispose() {
+	public void dispose() {
 		setVisible(false);
 		removeText();
 		GUIListener.removeComponent(this);

@@ -145,7 +145,7 @@ public class GDropDown extends GUIComponent{
 	}
 
 	@Override
-	protected void dispose() {
+	public void dispose() {
 		button.dispose();
 		for(GButton element : elements.values()) {
 			element.dispose();

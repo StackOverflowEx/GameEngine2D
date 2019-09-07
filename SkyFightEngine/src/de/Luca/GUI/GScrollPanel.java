@@ -259,7 +259,7 @@ public class GScrollPanel extends GUIComponent{
 	}
 
 	@Override
-	protected void dispose() {
+	public void dispose() {
 		panel.dispose();
 		sliderLR.dispose();
 		sliderTB.dispose();

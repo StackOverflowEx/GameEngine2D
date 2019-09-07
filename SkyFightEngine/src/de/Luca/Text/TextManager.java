@@ -45,7 +45,9 @@ public class TextManager {
 		changed = true;
 	}
 
-	public static  void generateFont(String file, float fontSize, String name, boolean italic, boolean bold) {
+	public static void generateFont(String file, float fontSize, String name, boolean italic, boolean bold) {
+		if(fonts.containsKey(name))
+			return;
 		long font = FontAtlas.addFont(file, fontSize, italic, bold);
 		FontAtlas.hasUpdated();
 		FontAtlas.build(0);

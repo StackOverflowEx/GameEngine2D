@@ -160,6 +160,13 @@ public class GUIListener implements Listener{
 			if(isMouseInside(mousePixel, corner1, corner2)) {
 				component.click(e.getButton(), e.getAction(), (int)mousePixel.x, (int)mousePixel.y);
 				clicked = true;
+			}else {
+				if(component instanceof GTextBox) {
+					if(e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+						GTextBox box = (GTextBox) component;
+						box.setSelected(false);
+					}
+				}
 			}
 		}
 		

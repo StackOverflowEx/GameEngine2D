@@ -11,7 +11,9 @@ import de.Luca.Text.Paragraph.TEXT_ALIGN;
 public class GTextBox extends GButton{
 	
 	private String text;
+	private String showText;
 	private boolean selected;
+	private boolean passwordBox;
 	private ArrayList<CharInputCallback> callbacks;
 	private ArrayList<TextFinishCallback> finishCallbacks;
 	
@@ -37,7 +39,17 @@ public class GTextBox extends GButton{
 		this.align = align;
 		this.margin = margin;
 		text = "";
+		showText = "";
 		callback();
+	}
+	
+	public void setPasswordBox(boolean passwordBox) {
+		this.passwordBox = passwordBox;
+	}
+	
+	protected void setSelected(boolean selected) {
+		this.selected = selected;
+		updateTexture(selected);
 	}
 	
 	public void setSelectedTextures(Texture selectedDefault, Texture selectedHover, Texture selectedPressed) {
@@ -120,12 +132,18 @@ public class GTextBox extends GButton{
 			public void run(String letter, INPUT_MODE mode) {
 				if(mode == INPUT_MODE.TEXT) {
 					text += letter;
-					setText(text, font, color, align, margin);
+					if(passwordBox) {
+						showText += "*";
+					}else {
+						showText += letter;
+					}
+					setText(showText, font, color, align, margin);
 				}else if(mode == INPUT_MODE.DELETE) {
 					if(text.length() > 0) {
 						text = text.substring(0, text.length() - 1);
+						showText = showText.substring(0, showText.length() - 1);
 					}
-					setText(text, font, color, align, margin);
+					setText(showText, font, color, align, margin);
 				}else if(mode == INPUT_MODE.SEND) {
 					fireTextFinish();
 				}
@@ -138,8 +156,10 @@ public class GTextBox extends GButton{
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if(key == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 					if(action == GLFW.GLFW_RELEASE) {
-						selected = !selected;
-						updateTexture(selected);
+						if(!selected) {
+							updateTexture(!selected);
+						}
+						selected = true;
 					}
 				}
 			}
