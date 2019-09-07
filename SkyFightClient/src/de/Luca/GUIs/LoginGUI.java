@@ -38,6 +38,13 @@ public class LoginGUI extends GUI {
 		background.setTexture(Loader.loadTexture("D:\\Downloads\\login.png"));
 		background.setColor(new Vector4f(1, 1, 1, 1));
 		this.addComponent(background);
+		
+		if(!SkyFightClient.handleServerConnection.isConnected()) {
+			GLabel error = new GLabel(0, 0, (int)windowSize.x, 40);
+			error.setColor(new Vector4f(1, 0, 0, 1));
+			error.setText("Verbindung zum Server nicht möglich", TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+			this.addComponent(error);
+		}
 
 		GTextBox username = new GTextBox(Calc.getPixelWidth(0.4f), Calc.getPixelHeight(0.4f), Calc.getPixelWidth(0.2f),
 				Calc.getPixelHeight(0.05f), TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);

@@ -32,7 +32,7 @@ public class TextManager {
 	private static float[][] buffer;
 	private static boolean changed;
 	private static Matrix4f projection;
-
+	
 	public static void init() {
 		if (fonts != null) {
 			return;
@@ -247,14 +247,16 @@ public class TextManager {
 				FontGlyph glyph = getGlyph(t.getFont(), c);
 
 				float width = glyph.x1 - glyph.x0;
+				width = width * t.getScale();
 				float height = glyph.y1 - glyph.y0;
+				height = height * t.getScale();
 				
 				Vector2f quadScale = WorldPosition
 						.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));
 				
 				renderGlyph(glyph, x, y, quadScale, offset * 4);
 				offset += 1;
-				x += glyph.advanceX / (windowSize.x / 2f);
+				x += (glyph.advanceX * t.getScale()) / (windowSize.x / 2f);
 			}
 		}
 		MasterRenderer.bindTexture(0);

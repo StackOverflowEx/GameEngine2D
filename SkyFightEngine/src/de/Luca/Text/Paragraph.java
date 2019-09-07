@@ -17,15 +17,31 @@ public class Paragraph {
 		texts = new ArrayList<Text>();
 		this.x = x;
 		this.y = y;
-		processLines(lines, font, color, TEXT_ALIGN.LEFT);
+		processLines(lines, font, color, TEXT_ALIGN.LEFT, 1.0f);
 		this.align = TEXT_ALIGN.LEFT;
+	}
+	
+	public Paragraph(int x, int y, String[] lines, long font, Vector4f color, float scale) {
+		texts = new ArrayList<Text>();
+		this.x = x;
+		this.y = y;
+		processLines(lines, font, color, TEXT_ALIGN.LEFT, scale);
+		this.align = TEXT_ALIGN.LEFT;
+	}
+	
+	public Paragraph(int x, int y, String[] lines, long font, Vector4f color, TEXT_ALIGN align, float scale) {
+		texts = new ArrayList<Text>();
+		this.x = x;
+		this.y = y;
+		processLines(lines, font, color, align, scale);
+		this.align = align;
 	}
 	
 	public Paragraph(int x, int y, String[] lines, long font, Vector4f color, TEXT_ALIGN align) {
 		texts = new ArrayList<Text>();
 		this.x = x;
 		this.y = y;
-		processLines(lines, font, color, align);
+		processLines(lines, font, color, align, 1.0f);
 		this.align = align;
 	}
 	
@@ -66,11 +82,11 @@ public class Paragraph {
 		bounds = new Vector2f(xLargest, y);
 	}
 	
-	private void processLines(String[] lines, long font, Vector4f color, TEXT_ALIGN align) {
+	private void processLines(String[] lines, long font, Vector4f color, TEXT_ALIGN align, float scale) {
 		int yOffset = 0;
 		float longest = 0;
 		for(String line : lines) {
-			Text t = new Text(font, x, y + yOffset, line, color);
+			Text t = new Text(font, x, y + yOffset, line, color, scale);
 			texts.add(t);
 			yOffset += t.getBounds().y;
 			if(t.getBounds().x > longest) {

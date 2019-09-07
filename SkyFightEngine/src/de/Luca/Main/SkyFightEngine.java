@@ -1,5 +1,6 @@
 package de.Luca.Main;
 
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import de.Luca.Blocks.BlockManager;
@@ -14,6 +15,7 @@ import de.Luca.Loading.Loader;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Rendering.RenderLoop;
 import de.Luca.Sound.AudioManager;
+import de.Luca.Text.Paragraph;
 import de.Luca.Text.TextManager;
 import de.Luca.Utils.DefaultKeyListener;
 import de.Luca.Window.Window;
@@ -31,8 +33,9 @@ public class SkyFightEngine {
 			
 			@Override
 			public void init() {
-				// TODO Auto-generated method stub
-				
+				TextManager.generateFont("C:\\Windows\\Fonts\\impact.ttf", 20, "Impact", false, false);
+				Paragraph p = new Paragraph(100, 100, new String[] {"Das ist ein", ", Test"},  TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1));
+				TextManager.addParagraph(p);
 			}
 		});
 	}

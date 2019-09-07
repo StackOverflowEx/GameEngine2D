@@ -16,6 +16,7 @@ public class Text {
 	private Vector4f color;
 	private Vector2D bounds;
 	private boolean visible;
+	private float scale;
 	
 	public Text(long font, int x, int y, String text, Vector4f color) {
 		super();
@@ -25,12 +26,41 @@ public class Text {
 		this.text = text;
 		this.color = color;
 		this.visible = true;
+		this.scale = 1.0f;
 		
 		bounds = Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);
 		
 		Vector2f wc = WorldPosition.toOpenGLCoords(new Vector2f(x, y));
 		openGLx = wc.x();
 		openGLy = wc.y();
+	}
+	
+	public Text(long font, int x, int y, String text, Vector4f color, float scale) {
+		super();
+		this.font = font;
+		this.x = x;
+		this.y = y;
+		this.text = text;
+		this.color = color;
+		this.visible = true;
+		this.scale = 1.0f;
+		
+		bounds = Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);
+		setScale(scale);
+		
+		Vector2f wc = WorldPosition.toOpenGLCoords(new Vector2f(x, y));
+		openGLx = wc.x();
+		openGLy = wc.y();
+	}
+	
+	public void setScale(float scale) {
+		this.scale = scale;
+		bounds.x = bounds.x * scale;
+		bounds.y = bounds.y * scale;
+	}
+	
+	public float getScale() {
+		return scale;
 	}
 	
 	public boolean isVisible() {
@@ -44,12 +74,11 @@ public class Text {
 	
 	public Vector2D getBounds() {
 		return bounds;
-	}
-	
+	}	
 	
 	
 	public Vector2D getTextSize() {
-		return Font.calcTextSize(font, Font.getFontSize(font), Float.MAX_VALUE, -1f, text);
+		return bounds;
 	}
 	
 	public Vector4f getColor() {

@@ -29,16 +29,24 @@ public class Connection {
 	private String clientPublicKey;
 	private String serverPublicKey;
 	private Thread th;
+	private boolean connected;
 	
 	public Connection(String ip, int port) {
 		try {
 			socket = new Socket(ip, port);
+			connected = true;
 			init();
 			sendHandshake();
 			listen();
 		} catch (IOException e) {
 			e.printStackTrace();
+			connected = false;
+			return;
 		}
+	}
+	
+	public boolean isConnected() {
+		return connected;
 	}
 	
 	private void init() {
