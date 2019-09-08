@@ -9,14 +9,16 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Base64;
 
+import de.Luca.GameLogic.GameLogic;
+import de.Luca.Main.Server;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.Encryption;
 import de.Luca.Security.RSAKeyPairGenerator;
 import de.Luca.Security.RSAUtil;
 
-public class DemonConnectionHandler implements Runnable {
+public class ConnectionHandler implements Runnable {
 
-	private static ArrayList<DemonConnectionHandler> handler = new ArrayList<DemonConnectionHandler>();
+	private static ArrayList<ConnectionHandler> handler = new ArrayList<ConnectionHandler>();
 
 	private Socket socket;
 	private InputStream is;
@@ -24,31 +26,35 @@ public class DemonConnectionHandler implements Runnable {
 	private PrivateKey serverPrivateKey;
 	private String serverPublicKey;
 	private String clientPublicKey;
-	private long lastInfo;
-	private DemonInfo info;
 	private String AESKey;
 
-	public DemonConnectionHandler(Socket socket) {
+	public ConnectionHandler(Socket socket) {
 		this.socket = socket;
-		lastInfo = 0;
 		addHandler(this);
 		init();
-
-		System.out.println("Demon connection established: " + socket.getInetAddress() + ":" + socket.getPort());
-
+		if(Server.player1 == null) {
+			Server.player1 = this;
+		}else if(Server.player2 == null) {
+			Server.player2 = null;
+		}else {
+			disconnect();
+		}
+		
+		System.out.println("Connection established: " + socket.getInetAddress() + ":" + socket.getPort());
+		
 	}
 
 	@SuppressWarnings("unchecked")
-	public static ArrayList<DemonConnectionHandler> getHandler() {
-		return (ArrayList<DemonConnectionHandler>) DemonConnectionHandler.handler.clone();
+	public static ArrayList<ConnectionHandler> getHandler() {
+		return (ArrayList<ConnectionHandler>) ConnectionHandler.handler.clone();
 	}
 
-	public static void addHandler(DemonConnectionHandler handler) {
-		DemonConnectionHandler.handler.add(handler);
+	public static void addHandler(ConnectionHandler handler) {
+		ConnectionHandler.handler.add(handler);
 	}
 
-	public static void removeHandler(DemonConnectionHandler handler) {
-		DemonConnectionHandler.handler.remove(handler);
+	public static void removeHandler(ConnectionHandler handler) {
+		ConnectionHandler.handler.remove(handler);
 	}
 
 	private void init() {
@@ -64,20 +70,19 @@ public class DemonConnectionHandler implements Runnable {
 			serverPrivateKey = keyGen.getPrivateKey();
 			serverPublicKey = Base64.getEncoder().encodeToString(keyGen.getPublicKey().getEncoded());
 		} catch (NoSuchAlgorithmException e) {
+			disconnect();
 			e.printStackTrace();
-			System.exit(0);
 		}
 	}
 
 	@Override
 	public void run() {
 		while (!socket.isClosed()) {
-			requestDemonInfo();
 			try {
 				if (is.available() > 0) {
 					byte[] data = getDataFromInputStream();
 					String input = null;
-					if (clientPublicKey == null) {
+					if(clientPublicKey == null) {
 						input = new String(data);
 					} else if(AESKey == null){
 						input = RSAUtil.decrypt(data, serverPrivateKey);
@@ -87,23 +92,11 @@ public class DemonConnectionHandler implements Runnable {
 					Packet packet = new Packet(input);
 					handlePacket(packet);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+			}catch (Exception e) {
 				disconnect();
+				e.printStackTrace();
 			}
 
-		}
-		return;
-	}
-
-	private void requestDemonInfo() {
-		if (AESKey != null && clientPublicKey != null && (System.currentTimeMillis() - lastInfo) > 10000) {
-			System.out.println("Requesting DemonInfo");
-			Packet p = new Packet();
-			p.packetType = Packet.DEMON_INFO;
-			p.a = System.currentTimeMillis();
-			send(p);
-			lastInfo = System.currentTimeMillis();
 		}
 	}
 
@@ -115,7 +108,7 @@ public class DemonConnectionHandler implements Runnable {
 
 	private void handlePacket(Packet packet) {
 		if (packet.packetType == Packet.HANDSHAKE) {
-			System.out.println("Handshake width demon " + socket.getInetAddress() + ":" + socket.getPort());
+			System.out.println("Handshake width " + socket.getInetAddress() + ":" + socket.getPort());
 			handleHandshake(packet);
 		} else {
 			if (clientPublicKey == null) {
@@ -123,47 +116,25 @@ public class DemonConnectionHandler implements Runnable {
 				sendUnencrypted(p);
 				return;
 			}
-
-			if (packet.packetType == Packet.DEMON_ERROR) {
+			
+			if(packet.packetType == Packet.ERROR) {
 				handleError(packet);
-			} else if (packet.packetType == Packet.DEMON_SUCCESS) {
+			}else if(packet.packetType == Packet.SUCCESS) {
 				handleSuccess(packet);
-			} else if (packet.packetType == Packet.DEMON_INFO) {
-				handleDeamonInfo(packet);
-			} else if (packet.packetType == Packet.DEMON_KEY) {
-				handleDemonKey(packet);
-			} else if (packet.packetType == Packet.DEMON_SERVER_CREATED) {
-				handleServerCreated(packet);
+			}else if (packet.packetType == Packet.KEY) {
+				handleKey(packet);
+			}else {
+				GameLogic.processPacket(packet);
 			}
-
+			
 		}
 	}
 	
-	private void handleServerCreated(Packet packet) {
-		String id = (String) packet.a;
-		int port = (int) packet.b;
-		ConnectionHandler[] ch = Searching.getFound(id);
-		if(ch != null) {
-			Packet p = new Packet();
-			p.packetType = Packet.CONNECT;
-			p.a = port;
-			for(ConnectionHandler c : ch) {
-				c.send(p);
-			}
-		}else {
-			Packet p = new Packet();
-			p.packetType = Packet.DEMON_STOP_SERVER;
-			p.a = id;
-			send(p);
-		}
-	}
-	
-	private void handleDemonKey(Packet packet) {
+	private void handleKey(Packet packet) {
 		String key = "";
 		try {
 			key = Encryption.genKey();
 		} catch (NoSuchAlgorithmException e) {
-			disconnect();
 			e.printStackTrace();
 		}
 		Packet p = new Packet();
@@ -172,41 +143,16 @@ public class DemonConnectionHandler implements Runnable {
 		send(p);
 		AESKey = key;
 	}
-
-	private void handleDeamonInfo(Packet packet) {
-		int ping = (int) (System.currentTimeMillis() - (long) packet.a);
-		double l = (double) packet.b;
-		float load = (float) l;
-		int freeRamMB = (int) packet.c;
-		System.out.println(ping + " | " + l + " | " + freeRamMB);
-		if (info == null) {
-			info = new DemonInfo(ping, freeRamMB, load);
-		} else {
-			info.setPing(ping);
-			info.setLoad(load);
-			info.setFreeRamMB(freeRamMB);
-		}
-	}
-
-	public DemonInfo getDeamonInfo() {
-		return info;
-	}
-
+	
+	
 	private void handleSuccess(Packet packet) {
-		System.out.println("Info/Demon (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")"
-				+ (int) packet.a);
+		System.out.println("Error/Client (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")" + (String)packet.a);
 	}
-
+	
 	private void handleError(Packet packet) {
-		System.out.println("Error/Demon (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") Errorcode: "
-				+ (int) packet.a);
-		int errorCode = (int) packet.a;
-		if(errorCode == Packet.ERROR_COULD_NOT_CREATE_SERVER) {
-			String id = (String) packet.b;
-			Searching.cancleMatch(id, Packet.ERROR_COULD_NOT_CREATE_SERVER);
-		}
+		System.out.println("Info/Client (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")" + (String)packet.a);
 	}
-
+	
 	private void handleHandshake(Packet packet) {
 		if (packet.packetType == Packet.HANDSHAKE) {
 			clientPublicKey = (String) packet.a;
@@ -216,14 +162,38 @@ public class DemonConnectionHandler implements Runnable {
 			sendUnencrypted(p);
 		}
 	}
-
+	
+	public void disconnect() {
+		try {
+			is.close();
+			os.close();
+			socket.close();
+		} catch (IOException e) {}
+		Packet p = new Packet();
+		p.packetType = Packet.ERROR_PLAYER_QUIT;
+		if(Server.player1 == this) {
+			Server.player2.send(p);
+		}else {
+			Server.player1.send(p);
+		}
+		
+		try {
+			Thread.sleep(5*1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+				
+		System.out.println("Demon disconnected");
+		System.exit(0);
+	}
+	
 	public Packet genErrorPacket(int error) {
 		Packet p = new Packet();
 		p.packetType = Packet.ERROR;
 		p.a = error;
 		return p;
 	}
-
+	
 	public Packet genSuccess(int recievedType) {
 		Packet p = new Packet();
 		p.packetType = Packet.SUCCESS;
@@ -239,18 +209,10 @@ public class DemonConnectionHandler implements Runnable {
 			os.flush();
 		} catch (IOException e) {
 			disconnect();
+			e.printStackTrace();
 		}
 	}
-
-	public void disconnect() {
-		try {
-			is.close();
-			os.close();
-			socket.close();
-		} catch (IOException e) {}
-		System.out.println("Demon disconnected");
-	}
-
+	
 	public void send(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
@@ -264,9 +226,10 @@ public class DemonConnectionHandler implements Runnable {
 			os.flush();
 		} catch (Exception e) {
 			disconnect();
+			e.printStackTrace();
 		}
 	}
-
+	
 	public void send(String msg) {
 		try {
 			byte[] enMSG = null;
@@ -279,6 +242,7 @@ public class DemonConnectionHandler implements Runnable {
 			os.flush();
 		} catch (Exception e) {
 			disconnect();
+			e.printStackTrace();
 		}
 	}
 

@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.Base64;
 
+import de.Luca.Main.Main;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.Encryption;
 import de.Luca.Security.RSAKeyPairGenerator;
@@ -15,7 +16,7 @@ import de.Luca.Security.RSAUtil;
 
 public class Connection {
 	
-	public static final int HANDLE_SERVER_PORT = 33332;
+	public static final int HANDLE_SERVER_PORT = 33331;
 	public static final String HANDLE_SERVER_IP = "127.0.0.1";
 	
 	private Socket socket;
@@ -146,7 +147,7 @@ public class Connection {
 	}
 
 	private void handlePacket(Packet packet) {
-		if (packet.packetType == Packet.DEMON_HANDSHAKE) {
+		if (packet.packetType == Packet.HANDSHAKE) {
 			handleHandshake(packet);
 		} else {
 			if (serverPublicKey == null) {
@@ -154,63 +155,37 @@ public class Connection {
 				sendUnencrypted(p);
 				return;
 			}
-			if(packet.packetType == Packet.DEMON_INFO) {
-				handleDemonInfo(packet);
-			}else if(packet.packetType == Packet.DEMON_KEY) {
-				handleDemonKey(packet);
-			}else if(packet.packetType == Packet.DEMON_CREATE_SERVER) {
-				handleServerGeneration(packet);
+			
+			if(packet.packetType == Packet.KEY) {
+				handleKey(packet);
 			}
 		}
 	}
 	
-	private void handleServerGeneration(Packet packet) {
-		String id = (String) packet.a;
-		boolean preset = (boolean) packet.b;
-		String name = (String) packet.c;
-		String path = "data/maps/";
-		if(preset) {
-			path += "presets/" + name;
-		}else {
-			String username = name.split(";")[0];
-			name = name.replace(username + ";", "");
-			//Set path
-		}
-		int i = ServerGenerator.genServer(path, id);
-		if(i < ServerGenerator.START_PORT) {
-			Packet p = genErrorPacket(Packet.ERROR_COULD_NOT_CREATE_SERVER);
-			p.b = id;
-			send(p);
-		}
-	}
 	
-	private void handleDemonKey(Packet packet) {
+	
+	private void handleKey(Packet packet) {
 		AESKey = (String) packet.a;
-	}
-	
-	private void handleDemonInfo(Packet packet) {
-		DemonInfo info = DemonInfo.getDemonInfo();
+		
 		Packet p = new Packet();
-		p.packetType = Packet.DEMON_INFO;
-		p.a = (long) packet.a;
-		p.b = (float)info.getLoad();
-		p.c = info.getFreeRamMB();
+		p.packetType = Packet.ID;
+		p.a = Main.id;
 		send(p);
 	}
 	
 	private void handleHandshake(Packet packet) {
-		if (packet.packetType == Packet.DEMON_HANDSHAKE) {
+		if (packet.packetType == Packet.HANDSHAKE) {
 			serverPublicKey = (String) packet.a;
 			System.out.println("RSA/public key (Server): " + serverPublicKey);
 			Packet p = new Packet();
-			p.packetType = Packet.DEMON_KEY;
+			p.packetType = Packet.KEY;
 			send(p);
 		}
 	}
 	
 	public Packet genErrorPacket(int error) {
 		Packet p = new Packet();
-		p.packetType = Packet.DEMON_ERROR;
+		p.packetType = Packet.ERROR;
 		p.a = error;
 		return p;
 	}

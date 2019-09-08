@@ -62,14 +62,14 @@ public class ConnectionHandler implements Runnable {
 			serverPrivateKey = keyGen.getPrivateKey();
 			serverPublicKey = Base64.getEncoder().encodeToString(keyGen.getPublicKey().getEncoded());
 		} catch (NoSuchAlgorithmException e) {
+			disconnect();
 			e.printStackTrace();
-			System.exit(0);
 		}
 	}
 
 	@Override
 	public void run() {
-		while (is != null) {
+		while (!socket.isClosed()) {
 			try {
 				if (is.available() > 0) {
 					byte[] data = getDataFromInputStream();
@@ -85,10 +85,27 @@ public class ConnectionHandler implements Runnable {
 					handlePacket(packet);
 				}
 			}catch (Exception e) {
+				disconnect();
 				e.printStackTrace();
 			}
 
 		}
+	}
+	
+	public void disconnect() {
+		try {
+			is.close();
+			os.close();
+			socket.close();
+		} catch (IOException e) {}
+		ConnectionHandler p = Searching.getFoundPartner(this);
+		if(p != null) {
+			Packet pa = new Packet();
+			pa.packetType = Packet.MATCH_CANCELLED;
+			pa.a = Packet.ERROR_PLAYER_QUIT;
+			p.send(pa);
+		}
+		System.out.println("Demon disconnected");
 	}
 
 	private byte[] getDataFromInputStream() throws IOException {
@@ -118,11 +135,22 @@ public class ConnectionHandler implements Runnable {
 				handleError(packet);
 			}else if(packet.packetType == Packet.SUCCESS) {
 				handleSuccess(packet);
-			}else if (packet.packetType == Packet.DEMON_KEY) {
+			}else if (packet.packetType == Packet.KEY) {
 				handleKey(packet);
+			}else if (packet.packetType == Packet.SEARCHING) {
+				handleSearch(packet);
 			}
 			
 		}
+	}
+	
+	private void handleSearch(Packet packet) {
+		if(DemonConnectionHandler.getHandler().size() == 0) {
+			Packet p = genErrorPacket(Packet.ERROR_MATCHES_NOT_AVALIABLE);
+			send(p);
+			return;
+		}
+		Searching.searching(this);
 	}
 	
 	private void handleKey(Packet packet) {
@@ -133,7 +161,7 @@ public class ConnectionHandler implements Runnable {
 			e.printStackTrace();
 		}
 		Packet p = new Packet();
-		p.packetType = Packet.DEMON_KEY;
+		p.packetType = Packet.KEY;
 		p.a = key;
 		send(p);
 		AESKey = key;
@@ -206,6 +234,7 @@ public class ConnectionHandler implements Runnable {
 			os.write(bMSG);
 			os.flush();
 		} catch (IOException e) {
+			disconnect();
 			e.printStackTrace();
 		}
 	}
@@ -222,6 +251,7 @@ public class ConnectionHandler implements Runnable {
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
+			disconnect();
 			e.printStackTrace();
 		}
 	}
@@ -237,6 +267,7 @@ public class ConnectionHandler implements Runnable {
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
+			disconnect();
 			e.printStackTrace();
 		}
 	}
