@@ -3,6 +3,7 @@ package de.Luca.Sound;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
@@ -19,7 +20,7 @@ public class AudioManager {
 	private static long context;
 	private static long device;
 	private static ALCCapabilities alcc;
-	private static ArrayList<Integer> buffers;
+	private static ConcurrentHashMap<String, ArrayList<Integer>> buffers;
 	private static ArrayList<Source> sources;
 	
 	public static void init() {
@@ -32,16 +33,20 @@ public class AudioManager {
 		alcc = ALC.createCapabilities(device);
 		
 		AL.createCapabilities(alcc);
-		buffers = new ArrayList<Integer>();
+		buffers = new ConcurrentHashMap<String, ArrayList<Integer>>();
 		sources = new ArrayList<Source>();
 		
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
 		
 	}
 	
-	public static SoundData loadSound(String file) {
+	public static SoundData loadSound(String file, String soundType) {
 		int buffer = AL10.alGenBuffers();
-		buffers.add(buffer);
+		if(!buffers.containsKey(soundType)) {
+			ArrayList<Integer> a = new ArrayList<Integer>();
+			buffers.put(soundType, a);
+		}
+		buffers.get(soundType).add(buffer);
 
 		MemoryStack.stackPush();
 		IntBuffer channelsBuffer = MemoryStack.stackMallocInt(1);
@@ -83,9 +88,17 @@ public class AudioManager {
 //		}
 	}
 	
-	public static void cleanUP() {
-		for(int buffer : buffers) {
+	public static void deleteSounds(String type) {
+		for(int buffer : buffers.get(type)) {
 			AL10.alDeleteBuffers(buffer);
+		}
+	}
+	
+	public static void cleanUP() {
+		for(String type : buffers.keySet()) {
+			for(int buffer : buffers.get(type)) {
+				AL10.alDeleteBuffers(buffer);
+			}
 		}
 		for(Source source : sources) {
 			source.delete();

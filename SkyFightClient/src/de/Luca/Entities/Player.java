@@ -33,7 +33,7 @@ public class Player extends Entity{
 		renderModel[0].setLocation(new Vector2f(openGL.x, openGL.y));
 		renderModel[1].setLocation(new Vector2f(openGL.x, openGL.y + BlockData.BLOCK_SCALE));
 	}
-
+	
 	public void setFlying(boolean flying) {
 		this.fly = flying;
 	}

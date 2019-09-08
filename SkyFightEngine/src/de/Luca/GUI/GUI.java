@@ -2,7 +2,7 @@ package de.Luca.GUI;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GUI {
+public abstract class GUI {
 	
 	private int x, y, width, height;
 	private CopyOnWriteArrayList<GUIComponent> components;
@@ -24,7 +24,10 @@ public class GUI {
 	
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		visibleUpdaet(visible);
 	}
+	
+	public abstract void visibleUpdaet(boolean visible);
 	
 	public void dispose() {
 		for(GUIComponent c : components) {
@@ -39,6 +42,7 @@ public class GUI {
 	
 	public void addComponent(GUIComponent c) {
 		components.add(c);
+		c.setVisible(isVisible());
 		c.setGUI(this);
 	}
 	

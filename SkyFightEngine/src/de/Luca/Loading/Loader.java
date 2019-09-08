@@ -32,7 +32,7 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class Loader {
 
-	public static ArrayList<Integer> textures = new ArrayList<Integer>();
+	public static HashMap<String, ArrayList<Integer>> textures = new HashMap<String, ArrayList<Integer>>();
 	public static HashMap<Integer, int[]> vbos = new HashMap<Integer, int[]>();
 	public static int QuadVAO = -1;
 
@@ -43,10 +43,14 @@ public class Loader {
 		return QuadVAO;
 	}
 
-	public static int loadTexture(ByteBuffer buffer, int width, int height) {
+	public static int loadTexture(ByteBuffer buffer, int width, int height, String textureType) {
 
 		int textureID = GL11.glGenTextures();
-		textures.add(textureID);
+		if(!textures.containsKey(textureType)) {
+			ArrayList<Integer> a = new ArrayList<Integer>();
+			textures.put(textureType, a);
+		}
+		textures.get(textureType).add(textureID);
 
 		if (buffer == null) {
 			return textureID;
@@ -95,13 +99,13 @@ public class Loader {
 		vbos.remove(vaoID);
 	}
 
-	public static Texture loadTexture(String file) {
+	public static Texture loadTexture(String file, String textureType) {
 		int width = 0;
 		int height = 0;
 		ByteBuffer buffer = null;
 
 		if (file == null || !new File(file).exists()) {
-			Texture texture = new Texture(buffer, width, height);
+			Texture texture = new Texture(buffer, width, height, textureType);
 			MasterRenderer.queueTexture(texture);
 		}
 
@@ -120,13 +124,13 @@ public class Loader {
 			System.exit(-1);
 		}
 
-		Texture texture = new Texture(buffer, width, height);
+		Texture texture = new Texture(buffer, width, height, textureType);
 		MasterRenderer.queueTexture(texture);
 
 		return texture;
 	}
 
-	public static Texture loadTexture(BufferedImage image) {
+	public static Texture loadTexture(BufferedImage image, String textureType) {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 
@@ -144,7 +148,7 @@ public class Loader {
 
 		buffer.flip();
 
-		Texture texture = new Texture(buffer, image.getWidth(), image.getHeight());
+		Texture texture = new Texture(buffer, image.getWidth(), image.getHeight(), textureType);
 		MasterRenderer.queueTexture(texture);
 
 		return texture;
@@ -226,12 +230,23 @@ public class Loader {
 	
 	public static void destroyTexture(Texture texture) {
 		GL11.glDeleteTextures(texture.getTextureID());
+		textures.get(texture.getTextureType()).remove(texture.getTextureID());
 		texture.setTextureID(-1);
 	}
 
+	public static void deleteTextures(String type) {
+		if(textures.containsKey(type)) {
+			for(int texture : textures.get(type)) {
+				GL11.glDeleteTextures(texture);
+			}
+		}
+	}
+	
 	public static void cleanUP() {
-		for (int texture : textures) {
-			GL11.glDeleteTextures(texture);
+		for (String type : textures.keySet()) {
+			for(int texture : textures.get(type)) {
+				GL11.glDeleteTextures(texture);
+			}
 		}
 		textures.clear();
 		for (int vaos : vbos.keySet()) {

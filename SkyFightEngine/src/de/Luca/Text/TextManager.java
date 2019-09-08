@@ -11,6 +11,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 import de.Luca.Calculation.Calc;
+import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Shader.TextShader;
@@ -54,7 +55,8 @@ public class TextManager {
 		ByteBuffer buffer = BufferUtils.createByteBuffer(FontAtlas.getTexDataAsRGBA32().data.length);
 		buffer.put(FontAtlas.getTexDataAsRGBA32().data);
 		buffer.flip();
-		tex = new Texture(buffer, FontAtlas.getTexDataAsRGBA32().width, FontAtlas.getTexDataAsRGBA32().height);
+		Loader.deleteTextures("text");
+		tex = new Texture(buffer, FontAtlas.getTexDataAsRGBA32().width, FontAtlas.getTexDataAsRGBA32().height, "text");
 		MasterRenderer.queueTexture(tex);
 
 		udpateFontGlyphs();

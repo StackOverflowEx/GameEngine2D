@@ -61,4 +61,7 @@ public class PopUp extends GUI{
 		}
 	}
 
+	@Override
+	public void visibleUpdaet(boolean visible) {}
+
 }

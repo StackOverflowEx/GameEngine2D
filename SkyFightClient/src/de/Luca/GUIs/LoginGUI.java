@@ -22,9 +22,11 @@ import de.Luca.Window.Window;
 public class LoginGUI extends GUI {
 	
 	private GLabel error;
+	private boolean e;
 
 	public LoginGUI() {
 		super(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
+		e = false;
 		calc();
 	}
 
@@ -38,14 +40,14 @@ public class LoginGUI extends GUI {
 		Vector2f windowSize = Window.getWindowSize();
 
 		GLabel background = new GLabel(0, 0, (int) windowSize.x, (int) windowSize.y);
-		background.setTexture(Loader.loadTexture("D:\\Downloads\\login.png"));
+		background.setTexture(Loader.loadTexture("D:\\Downloads\\login.png", "gui"));
 		background.setColor(new Vector4f(1, 1, 1, 1));
 		this.addComponent(background);
 		
 		error = new GLabel(0, 0, (int)windowSize.x, 40);
 		error.setColor(new Vector4f(1, 0, 0, 1));
 		error.setText("Verbindung zum Server nicht möglich", TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
-		error.setVisible(false);
+		error.setVisible(e && isVisible());
 		this.addComponent(error);
 
 		GTextBox username = new GTextBox(Calc.getPixelWidth(0.4f), Calc.getPixelHeight(0.4f), Calc.getPixelWidth(0.2f),
@@ -104,15 +106,22 @@ public class LoginGUI extends GUI {
 	}
 	
 	public void showNotConnected() {
-		if(error != null) {
+		if(error != null && isVisible()) {
 			error.setVisible(true);
 		}
+		e = true;
 	}
 	
 	public void hideNotConnected() {
 		if(error != null) {
 			error.setVisible(false);
 		}
+		e = false;
+	}
+
+	@Override
+	public void visibleUpdaet(boolean visible) {
+		error.setVisible(e && visible);
 	}
 
 }

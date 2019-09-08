@@ -3,6 +3,7 @@ package de.Luca.GameLogic;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
+import de.Luca.Calculation.Camera;
 import de.Luca.Entities.Player;
 import de.Luca.Utils.DefaultKeyListener;
 
@@ -56,7 +57,7 @@ public class PlayerCalc {
 			addY += sec * upSpeed;
 		}
 		p.move(new Vector2f(addX, addY));
-//		Camera.setPos(p.getModels()[1].getLocation().x, p.getModels()[1].getLocation().y);
+		Camera.setPos(p.getModels()[1].getLocation().x, p.getModels()[1].getLocation().y);
 		lastCalc = System.currentTimeMillis();
 	}
 		

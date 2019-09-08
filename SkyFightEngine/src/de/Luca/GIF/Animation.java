@@ -54,7 +54,7 @@ public class Animation {
 
 		for (ImageFrame frame : frames) {
 			BufferedImage img = frame.getImage();
-			Texture tex = Loader.loadTexture(img);
+			Texture tex = Loader.loadTexture(img, "animation");
 			System.out.println(frame.getDelay());
 			textures.put(tex, frame.getDelay());
 		}

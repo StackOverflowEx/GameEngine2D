@@ -21,6 +21,7 @@ public abstract class Entity {
 	private boolean visible;
 	private boolean onGround;
 	private ArrayList<Block> colliding;
+	private boolean collisionWithBlocks;
 	private ConcurrentHashMap<SoundData, Source> audioSources;
 	
 	public Entity(Vector2f worldPos, int yHeight, int xWidth) {
@@ -29,7 +30,27 @@ public abstract class Entity {
 		this.worldPos = worldPos;
 		this.visible = true;
 		this.onGround = true;
+		collisionWithBlocks = true;
 		EntityManager.addEntity(this);
+	}
+	
+	public void setCollisionWithBlocks(boolean b) {
+		this.collisionWithBlocks = b;
+	}
+	
+	public boolean canCollideWithBlocks() {
+		return collisionWithBlocks;
+	}
+	
+	public Block getBlockBelow() {
+		if(onGround) {
+			Vector4f hitbox = getHitBox(worldPos);
+			float x = hitbox.x + (hitbox.z - hitbox.x) / 2f;
+			float y = hitbox.y - 0.1f;
+			Block b = BlockManager.getBlock(new Vector2f(x, y));
+			return b;
+		}
+		return null;
 	}
 	
 	public boolean isPlaying(SoundData d) {
@@ -100,22 +121,24 @@ public abstract class Entity {
 
 	public void move(Vector2f addPos) {
 		nextPos = new Vector2f(worldPos.x + addPos.x, worldPos.y + addPos.y);
-		float y = nextPos.y;
-		if(y > 0) {
-			y = (int)Math.ceil(y);
-		}else {
-			y = (int)Math.floor(y);
-		}
-		colliding = BlockManager.isCollidingWithBlock(getHitBox(new Vector2f(worldPos.x, y - 0.000001f)));
-		if(colliding.size() > 0) {
-			onGround = true;
-			nextPos.y = (int) y;
-		}else {
-			onGround = false;
-		}
-		colliding = BlockManager.isCollidingWithBlock(getHitBox(new Vector2f(nextPos.x, worldPos.y)));
-		if(colliding.size() > 0) {
-			nextPos.x = worldPos.x;
+		if(canCollideWithBlocks()) {
+			float y = nextPos.y;
+			if(y > 0) {
+				y = (int)Math.ceil(y);
+			}else {
+				y = (int)Math.floor(y);
+			}
+			colliding = BlockManager.isCollidingWithBlock(getHitBox(new Vector2f(worldPos.x, y - 0.000001f)));
+			if(colliding.size() > 0) {
+				onGround = true;
+				nextPos.y = (int) y;
+			}else {
+				onGround = false;
+			}
+			colliding = BlockManager.isCollidingWithBlock(getHitBox(new Vector2f(nextPos.x, worldPos.y)));
+			if(colliding.size() > 0) {
+				nextPos.x = worldPos.x;
+			}
 		}
 //		System.out.println(nextPos.x + 0.05f + " " + nextPos.y);
 		if(nextPos.y != worldPos.y || nextPos.x != worldPos.x) {
