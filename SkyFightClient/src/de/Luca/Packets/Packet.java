@@ -14,6 +14,7 @@ public class Packet {
 	public static final int REGISTRATION = 4;
 	public static final int LOGIN = 5;
 	public static final int PING = 6;
+	public static final int KEY = 7;
 	
 	public static final int ERROR_MISSING_HANDSHAKE = 1;
 	public static final int ERROR_SERVER = 2;

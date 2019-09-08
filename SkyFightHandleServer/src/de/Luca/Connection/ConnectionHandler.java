@@ -4,18 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Base64;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 import de.Luca.MySQL.DatabaseManager;
 import de.Luca.Packets.Packet;
+import de.Luca.Security.Encryption;
 import de.Luca.Security.RSAKeyPairGenerator;
 import de.Luca.Security.RSAUtil;
 
@@ -29,6 +25,7 @@ public class ConnectionHandler implements Runnable {
 	private PrivateKey serverPrivateKey;
 	private String serverPublicKey;
 	private String clientPublicKey;
+	private String AESKey;
 
 	public ConnectionHandler(Socket socket) {
 		this.socket = socket;
@@ -79,13 +76,15 @@ public class ConnectionHandler implements Runnable {
 					String input = null;
 					if(clientPublicKey == null) {
 						input = new String(data);
-					}else {
+					} else if(AESKey == null){
 						input = RSAUtil.decrypt(data, serverPrivateKey);
+					}else {
+						input = Encryption.decrypt(data, AESKey);
 					}
 					Packet packet = new Packet(input);
 					handlePacket(packet);
 				}
-			}catch (IOException | InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException e) {
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
 
@@ -115,13 +114,34 @@ public class ConnectionHandler implements Runnable {
 				handleRegistration(packet);
 			}else if(packet.packetType == Packet.PING) {
 				handlePing(packet);
+			}else if(packet.packetType == Packet.ERROR) {
+				handleError(packet);
+			}else if(packet.packetType == Packet.SUCCESS) {
+				handleSuccess(packet);
+			}else if (packet.packetType == Packet.DEMON_KEY) {
+				handleKey(packet);
 			}
 			
 		}
 	}
 	
+	private void handleKey(Packet packet) {
+		String key = "";
+		try {
+			key = Encryption.genKey();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		Packet p = new Packet();
+		p.packetType = Packet.DEMON_KEY;
+		p.a = key;
+		send(p);
+		AESKey = key;
+	}
+	
 	private void handlePing(Packet packet) {
 		Packet p = new Packet();
+		p.packetType = Packet.PING;
 		p.a = (long)packet.a;
 		send(p);
 	}
@@ -145,6 +165,14 @@ public class ConnectionHandler implements Runnable {
 			send(genSuccess(packet.packetType));
 		
 		send(genErrorPacket(status));
+	}
+	
+	private void handleSuccess(Packet packet) {
+		System.out.println("Error/Client (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")" + (String)packet.a);
+	}
+	
+	private void handleError(Packet packet) {
+		System.out.println("Info/Client (" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ")" + (String)packet.a);
 	}
 	
 	private void handleHandshake(Packet packet) {
@@ -185,22 +213,30 @@ public class ConnectionHandler implements Runnable {
 	public void send(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
-			byte[] enMSG = RSAUtil.encrypt(msg, clientPublicKey);
+			byte[] enMSG = null;
+			if(AESKey == null) {
+				enMSG = RSAUtil.encrypt(msg, clientPublicKey);
+			}else {
+				enMSG = Encryption.encrypt(msg, AESKey);
+			}
 			os.write(enMSG);
 			os.flush();
-		} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
-				| NoSuchAlgorithmException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void send(String msg) {
 		try {
-			byte[] enMSG = RSAUtil.encrypt(msg, clientPublicKey);
+			byte[] enMSG = null;
+			if(AESKey == null) {
+				enMSG = RSAUtil.encrypt(msg, clientPublicKey);
+			}else {
+				enMSG = Encryption.encrypt(msg, AESKey);
+			}
 			os.write(enMSG);
 			os.flush();
-		} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
-				| NoSuchAlgorithmException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

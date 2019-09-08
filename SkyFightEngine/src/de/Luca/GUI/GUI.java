@@ -24,6 +24,9 @@ public abstract class GUI {
 	
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		for(GUIComponent c : components) {
+			c.setVisible(visible);
+		}
 		visibleUpdaet(visible);
 	}
 	

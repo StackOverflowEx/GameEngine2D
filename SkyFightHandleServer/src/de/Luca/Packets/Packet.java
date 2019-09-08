@@ -14,6 +14,14 @@ public class Packet {
 	public static final int REGISTRATION = 4;
 	public static final int LOGIN = 5;
 	public static final int PING = 6;
+	public static final int KEY = 7;
+	
+	public static final int DEMON_HANDSHAKE = 0;
+	public static final int DEMON_ERROR = 1;
+	public static final int DEMON_SUCCESS = 2;
+	public static final int DEMON_CREATE_SERVER = 3;
+	public static final int DEMON_INFO = 4;
+	public static final int DEMON_KEY = 5;
 	
 	public static final int ERROR_MISSING_HANDSHAKE = 1;
 	public static final int ERROR_SERVER = 2;

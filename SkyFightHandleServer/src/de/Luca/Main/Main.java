@@ -1,7 +1,7 @@
 package de.Luca.Main;
 
 import de.Luca.Connection.Connection;
-import de.Luca.MySQL.DatabaseManager;
+import de.Luca.Connection.DemonConnection;
 import de.Luca.MySQL.MySQL;
 
 public class Main {
@@ -15,12 +15,17 @@ public class Main {
 			}
 		});
 		th.start();
+		Thread th1 = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				DemonConnection.start();
+			}
+		});
+		th1.start();
 		
 		MySQL.connect();
 		MySQL.create();
-		
-		int i = DatabaseManager.login("test", "test");
-		System.out.println(i);
 	}
 
 }

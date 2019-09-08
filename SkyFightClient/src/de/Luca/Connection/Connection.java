@@ -15,6 +15,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import de.Luca.EventManager.EventManager;
 import de.Luca.Packets.Packet;
+import de.Luca.Security.Encryption;
 import de.Luca.Security.RSAKeyPairGenerator;
 import de.Luca.Security.RSAUtil;
 import de.Luca.Window.Window;
@@ -32,6 +33,7 @@ public class Connection {
 	private String serverPublicKey;
 	private Thread th;
 	private boolean connected;
+	private String AESKey;
 	
 	private String ip; 
 	private int port;
@@ -125,13 +127,15 @@ public class Connection {
 							String input = null;
 							if(serverPublicKey == null) {
 								input = new String(data);
-							}else {
+							}else if(AESKey == null){
 								input = RSAUtil.decrypt(data, clientPrivateKey);
+							}else {
+								input = Encryption.decrypt(data, AESKey);
 							}
 							Packet packet = new Packet(input);
 							handlePacket(packet);
 						}
-					}catch (IOException | InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException e) {
+					}catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -159,7 +163,9 @@ public class Connection {
 	private void handlePacket(Packet packet) {
 		if (packet.packetType == Packet.HANDSHAKE) {
 			handleHandshake(packet);
-		} else {
+		} else if(packet.packetType == Packet.KEY) {
+			handleKey(packet);
+		}else {
 			if (serverPublicKey == null) {
 				Packet p = genErrorPacket(Packet.ERROR_MISSING_HANDSHAKE);
 				sendUnencrypted(p);
@@ -169,10 +175,17 @@ public class Connection {
 		}
 	}
 	
+	private void handleKey(Packet packet) {
+		AESKey = (String) packet.a;
+	}
+	
 	private void handleHandshake(Packet packet) {
 		if (packet.packetType == Packet.HANDSHAKE) {
 			serverPublicKey = (String) packet.a;
 			System.out.println("RSA/public key (Server): " + serverPublicKey);
+			Packet p = new Packet();
+			p.packetType = Packet.KEY;
+			send(p);
 		}
 	}
 	
