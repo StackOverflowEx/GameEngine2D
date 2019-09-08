@@ -19,12 +19,12 @@ public class LoopHandler implements BeatHandler{
 		
 		SkyFightClient.p = new Player(Loader.loadTexture("D:\\Downloads\\up.png", "player"), Loader.loadTexture("D:\\Downloads\\down.png", "player"), new Vector2f(0, 0));
 		SkyFightClient.p.setFlying(true);
-//		SkyFightClient.p.setCollisionWithBlocks(false);
+		SkyFightClient.p.setCollisionWithBlocks(false);
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
 		loadFonts();
 		SkyFightClient.load();
-//		SkyFightClient.loginGUI.setVisible(true);
+		SkyFightClient.loginGUI.setVisible(true);
 		
 		EventManager.registerEvent(new ConnectionListener());
 		
