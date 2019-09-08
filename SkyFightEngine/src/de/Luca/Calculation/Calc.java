@@ -9,7 +9,18 @@ import de.Luca.Window.Window;
 public class Calc {
 	
 	public static Matrix4f projectionMatrix;
+	public static Matrix4f ZoomProjectionMatrix;
 	public static Matrix4f viewMatrix;
+	private static float zoom = 1.0f;;
+	
+	public static void setZoom(float zoom) {
+		Calc.zoom = zoom;
+		ZoomProjectionMatrix = null;
+	}
+	
+	public static float getZoom() {
+		return zoom;
+	}
 	
 	public static void calcProjectionMatrix() {
 		
@@ -42,6 +53,37 @@ public class Calc {
 		projectionMatrix = matrix;
 	}
 	
+	public static void calcZoomProjectionMatrix() {
+		
+
+		Vector2f windowSize = Window.getWindowSize();
+
+		float aspectRatio = windowSize.x / windowSize.y;
+		float halfWidth = 1.0f;
+		float halfHeight = halfWidth / aspectRatio;
+		
+		float left = -halfWidth * zoom;
+		float right = halfWidth * zoom;
+		float bottom = -halfHeight * zoom;
+		float top = halfHeight * zoom;
+		float far = -1f;
+		float near = 1f;
+
+		Matrix4f matrix = new Matrix4f();
+
+		matrix.identity();
+
+		matrix._m00(2f / (right - left));
+		matrix._m11(2f / (top - bottom));
+		matrix._m22(-2f / (far - near));
+		matrix._m32((far + near) / (far - near));
+		matrix._m30((right + left) / (right - left));
+		matrix._m31((top + bottom) / (top - bottom));
+		
+		
+		ZoomProjectionMatrix = matrix;
+	}
+	
 	public static Matrix4f getViewMatrix() {
 		if(viewMatrix == null) {
 			calcViewMatrix();
@@ -72,6 +114,13 @@ public class Calc {
 			calcProjectionMatrix();
 		}
 		return projectionMatrix;
+	}
+	
+	public static Matrix4f getZommProjectionMatrix() {
+		if(ZoomProjectionMatrix == null) {
+			calcZoomProjectionMatrix();
+		}
+		return ZoomProjectionMatrix;
 	}
 
 }

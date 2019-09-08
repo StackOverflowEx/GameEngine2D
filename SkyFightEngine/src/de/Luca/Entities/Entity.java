@@ -140,7 +140,6 @@ public abstract class Entity {
 				nextPos.x = worldPos.x;
 			}
 		}
-//		System.out.println(nextPos.x + 0.05f + " " + nextPos.y);
 		if(nextPos.y != worldPos.y || nextPos.x != worldPos.x) {
 			worldPos = nextPos;
 			calcOpenGLPos();

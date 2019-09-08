@@ -99,8 +99,8 @@ public class BlockManager {
 		
 		
 		shader.start();
-		if(MasterRenderer.hasProjectionChanged() || firstRun) {
-			shader.loadProjectionMatrix(MasterRenderer.getProjection());
+		if(MasterRenderer.hasZoomProjectionChanged() || firstRun) {
+			shader.loadProjectionMatrix(MasterRenderer.getZoomProjection());
 		}
 		if(MasterRenderer.hasViewChanged() || firstRun) {
 			shader.loadViewMatrix(MasterRenderer.getView());

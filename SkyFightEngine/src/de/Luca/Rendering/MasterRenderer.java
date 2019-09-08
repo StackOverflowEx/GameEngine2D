@@ -27,11 +27,12 @@ public class MasterRenderer extends Thread {
 	private Frame frame;
 	private Frame queuedFrame;
 	private CopyOnWriteArrayList<Texture> loadTextures;
-	private Matrix4f projection, view;
+	private Matrix4f projection, view, zoomProjection;
 	private Background background;
 	private boolean ProjectionChanged;
 	private boolean viewChanged;
-
+	private boolean projectionZoomChanged;
+	
 	public MasterRenderer(RenderLoop loop) {
 		super(loop);
 		if (masterRenderer != null) {
@@ -86,6 +87,10 @@ public class MasterRenderer extends Thread {
 		return masterRenderer.viewChanged;
 	}
 	
+	public static boolean hasZoomProjectionChanged() {
+		return masterRenderer.projectionZoomChanged;
+	}
+	
 	public static Matrix4f getProjection() {
 		return masterRenderer.projection;
 	}
@@ -93,11 +98,17 @@ public class MasterRenderer extends Thread {
 	public static Matrix4f getView() {
 		return masterRenderer.view;
 	}
+	
+	public static Matrix4f getZoomProjection() {
+		return masterRenderer.zoomProjection;
+	}
 
 	private void processMatricies() {
 
 		boolean loadProjection = true;
 		boolean loadView = true;
+		boolean loadZommProjection = true;
+		Matrix4f calcZommProjeciton = Calc.getZommProjectionMatrix();
 		Matrix4f calcProjection = Calc.getProjectionMatrix();
 		Matrix4f calcView = Calc.getViewMatrix();
 
@@ -121,8 +132,19 @@ public class MasterRenderer extends Thread {
 			}
 		}
 		
+		if (zoomProjection == null) {
+			zoomProjection = calcZommProjeciton;
+		} else {
+			if (zoomProjection == calcZommProjeciton) {
+				loadZommProjection = false;
+			} else {
+				zoomProjection = calcZommProjeciton;
+			}
+		}
+		
 		ProjectionChanged = loadProjection;
 		viewChanged = loadView;
+		projectionZoomChanged = loadZommProjection;
 		
 	}
 

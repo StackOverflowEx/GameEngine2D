@@ -11,7 +11,6 @@ import de.Luca.GUIs.PopUp;
 import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.TextManager;
-import de.Luca.World.WorldLoader;
 
 public class LoopHandler implements BeatHandler{
 
@@ -20,7 +19,7 @@ public class LoopHandler implements BeatHandler{
 		
 		SkyFightClient.p = new Player(Loader.loadTexture("D:\\Downloads\\up.png", "player"), Loader.loadTexture("D:\\Downloads\\down.png", "player"), new Vector2f(0, 0));
 		SkyFightClient.p.setFlying(true);
-		SkyFightClient.p.setCollisionWithBlocks(false);
+//		SkyFightClient.p.setCollisionWithBlocks(false);
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
 		loadFonts();
@@ -29,8 +28,6 @@ public class LoopHandler implements BeatHandler{
 		
 		EventManager.registerEvent(new ConnectionListener());
 		
-		
-		WorldLoader.loadMap("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\TEST");
 	}
 
 	@Override
