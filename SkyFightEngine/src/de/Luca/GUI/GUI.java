@@ -26,6 +26,13 @@ public class GUI {
 		this.visible = visible;
 	}
 	
+	public void dispose() {
+		for(GUIComponent c : components) {
+			c.dispose();
+		}
+		GUIManager.removeGUI(this);
+	}
+	
 	public boolean isVisible() {
 		return visible;
 	}

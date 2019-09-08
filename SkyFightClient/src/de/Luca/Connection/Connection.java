@@ -13,9 +13,11 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import de.Luca.EventManager.EventManager;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.RSAKeyPairGenerator;
 import de.Luca.Security.RSAUtil;
+import de.Luca.Window.Window;
 
 public class Connection {
 	
@@ -31,7 +33,32 @@ public class Connection {
 	private Thread th;
 	private boolean connected;
 	
+	private String ip; 
+	private int port;
+	
 	public Connection(String ip, int port) {
+		try {
+			this.ip = ip;
+			this.port = port;
+			socket = new Socket(ip, port);
+			connected = true;
+			init();
+			sendHandshake();
+			listen();
+		} catch (IOException e) {
+			e.printStackTrace();
+			EventManager.fireEvent(new ConnectionErrorEvent(this));
+			connected = false;
+			return;
+		}
+	}
+	
+	public void retry() {
+		long start = System.currentTimeMillis();
+		while((System.currentTimeMillis() - start) < 5000 && !Window.shouldClose()) {}
+		if(Window.shouldClose()) {
+			return;
+		}
 		try {
 			socket = new Socket(ip, port);
 			connected = true;
@@ -40,9 +67,18 @@ public class Connection {
 			listen();
 		} catch (IOException e) {
 			e.printStackTrace();
+			EventManager.fireEvent(new ConnectionErrorEvent(this));
 			connected = false;
 			return;
 		}
+	}
+	
+	public String getIP() {
+		return ip;
+	}
+	
+	public int getPort() {
+		return port;
 	}
 	
 	public boolean isConnected() {
@@ -65,6 +101,8 @@ public class Connection {
 			e.printStackTrace();
 			System.exit(0);
 		}
+		
+		EventManager.fireEvent(new ConnectionConnectedEvent(this));
 	}
 	
 	private void sendHandshake() {
@@ -127,6 +165,7 @@ public class Connection {
 				sendUnencrypted(p);
 				return;
 			}
+			EventManager.fireEvent(new ConnectionRecieveEvent(packet, this));
 		}
 	}
 	

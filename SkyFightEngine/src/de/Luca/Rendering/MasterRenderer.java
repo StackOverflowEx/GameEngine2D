@@ -70,10 +70,12 @@ public class MasterRenderer extends Thread {
 	
 	private static void loadTextures() {
 		for (Texture texture : masterRenderer.loadTextures) {
+			System.out.println("Loading texture...");
 			int id = Loader.loadTexture(texture.getBuffer(), texture.getWidth(), texture.getHeight());
+			System.out.println("Loaded texture: " + id);
 			texture.setTextureID(id);
+			masterRenderer.loadTextures.remove(texture);
 		}
-		masterRenderer.loadTextures.clear();
 	}
 	
 	public static boolean hasProjectionChanged() {

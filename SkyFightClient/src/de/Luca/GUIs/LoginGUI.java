@@ -13,12 +13,15 @@ import de.Luca.GUI.GUIComponent;
 import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.Packet;
+import de.Luca.Security.SHAHasing;
 import de.Luca.Text.TextManager;
 import de.Luca.Utils.Calc;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Window.Window;
 
 public class LoginGUI extends GUI {
+	
+	private GLabel error;
 
 	public LoginGUI() {
 		super(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
@@ -39,12 +42,11 @@ public class LoginGUI extends GUI {
 		background.setColor(new Vector4f(1, 1, 1, 1));
 		this.addComponent(background);
 		
-		if(!SkyFightClient.handleServerConnection.isConnected()) {
-			GLabel error = new GLabel(0, 0, (int)windowSize.x, 40);
-			error.setColor(new Vector4f(1, 0, 0, 1));
-			error.setText("Verbindung zum Server nicht möglich", TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
-			this.addComponent(error);
-		}
+		error = new GLabel(0, 0, (int)windowSize.x, 40);
+		error.setColor(new Vector4f(1, 0, 0, 1));
+		error.setText("Verbindung zum Server nicht möglich", TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+		error.setVisible(false);
+		this.addComponent(error);
 
 		GTextBox username = new GTextBox(Calc.getPixelWidth(0.4f), Calc.getPixelHeight(0.4f), Calc.getPixelWidth(0.2f),
 				Calc.getPixelHeight(0.05f), TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
@@ -75,6 +77,7 @@ public class LoginGUI extends GUI {
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if(key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
 					String name = username.getText();
+					//name only "^[a-zA-Z0-9_]*$"
 					String pw = password.getText();
 					boolean ret = false;
 					if(name.isEmpty()) {
@@ -92,12 +95,24 @@ public class LoginGUI extends GUI {
 					Packet packet = new Packet();
 					packet.packetType = Packet.LOGIN;
 					packet.a = name;
-					packet.b = pw;
+					packet.b = SHAHasing.getHash(pw);
 					SkyFightClient.handleServerConnection.send(packet);
 				}
 			}
 		});
 
+	}
+	
+	public void showNotConnected() {
+		if(error != null) {
+			error.setVisible(true);
+		}
+	}
+	
+	public void hideNotConnected() {
+		if(error != null) {
+			error.setVisible(false);
+		}
 	}
 
 }

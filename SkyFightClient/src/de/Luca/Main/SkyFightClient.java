@@ -1,5 +1,7 @@
 package de.Luca.Main;
 
+import java.io.File;
+
 import de.Luca.Connection.Connection;
 import de.Luca.Entities.Player;
 import de.Luca.GUIs.LoginGUI;
@@ -19,7 +21,14 @@ public class SkyFightClient {
 	//Gamestate
 	public static GameState gameState = GameState.MENUE;
 	
+	//Files
+	public static String root = System.getenv("APPDATA") + "/SkyFight";
+	
 	public static void load() {
+		root.replace("\\", "/");
+		if(!new File(root).exists()) {
+			new File(root).mkdir();
+		}
 		loginGUI = new LoginGUI();
 	}
 

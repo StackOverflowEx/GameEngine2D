@@ -10,11 +10,17 @@ public class Packet {
 	
 	public static final int HANDSHAKE = 0;
 	public static final int ERROR = 1;
-	public static final int REGISTRATION = 2;
-	public static final int LOGIN = 3;
-	public static final int PING = 4;
+	public static final int SUCCESS = 2;
+	public static final int REGISTRATION = 4;
+	public static final int LOGIN = 5;
+	public static final int PING = 6;
 	
-	public static final int ERROR_MISSING_HANDSHAKE = 0;
+	public static final int ERROR_MISSING_HANDSHAKE = 1;
+	public static final int ERROR_SERVER = 2;
+	public static final int ERROR_USERNAME_EXISTS = 3;
+	public static final int ERROR_EMAIL_EXISTS = 4;
+	public static final int ERROR_NO_USERNAME_EMAIL = 5;
+	public static final int ERROR_WRONG_PASSWORD = 6;
 	
 	public Packet() {}
 	

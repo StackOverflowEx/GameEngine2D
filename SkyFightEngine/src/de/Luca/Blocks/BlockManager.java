@@ -28,6 +28,14 @@ public class BlockManager {
 		}
 	}
 	
+	public static void removeAllBlocks() {
+		blocks.clear();
+	}
+	
+	public static ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Block>> getBlocks(){
+		return blocks;
+	}
+	
 	public static void addBlock(Block b) {
 		if(!blocks.containsKey((int)b.getWorldPos().x)) {
 			ConcurrentHashMap<Integer, Block> tmp = new ConcurrentHashMap<Integer, Block>();

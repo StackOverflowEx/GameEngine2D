@@ -14,6 +14,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import de.Luca.MySQL.DatabaseManager;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.RSAKeyPairGenerator;
 import de.Luca.Security.RSAUtil;
@@ -107,7 +108,43 @@ public class ConnectionHandler implements Runnable {
 				sendUnencrypted(p);
 				return;
 			}
+			
+			if(packet.packetType == Packet.LOGIN) {
+				handleLogin(packet);
+			}else if(packet.packetType == Packet.REGISTRATION) {
+				handleRegistration(packet);
+			}else if(packet.packetType == Packet.PING) {
+				handlePing(packet);
+			}
+			
 		}
+	}
+	
+	private void handlePing(Packet packet) {
+		Packet p = new Packet();
+		p.a = (long)packet.a;
+		send(p);
+	}
+	
+	private void handleRegistration(Packet packet) {
+		String username = (String) packet.a;
+		String password = (String) packet.b;
+		String email = (String) packet.c;
+		int status = DatabaseManager.register(username, email, password);
+		if(status == 0)
+			send(genSuccess(packet.packetType));
+		
+		send(genErrorPacket(status));
+	}
+	
+	private void handleLogin(Packet packet) {
+		String username = (String) packet.a;
+		String password = (String) packet.b;
+		int status = DatabaseManager.login(username, password);
+		if(status == 0)
+			send(genSuccess(packet.packetType));
+		
+		send(genErrorPacket(status));
 	}
 	
 	private void handleHandshake(Packet packet) {
@@ -124,6 +161,13 @@ public class ConnectionHandler implements Runnable {
 		Packet p = new Packet();
 		p.packetType = Packet.ERROR;
 		p.a = error;
+		return p;
+	}
+	
+	public Packet genSuccess(int recievedType) {
+		Packet p = new Packet();
+		p.packetType = Packet.SUCCESS;
+		p.a = recievedType;
 		return p;
 	}
 

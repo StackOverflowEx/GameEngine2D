@@ -223,6 +223,11 @@ public class Loader {
 		GL30.glBindVertexArray(vaoID);
 		return vaoID;
 	}
+	
+	public static void destroyTexture(Texture texture) {
+		GL11.glDeleteTextures(texture.getTextureID());
+		texture.setTextureID(-1);
+	}
 
 	public static void cleanUP() {
 		for (int texture : textures) {

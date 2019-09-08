@@ -70,6 +70,7 @@ public class SkyFightEngine {
 		GUIManager.cleanUP();
 		Loader.cleanUP();
 		Window.closeWindow();
+		System.exit(0);
 	}
 
 }

@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
+import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
 import de.Luca.Shader.BackgroundShader;
 
@@ -39,6 +40,9 @@ public class Background {
 			
 			if(blendFactor >= 1) {
 				blendFactor = 1;
+				if(tex.getTextureID() != defaultTexture.getTextureID()) {
+					Loader.destroyTexture(tex);
+				}
 				tex = afterTex;
 			}
 		}
