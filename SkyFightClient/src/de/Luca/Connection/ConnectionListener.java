@@ -21,11 +21,13 @@ public class ConnectionListener implements Listener{
 			}else if(packet.packetType == Packet.SUCCESS) {
 				if((int)packet.a == Packet.LOGIN) {
 					//Logged in;
+					System.out.println("LOGGED IN");
 				}else if((int) packet.a == Packet.REGISTRATION) {
 					//Registered
 				}
 			}else if(packet.packetType == Packet.ERROR) {
-				
+				int errorCode = (int) packet.a;
+				System.out.println("Recieved error: " + errorCode);
 			}
 		}
 	}

@@ -24,6 +24,31 @@ public class DatabaseManager {
 		return Packet.ERROR_SERVER;
 	}
 	
+	public static String getUsername(String email) {
+		try {
+			PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT 1 FROM Userdata WHERE EMAIL = ?");
+			ps.setString(1, email);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			return rs.getString(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public static boolean setPassword(String email, String password) {
+		try {
+			PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE Userdata SET PASSWORD=? WHERE EMAIL=?");
+			ps.setString(1, password);
+			ps.setString(2, email);
+			return ps.executeUpdate() == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public static int login(String username, String pw) {
 		username = username.toLowerCase();
 		boolean isEmail = false;

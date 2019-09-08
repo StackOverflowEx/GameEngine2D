@@ -20,6 +20,7 @@ public class Packet {
 	public static final int MATCH_FOUND = 10;
 	public static final int MATCH_CANCELLED = 11;
 	public static final int CONNECT = 12;
+	public static final int PASSWORD_RESET = 13;
 	
 	public static final int DEMON_HANDSHAKE = 0;
 	public static final int DEMON_ERROR = 1;
@@ -39,6 +40,7 @@ public class Packet {
 	public static final int ERROR_COULD_NOT_CREATE_SERVER = 7;
 	public static final int ERROR_MATCHES_NOT_AVALIABLE = 8;
 	public static final int ERROR_PLAYER_QUIT = 9;
+	public static final int ERROR_COULD_NOT_RESET_PASSWORD = 10;
 	
 	public Packet() {}
 	

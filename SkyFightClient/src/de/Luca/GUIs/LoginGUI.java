@@ -78,6 +78,7 @@ public class LoginGUI extends GUI {
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if(key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+					
 					String name = username.getText();
 					//name only "^[a-zA-Z0-9_]*$"
 					String pw = password.getText();

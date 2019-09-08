@@ -4,14 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.Base64;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import de.Luca.EventManager.EventManager;
 import de.Luca.Packets.Packet;
@@ -23,7 +18,7 @@ import de.Luca.Window.Window;
 public class Connection {
 	
 	public static final int HANDLE_SERVER_PORT = 33333;
-	public static final String HANDLE_SERVER_IP = "127.0.0.1";
+	public static final String HANDLE_SERVER_IP = "167.86.87.105";
 	
 	private Socket socket;
 	private InputStream is;
@@ -177,6 +172,7 @@ public class Connection {
 	
 	private void handleKey(Packet packet) {
 		AESKey = (String) packet.a;
+		System.out.println("Key: " + AESKey);
 	}
 	
 	private void handleHandshake(Packet packet) {
@@ -210,22 +206,29 @@ public class Connection {
 	public void send(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
-			byte[] enMSG = RSAUtil.encrypt(msg, serverPublicKey);
-			os.write(enMSG);
+			byte[] enMSG = null;
+			if(AESKey == null) {
+				enMSG = RSAUtil.encrypt(msg, serverPublicKey);
+			}else {
+				enMSG = Encryption.encrypt(msg, AESKey);
+			}			os.write(enMSG);
 			os.flush();
-		} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
-				| NoSuchAlgorithmException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void send(String msg) {
 		try {
-			byte[] enMSG = RSAUtil.encrypt(msg, serverPublicKey);
+			byte[] enMSG = null;
+			if(AESKey == null) {
+				enMSG = RSAUtil.encrypt(msg, serverPublicKey);
+			}else {
+				enMSG = Encryption.encrypt(msg, AESKey);
+			}
 			os.write(enMSG);
 			os.flush();
-		} catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException
-				| NoSuchAlgorithmException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

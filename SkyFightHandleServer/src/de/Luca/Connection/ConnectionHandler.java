@@ -3,11 +3,14 @@ package de.Luca.Connection;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Base64;
+
+import javax.mail.MessagingException;
 
 import de.Luca.MySQL.DatabaseManager;
 import de.Luca.Packets.Packet;
@@ -139,9 +142,46 @@ public class ConnectionHandler implements Runnable {
 				handleKey(packet);
 			}else if (packet.packetType == Packet.SEARCHING) {
 				handleSearch(packet);
+			}else if (packet.packetType == Packet.PASSWORD_RESET) {
+				handlePasswordReset(packet);
 			}
 			
 		}
+	}
+	
+	private void handlePasswordReset(Packet packet) {
+		String mail = (String) packet.a;
+		if(mail.contains("@")) {
+			try {
+				String token = Encryption.genKey();
+				PasswordReset.addToken(mail, token);
+				if(DatabaseManager.doseEmailExist(mail.toLowerCase())) {
+					try {
+						PasswordReset.sendReset(mail, DatabaseManager.getUsername(mail), token);
+					} catch (UnsupportedEncodingException | MessagingException e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (NoSuchAlgorithmException e) {
+				send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
+				e.printStackTrace();
+				return;
+			}
+		}else {
+			String token = mail;
+			String newPass = (String) packet.b;
+			mail = PasswordReset.getEmailForToken(token);
+			if(mail != null) {
+				PasswordReset.removeTokcen(token);
+				if(!DatabaseManager.setPassword(mail, newPass)) {
+					send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
+				}
+			}else {
+				send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
+				return;
+			}
+		}
+		
 	}
 	
 	private void handleSearch(Packet packet) {
@@ -188,6 +228,7 @@ public class ConnectionHandler implements Runnable {
 	private void handleLogin(Packet packet) {
 		String username = (String) packet.a;
 		String password = (String) packet.b;
+		System.out.println("PW: " + password);
 		int status = DatabaseManager.login(username, password);
 		if(status == 0)
 			send(genSuccess(packet.packetType));

@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-8.0.17.jar"/>
+	<classpathentry kind="lib" path="lib/mail-1.4.7.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
