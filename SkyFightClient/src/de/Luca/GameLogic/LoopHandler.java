@@ -30,7 +30,7 @@ public class LoopHandler implements BeatHandler{
 		EventManager.registerEvent(new ConnectionListener());
 		
 		
-		WorldLoader.loadMap("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\TEST", "TEST");
+		WorldLoader.loadMap("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\TEST");
 	}
 
 	@Override

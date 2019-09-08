@@ -24,7 +24,6 @@ import de.Luca.Rendering.MasterRenderer;
 public class WorldEditor {
 	
 	private static WorldEditorListener listener;
-	private static String mapName;
 	private static ArrayList<String> names;
 	private static boolean saving;
 	private static String background;
@@ -64,8 +63,8 @@ public class WorldEditor {
 	}
 		
 	public static void save(String mapName) {
-		WorldEditor.mapName = mapName;
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldEditor.mapName);
+		WorldLoader.mapName = mapName;
+		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		if(maps.exists()) {
 			new PopUp("Dieser Name ist bereits besetzt", new Vector4f(1, 0, 0, 1));
 			return;
@@ -90,19 +89,22 @@ public class WorldEditor {
 				bs.add(blocks);
 			}
 		}
-		if(!saveBlock(bs)) {
+		if(!saveBlocksAndMapName(bs, mapName)) {
 			return;
 		}
 		if(!saveBackground()) {
 			return;
 		}
+		
 	}
+	
+	
 	
 	private static boolean saveBackground() {
 		if(background == null) {
 			return true;
 		}
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldEditor.mapName);
+		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		File mapdata = new File(maps.getPath() + "/mapdata");
 		File file = new File(background);
 		File dest = new File(mapdata.getPath() + "/background.png");
@@ -117,8 +119,8 @@ public class WorldEditor {
 		return true;
 	}
 	
-	private static boolean saveBlock(ArrayList<String> blocks) {
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldEditor.mapName);
+	private static boolean saveBlocksAndMapName(ArrayList<String> blocks, String mapName) {
+		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		File mapdata = new File(maps.getPath() + "/mapdata");
 		if(!mapdata.exists()) {
 			mapdata.mkdirs();
@@ -126,6 +128,7 @@ public class WorldEditor {
 		File d = new File(mapdata.getPath() + "/blocks.txt");
 		try {
 			PrintWriter pw = new PrintWriter(d);
+			pw.println("name=" + mapName);
 			for(String s : blocks) {
 				pw.println(s);
 			}
@@ -141,7 +144,7 @@ public class WorldEditor {
 	}
 	
 	private static boolean saveBlockData(BlockDataPre data) {
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldEditor.mapName);
+		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		File blockdata = new File(maps.getPath() + "/blockdata/" + data.getName());
 		if(!blockdata.exists()) {
 			blockdata.mkdirs();

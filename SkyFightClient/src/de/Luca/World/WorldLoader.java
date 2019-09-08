@@ -22,6 +22,7 @@ import de.Luca.Sound.AudioManager;
 public class WorldLoader {
 	
 	private static HashMap<String, BlockData> blockData = new HashMap<String, BlockData>();
+	public static String mapName = "Default";
 	
 	public static void clearBlockData() {
 		Loader.deleteTextures("block");
@@ -29,26 +30,31 @@ public class WorldLoader {
 		blockData.clear();
 	}
 	
-	public static void loadMap(String mapFolder, String name) {
+	public static String getMapName() {
+		return mapName;
+	}
+	
+	public static void loadMap(String mapFolder) {
 		File map = new File(mapFolder);
 		if(!map.exists()) {
 			new PopUp("Die Map wurde nicht gefunden und kann nicht geladen werden.", new Vector4f(1, 0, 0, 1));
 			return;
 		}
 		clearBlockData();
-		loadBlockData(map, name);
-		loadBlocks(map, name);
-		laodBackground(map, name);
+		loadBlockData(map);
+		loadBlocks(map);
+		laodBackground(map);
+		System.out.println("Map " + mapName + " has successfully been loaded.");
 	}
 	
-	private static void laodBackground(File map, String name) {
+	private static void laodBackground(File map) {
 		File background = new File(map.getPath() + "/mapdata/background.png");
 		if(background.exists()) {
 			MasterRenderer.switchBackground(Loader.loadTexture(background.getPath(), "background"), 1000);
 		}
 	}
 	
-	private static void loadBlocks(File map, String name) {
+	private static void loadBlocks(File map) {
 		File mapdata = new File(map.getPath() + "/mapdata");
 		File blocks = new File(mapdata.getPath() + "/blocks.txt");
 		try {
@@ -56,6 +62,10 @@ public class WorldLoader {
 			String line;
 			while((line = br.readLine()) != null) {
 				if(!line.isEmpty()) {
+					if(line.startsWith("name=")) {
+						mapName = line.replace("name=", "");
+						continue;
+					}
 					String[] tmp = line.split(";");
 					String blockName = tmp[0];
 					int x = Integer.parseInt(tmp[1]);
@@ -69,13 +79,13 @@ public class WorldLoader {
 			br.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			new PopUp("Ein Fehler ist beim Laden der Map " + name + " aufgetreten.", new Vector4f(1, 0, 0, 1));
+			new PopUp("Ein Fehler ist beim Laden der Map aufgetreten.", new Vector4f(1, 0, 0, 1));
 			clearBlockData();
 			return;
 		}
 	}
 	
-	private static void loadBlockData(File map, String name) {
+	private static void loadBlockData(File map) {
 		File blockdata = new File(map.getPath() + "/blockdata");
 		for(File block : blockdata.listFiles()) {
 			File data = new File(block.getPath() + "/data.properties");
@@ -105,7 +115,7 @@ public class WorldLoader {
 				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-				new PopUp("Ein Fehler ist beim Laden der Map " + name + " aufgetreten.", new Vector4f(1, 0, 0, 1));
+				new PopUp("Ein Fehler ist beim Laden der Map aufgetreten.", new Vector4f(1, 0, 0, 1));
 				clearBlockData();
 				return;
 			}

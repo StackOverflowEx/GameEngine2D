@@ -89,8 +89,10 @@ public class AudioManager {
 	}
 	
 	public static void deleteSounds(String type) {
-		for(int buffer : buffers.get(type)) {
-			AL10.alDeleteBuffers(buffer);
+		if(buffers.containsKey(type)) {
+			for(int buffer : buffers.get(type)) {
+				AL10.alDeleteBuffers(buffer);
+			}
 		}
 	}
 	
