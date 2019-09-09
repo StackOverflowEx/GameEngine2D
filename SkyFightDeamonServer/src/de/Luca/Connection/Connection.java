@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.util.ArrayList;
 import java.util.Base64;
 
 import de.Luca.Packets.Packet;
@@ -16,7 +17,8 @@ import de.Luca.Security.RSAUtil;
 public class Connection {
 	
 	public static final int HANDLE_SERVER_PORT = 33332;
-	public static final String HANDLE_SERVER_IP = "127.0.0.1";
+	public static String HANDLE_SERVER_IP = "127.0.0.1";
+	public static final String endOfStream = "END"; //69 78 68
 	
 	private Socket socket;
 	private InputStream is;
@@ -43,6 +45,7 @@ public class Connection {
 		} catch (IOException e) {
 			e.printStackTrace();
 			connected = false;
+			retry();
 			return;
 		}
 	}
@@ -59,6 +62,7 @@ public class Connection {
 		} catch (IOException e) {
 			e.printStackTrace();
 			connected = false;
+			retry();
 			return;
 		}
 	}
@@ -88,6 +92,7 @@ public class Connection {
 			clientPrivateKey = keyGen.getPrivateKey();
 			clientPublicKey = Base64.getEncoder().encodeToString(keyGen.getPublicKey().getEncoded());
 		} catch (NoSuchAlgorithmException e) {
+			disconnect();
 			e.printStackTrace();
 		}
 	}
@@ -105,10 +110,13 @@ public class Connection {
 			
 			@Override
 			public void run() {
-				while(is != null) {
+				while(!socket.isClosed()) {
 					try {
-						if (is.available() > 0) {
+//						if (is.available() > 0) {
 							byte[] data = getDataFromInputStream();
+							if(data == null) {
+								continue;
+							}
 							String input = null;
 							if(serverPublicKey == null) {
 								input = new String(data);
@@ -119,11 +127,13 @@ public class Connection {
 							}
 							Packet packet = new Packet(input);
 							handlePacket(packet);
-						}
+//						}
 					}catch (Exception e) {
+						disconnect();
 						e.printStackTrace();
 					}
 				}
+				return;
 			}
 		});
 		th.start();
@@ -139,10 +149,40 @@ public class Connection {
 		}
 	}
 	
+	private int nullCount = 0;
+	private ArrayList<Byte> bytes = new ArrayList<Byte>();
 	private byte[] getDataFromInputStream() throws IOException {
-		byte[] ret = new byte[is.available()];
-		is.read(ret);
-		return ret;
+		bytes.add((byte) is.read());
+		if(bytes.get(bytes.size() - 1) == -1) {
+			nullCount++;
+			bytes.remove(bytes.size() - 1);
+			if(nullCount == 10) {
+				disconnect();
+			}
+			return null;
+		}
+		nullCount = 0;
+		if(bytes.size() >= 3) {
+			byte[] end = new byte[] {bytes.get(bytes.size()-3), bytes.get(bytes.size()-2), bytes.get(bytes.size()-1)};
+			if(new String(end).equals(endOfStream)) {
+				byte[] ret = new byte[bytes.size() - 3];
+				for(int i = 0; i < ret.length; i++) {
+					ret[i] = bytes.get(i);
+				}
+				bytes.clear();
+				return ret;
+			}
+		}
+		return getDataFromInputStream();
+	}
+	
+	public void disconnect() {
+		try {
+			is.close();
+			os.close();
+			socket.close();
+		} catch (IOException e) {}
+		System.out.println("Disconnected from server");
 	}
 
 	private void handlePacket(Packet packet) {
@@ -215,14 +255,27 @@ public class Connection {
 		return p;
 	}
 	
+	private byte[] getWithEnd(byte[] message) {
+		byte[] ret = new byte[message.length + 3];
+		for(int i = 0; i < message.length; i++) {
+			ret[i] = message[i];
+		}
+		ret[ret.length - 3] = 69;
+		ret[ret.length - 2] = 78;
+		ret[ret.length - 1] = 68;
+		return ret;
+	}
+	
 	public void sendUnencrypted(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
 			byte[] bMSG = msg.getBytes();
+			bMSG = getWithEnd(bMSG);
 			os.write(bMSG);
 			os.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
+			disconnect();
 		}
 	}
 	
@@ -235,10 +288,12 @@ public class Connection {
 			}else {
 				enMSG = Encryption.encrypt(msg, AESKey);
 			}
+			enMSG = getWithEnd(enMSG);
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
 			e.printStackTrace();
+			disconnect();
 		}
 	}
 	
@@ -250,9 +305,11 @@ public class Connection {
 			}else {
 				enMSG = Encryption.encrypt(msg, AESKey);
 			}
+			enMSG = getWithEnd(enMSG);
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
+			disconnect();
 			e.printStackTrace();
 		}
 	}

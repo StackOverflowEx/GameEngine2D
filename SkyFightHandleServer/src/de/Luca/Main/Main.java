@@ -2,6 +2,7 @@ package de.Luca.Main;
 
 import de.Luca.Connection.Connection;
 import de.Luca.Connection.DemonConnection;
+import de.Luca.Connection.DemonInfo;
 import de.Luca.MySQL.MySQL;
 
 public class Main {
@@ -26,6 +27,7 @@ public class Main {
 		
 		MySQL.connect();
 		MySQL.create();
+		DemonInfo.requestLoopStart();
 	}
 
 }

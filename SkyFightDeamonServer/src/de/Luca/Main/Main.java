@@ -18,6 +18,10 @@ public class Main {
 			System.exit(-1);
 			e.printStackTrace();
 		}
+		
+//		String ip = args[0];
+//		Connection.HANDLE_SERVER_IP = ip;
+		
 		con = new Connection(Connection.HANDLE_SERVER_IP, Connection.HANDLE_SERVER_PORT);
 	}
 
