@@ -43,6 +43,19 @@ public class GTextBox extends GButton{
 		callback();
 	}
 	
+	public void setText(String text) {
+		this.text = text;
+		if(passwordBox) {
+			showText = "";
+			for(int i = 0; i < text.length(); i++) {
+				showText += "*";
+			}
+		}else {
+			this.showText = text;
+		}
+		setText(showText, font, color, align, margin);
+	}
+	
 	public void setPasswordBox(boolean passwordBox) {
 		this.passwordBox = passwordBox;
 	}
@@ -119,10 +132,6 @@ public class GTextBox extends GButton{
 	
 	public String getText() {
 		return text;
-	}
-	
-	public void setText(String text) {
-		this.text = text;
 	}
 	
 	private void callback() {

@@ -46,7 +46,7 @@ public class EntityManager {
 			e.updateAnimation();
 			e.updateSound();
 			for(RenderModel model : e.getModels()) {
-				if(model.getModel().getTexture().getTextureID() != -1) {
+				if(model.getModel().getTexture() != null && model.getModel().getTexture().getTextureID() != -1) {
 					MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());
 					Matrix4f transformation = Calc.getTransformationMatrix(model.getLocation(), model.getModel().getScale(), model.getRoll());
 					shader.loadTransformationMatrix(transformation);

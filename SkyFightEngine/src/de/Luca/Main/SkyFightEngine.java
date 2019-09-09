@@ -34,7 +34,7 @@ public class SkyFightEngine {
 			@Override
 			public void init() {
 				TextManager.generateFont("C:\\Windows\\Fonts\\impact.ttf", 20, "Impact", false, false);
-				Paragraph p = new Paragraph(100, 100, new String[] {"Das ist ein", ", Test"},  TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1));
+				Paragraph p = new Paragraph(100, 100, new String[] {"Te-st"},  TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1));
 				TextManager.addParagraph(p);
 			}
 		});

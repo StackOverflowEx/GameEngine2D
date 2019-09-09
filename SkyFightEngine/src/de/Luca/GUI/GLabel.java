@@ -51,7 +51,7 @@ public class GLabel extends GUIComponent{
 		Vector2f bounds = p.getBounds();
 		
 		p.setX(this.getX() + margin);
-		p.setY(this.getY());
+		p.setY((int) (this.getY() - p.getBounds().y));
 		
 		float textHeight = bounds.y;
 		float offsetY = getHeight() - textHeight;
@@ -133,7 +133,9 @@ public class GLabel extends GUIComponent{
 		setVisible(false);
 		removeText();
 		GUIListener.removeComponent(this);
-		this.getGUI().removeComponent(this);
+		if(this.getGUI() != null) {
+			this.getGUI().removeComponent(this);
+		}
 	}
 
 	@Override

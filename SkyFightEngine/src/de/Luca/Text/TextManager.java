@@ -153,6 +153,9 @@ public class TextManager {
 				continue;
 			}
 			for (char c : t.getText().toCharArray()) {
+				if(pointer == size) {
+					break;
+				}
 				FontGlyph glyph = getGlyph(t.getFont(), c);
 				textureCoords[pointer] = glyph.u0;
 				textureCoords[pointer + 1] = glyph.v1;
@@ -184,6 +187,9 @@ public class TextManager {
 				continue;
 			}
 			for (int i = 0; i < t.getText().toCharArray().length; i++) {
+				if(pointer == size) {
+					break;
+				}
 				verticies[pointer] = 0;
 				verticies[pointer + 1] = 0;
 				verticies[pointer + 2] = 0;
@@ -244,7 +250,6 @@ public class TextManager {
 			}
 			Vector2f wc = t.getOpenGLPos();
 			float x = wc.x();
-			float y = wc.y();
 			for (char c : t.getText().toCharArray()) {
 				FontGlyph glyph = getGlyph(t.getFont(), c);
 
@@ -252,6 +257,9 @@ public class TextManager {
 				width = width * t.getScale();
 				float height = glyph.y1 - glyph.y0;
 				height = height * t.getScale();
+				
+				Vector2f yy = WorldPosition.toOpenGLCoords(new Vector2f(0, (windowSize.y() / 2f) - glyph.y1));
+				float y = wc.y() - yy.y;
 				
 				Vector2f quadScale = WorldPosition
 						.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));

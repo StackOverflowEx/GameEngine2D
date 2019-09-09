@@ -8,7 +8,6 @@ import de.Luca.Entities.EntityManager;
 import de.Luca.Entities.Player;
 import de.Luca.EventManager.EventManager;
 import de.Luca.GUIs.PopUp;
-import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.TextManager;
 
@@ -16,14 +15,14 @@ public class LoopHandler implements BeatHandler{
 
 	@Override
 	public void init() {
+		loadFonts();
+		SkyFightClient.load();
 		
-		SkyFightClient.p = new Player(Loader.loadTexture("D:\\Downloads\\up.png", "player"), Loader.loadTexture("D:\\Downloads\\down.png", "player"), new Vector2f(0, 0));
+		SkyFightClient.p = new Player(SkyFightClient.playerUP, SkyFightClient.playerDown, new Vector2f(0, 0));
 		SkyFightClient.p.setFlying(true);
 		SkyFightClient.p.setCollisionWithBlocks(false);
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
-		loadFonts();
-		SkyFightClient.load();
 		SkyFightClient.loginGUI.setVisible(true);
 		
 		EventManager.registerEvent(new ConnectionListener());

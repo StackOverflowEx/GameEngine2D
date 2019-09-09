@@ -6,7 +6,7 @@ import org.joml.Vector4f;
 
 import de.Luca.GUI.GLabel;
 import de.Luca.GUI.GUI;
-import de.Luca.Text.TextManager;
+import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Window.Window;
 
@@ -22,7 +22,7 @@ public class PopUp extends GUI{
 		gen = System.currentTimeMillis();
 		GLabel label = new GLabel(0, 0, (int)Window.getWindowSize().x, 40);
 		label.setColor(color);
-		label.setText(message, TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+		label.setText(message, SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 		this.addComponent(label);
 		setY(popups.size() * (int)(Window.getWindowSize().y/25f));
 		setVisible(true);
@@ -37,7 +37,7 @@ public class PopUp extends GUI{
 		}
 		GLabel label = new GLabel(0, 0, (int)Window.getWindowSize().x, 40);
 		label.setColor(color);
-		label.setText(message, TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+		label.setText(message, SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 		this.addComponent(label);
 		setY(popups.size() * (int)(Window.getWindowSize().y/25f));
 		setVisible(true);
@@ -45,6 +45,12 @@ public class PopUp extends GUI{
 	
 	public long getGen() {
 		return gen;
+	}
+	
+	public void destroy() {
+		popups.remove(this);
+		this.dispose();
+		update();
 	}
 	
 	public static void update() {
