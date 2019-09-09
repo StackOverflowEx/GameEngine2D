@@ -43,7 +43,7 @@ public class MasterRenderer extends Thread {
 		masterRenderer = this;
 		loadTextures = new CopyOnWriteArrayList<Texture>();
 		
-		background = new Background(Loader.loadTexture("D:\\Downloads\\background.png", "background"));
+		background = new Background(Loader.loadTexture("C:\\Users\\andy\\Pictures\\background.png", "background"));
 		
 		GLFW.glfwMakeContextCurrent(0);
 		setName("Rendering Thread");
