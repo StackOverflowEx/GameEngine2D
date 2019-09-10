@@ -2,6 +2,9 @@ package de.Luca.Main;
 
 import java.io.File;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import de.Luca.Connection.Connection;
 import de.Luca.Entities.Player;
 import de.Luca.GUIs.LoadingGUI;
@@ -41,6 +44,14 @@ public class SkyFightClient {
 	public static String root = System.getenv("APPDATA") + "/SkyFight";
 	
 	public static void load() {
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+				| UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+		
 		root.replace("\\", "/");
 		if(!new File(root).exists()) {
 			new File(root).mkdir();

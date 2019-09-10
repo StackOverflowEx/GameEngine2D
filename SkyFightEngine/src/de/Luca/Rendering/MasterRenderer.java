@@ -162,7 +162,7 @@ public class MasterRenderer extends Thread {
 			shader = new BlockShader();
 		}
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-		GL11.glClearColor(1, 0.5f, 0, 1);
+		GL11.glClearColor(0, 0, 0, 1);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
 		processMatricies();
