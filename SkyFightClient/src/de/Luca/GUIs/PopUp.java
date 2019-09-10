@@ -22,9 +22,9 @@ public class PopUp extends GUI{
 		gen = System.currentTimeMillis();
 		GLabel label = new GLabel(0, 0, (int)Window.getWindowSize().x, 40);
 		label.setColor(color);
-		label.setText(message, SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 		this.addComponent(label);
-		setY(popups.size() * (int)(Window.getWindowSize().y/25f));
+		setY(popups.size() * 40);
+		label.setText(message, SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 		setVisible(true);
 	}
 	
@@ -39,7 +39,7 @@ public class PopUp extends GUI{
 		label.setColor(color);
 		label.setText(message, SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 		this.addComponent(label);
-		setY(popups.size() * (int)(Window.getWindowSize().y/25f));
+		setY(popups.size() * 40);
 		setVisible(true);
 	}
 	
@@ -62,7 +62,7 @@ public class PopUp extends GUI{
 		}
 		int i = 0;
 		for(PopUp p : popups) {
-			p.setY(i * (int)(Window.getWindowSize().y/25f));
+			p.setY(i * 40);
 			i++;
 		}
 	}

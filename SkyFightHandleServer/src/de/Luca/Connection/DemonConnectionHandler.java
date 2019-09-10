@@ -91,7 +91,6 @@ public class DemonConnectionHandler implements Runnable {
 					handlePacket(packet);
 //				}
 			} catch (Exception e) {
-				e.printStackTrace();
 				disconnect();
 			}
 

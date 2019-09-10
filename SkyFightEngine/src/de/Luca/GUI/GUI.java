@@ -62,6 +62,7 @@ public abstract class GUI {
 
 	public void setX(int x) {
 		this.x = x;
+		resize();
 	}
 
 	public int getY() {
@@ -70,6 +71,7 @@ public abstract class GUI {
 
 	public void setY(int y) {
 		this.y = y;
+		resize();
 	}
 
 	public int getWidth() {
@@ -78,6 +80,7 @@ public abstract class GUI {
 
 	public void setWidth(int width) {
 		this.width = width;
+		resize();
 	}
 
 	public int getHeight() {
@@ -86,8 +89,14 @@ public abstract class GUI {
 
 	public void setHeight(int height) {
 		this.height = height;
+		resize();
 	}
 	
+	private void resize() {
+		for(GUIComponent c : components) {
+			c.reCalc();
+		}
+	}
 	
 
 }

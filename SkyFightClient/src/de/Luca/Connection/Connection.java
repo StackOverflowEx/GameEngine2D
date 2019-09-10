@@ -18,8 +18,8 @@ import de.Luca.Window.Window;
 public class Connection {
 	
 	public static final int HANDLE_SERVER_PORT = 33333;
-	public static final String HANDLE_SERVER_IP = "127.0.0.1";
-//	public static final String HANDLE_SERVER_IP = "167.86.87.105";
+//	public static final String HANDLE_SERVER_IP = "127.0.0.1";
+	public static final String HANDLE_SERVER_IP = "167.86.87.105";
 	
 	private Socket socket;
 	private InputStream is;
@@ -84,6 +84,10 @@ public class Connection {
 	}
 	
 	private void init() {
+		
+		AESKey = null;
+		serverPublicKey = null;
+		
 		try {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
@@ -119,6 +123,7 @@ public class Connection {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		EventManager.fireEvent(new ConnectionDisconnectedEvent(this));
 		System.out.println("Disconnected from server.");
 	}
 	
@@ -147,7 +152,6 @@ public class Connection {
 //						}
 					}catch (Exception e) {
 						disconnect();
-						e.printStackTrace();
 					}
 				}
 			}

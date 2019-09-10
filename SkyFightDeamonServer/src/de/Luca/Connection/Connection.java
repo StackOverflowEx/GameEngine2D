@@ -128,7 +128,6 @@ public class Connection {
 //						}
 					}catch (Exception e) {
 						disconnect();
-						e.printStackTrace();
 					}
 				}
 				return;

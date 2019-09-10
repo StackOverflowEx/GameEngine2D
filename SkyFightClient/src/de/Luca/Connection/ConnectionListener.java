@@ -65,23 +65,37 @@ public class ConnectionListener implements Listener{
 	public void onErrrorConnectino(ConnectionErrorEvent e) {
 		if(e.getConnection().getPort() == Connection.HANDLE_SERVER_PORT && e.getConnection().getIP().equals(Connection.HANDLE_SERVER_IP)) {
 			if(SkyFightClient.gameState == GameState.MENUE) {
-				if(notConnected == null) {
-					notConnected = new PopUp("Es konnte keine Verbindung mit dem Server hergestellt werden.", new Vector4f(1, 0, 0, 1), true);
+				if(notConnected != null) {
+					notConnected.destroy();
 				}
+				notConnected = new PopUp("Es konnte keine Verbindung mit dem Server hergestellt werden.", new Vector4f(1, 0, 0, 1), true);
 			}
 			e.getConnection().retry();
 		}
 	}
 	
 	@EventHandler
-	public void onErrrorConnection(ConnectionConnectedEvent e) {
+	public void onConnectConnection(ConnectionConnectedEvent e) {
 		if(e.getConnection().getPort() == Connection.HANDLE_SERVER_PORT && e.getConnection().getIP().equals(Connection.HANDLE_SERVER_IP)) {
 			if(SkyFightClient.gameState == GameState.MENUE) {
 				if(notConnected != null) {
 					notConnected.destroy();
-					new PopUp("Verbindung zum Server hergestellt", new Vector4f(0, 1, 0, 1));
 				}
+				new PopUp("Verbindung zum Server hergestellt", new Vector4f(0, 1, 0, 1));
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onDisconnectConnection(ConnectionDisconnectedEvent e) {
+		if(e.getConnection().getPort() == Connection.HANDLE_SERVER_PORT && e.getConnection().getIP().equals(Connection.HANDLE_SERVER_IP)) {
+			if(SkyFightClient.gameState == GameState.MENUE) {
+				if(notConnected != null) {
+					notConnected.destroy();
+				}
+				notConnected = new PopUp("Die Verbindung zum Server wurde unterbrochen.", new Vector4f(1, 0, 0, 1), true);
+			}
+			e.getConnection().retry();
 		}
 	}
 

@@ -93,7 +93,6 @@ public class ConnectionHandler implements Runnable {
 //				}
 			}catch (Exception e) {
 				disconnect();
-				e.printStackTrace();
 			}
 
 		}
@@ -114,34 +113,6 @@ public class ConnectionHandler implements Runnable {
 		}
 		System.out.println("Client disconnected");
 	}
-
-//	private int nullCount = 0;
-//	private ArrayList<Byte> bytes = new ArrayList<Byte>();
-//	private byte[] getDataFromInputStream() throws IOException {
-//		bytes.add((byte) is.read());
-//		if(bytes.get(bytes.size() - 1) == -1) {
-//			nullCount++;
-//			bytes.remove(bytes.size() - 1);
-//			if(nullCount == 10) {
-//				disconnect();
-//			}
-//			return null;
-//		}
-//		nullCount = 0;
-//		if(bytes.size() >= 3) {
-//			byte[] end = new byte[] {bytes.get(bytes.size()-3), bytes.get(bytes.size()-2), bytes.get(bytes.size()-1)};
-//			if(new String(end).equals(endOfStream)) {
-//				byte[] ret = new byte[bytes.size() - 3];
-//				for(int i = 0; i < ret.length; i++) {
-//					ret[i] = bytes.get(i);
-//				}
-//				bytes.clear();
-//				System.out.println("END OF PACKET DETECTED: " + is.available() + " bytes waiting");
-//				return ret;
-//			}
-//		}
-//		return getDataFromInputStream();
-//	}
 
 	private int nullCount = 0;
 	private byte[] getDataFromInputStream() throws IOException {
