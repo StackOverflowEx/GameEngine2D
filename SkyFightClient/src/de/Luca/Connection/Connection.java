@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.util.ArrayList;
 import java.util.Base64;
 
 import de.Luca.EventManager.EventManager;
@@ -19,9 +18,8 @@ import de.Luca.Window.Window;
 public class Connection {
 	
 	public static final int HANDLE_SERVER_PORT = 33333;
-//	public static final String HANDLE_SERVER_IP = "127.0.0.1";
-	public static final String endOfStream = "END"; //69 78 68
-	public static final String HANDLE_SERVER_IP = "167.86.87.105";
+	public static final String HANDLE_SERVER_IP = "127.0.0.1";
+//	public static final String HANDLE_SERVER_IP = "167.86.87.105";
 	
 	private Socket socket;
 	private InputStream is;
@@ -43,8 +41,8 @@ public class Connection {
 			socket = new Socket(ip, port);
 			connected = true;
 			init();
-			sendHandshake();
 			listen();
+			sendHandshake();
 		} catch (IOException e) {
 			e.printStackTrace();
 			EventManager.fireEvent(new ConnectionErrorEvent(this));
@@ -63,8 +61,8 @@ public class Connection {
 			socket = new Socket(ip, port);
 			connected = true;
 			init();
-			sendHandshake();
 			listen();
+			sendHandshake();
 		} catch (IOException e) {
 			e.printStackTrace();
 			EventManager.fireEvent(new ConnectionErrorEvent(this));
@@ -129,7 +127,7 @@ public class Connection {
 			
 			@Override
 			public void run() {
-				while(socket.isClosed()) {
+				while(!socket.isClosed()) {
 					try {
 //						if (is.available() > 0) {
 							byte[] data = getDataFromInputStream();
@@ -168,30 +166,26 @@ public class Connection {
 	}
 	
 	private int nullCount = 0;
-	private ArrayList<Byte> bytes = new ArrayList<Byte>();
 	private byte[] getDataFromInputStream() throws IOException {
-		bytes.add((byte) is.read());
-		if(bytes.get(bytes.size() - 1) == -1) {
+		byte[] buffer = new byte[1024];
+		int t = is.read(buffer);
+		if(t == -1) {
 			nullCount++;
-			bytes.remove(bytes.size() - 1);
 			if(nullCount == 10) {
 				disconnect();
 			}
 			return null;
 		}
-		nullCount = 0;
-		if(bytes.size() >= 3) {
-			byte[] end = new byte[] {bytes.get(bytes.size()-3), bytes.get(bytes.size()-2), bytes.get(bytes.size()-1)};
-			if(new String(end).equals(endOfStream)) {
-				byte[] ret = new byte[bytes.size() - 3];
-				for(int i = 0; i < ret.length; i++) {
-					ret[i] = bytes.get(i);
-				}
-				bytes.clear();
-				return ret;
-			}
+		if(t == 0) {
+			System.out.println(0);
+			return null;
 		}
-		return getDataFromInputStream();
+		nullCount = 0;
+		byte[] ret = new byte[t];
+		for(int i = 0; i < t; i++) {
+			ret[i] = buffer[i];
+		}
+		return ret;
 	}
 
 	private void handlePacket(Packet packet) {
@@ -231,22 +225,10 @@ public class Connection {
 		return p;
 	}
 	
-	private byte[] getWithEnd(byte[] message) {
-		byte[] ret = new byte[message.length + 3];
-		for(int i = 0; i < message.length; i++) {
-			ret[i] = message[i];
-		}
-		ret[ret.length - 3] = 69;
-		ret[ret.length - 2] = 78;
-		ret[ret.length - 1] = 68;
-		return ret;
-	}
-	
 	public void sendUnencrypted(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
 			byte[] bMSG = msg.getBytes();
-			bMSG = getWithEnd(bMSG);
 			os.write(bMSG);
 			os.flush();
 		} catch (IOException e) {
@@ -263,8 +245,7 @@ public class Connection {
 				enMSG = RSAUtil.encrypt(msg, serverPublicKey);
 			}else {
 				enMSG = Encryption.encrypt(msg, AESKey);
-			}			
-			enMSG = getWithEnd(enMSG);
+			}
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
@@ -281,7 +262,6 @@ public class Connection {
 			}else {
 				enMSG = Encryption.encrypt(msg, AESKey);
 			}
-			enMSG = getWithEnd(enMSG);
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
