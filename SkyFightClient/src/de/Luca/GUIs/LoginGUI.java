@@ -10,7 +10,6 @@ import de.Luca.GUI.GLabel;
 import de.Luca.GUI.GTextBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
-import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.SHAHasing;
@@ -20,6 +19,7 @@ import de.Luca.Window.Window;
 
 public class LoginGUI extends GUI {
 
+	
 	public LoginGUI() {
 		super(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
 		calc();
@@ -103,11 +103,12 @@ public class LoginGUI extends GUI {
 				}
 			}
 		});
-		
-		GLabel test = new GLabel(0, 0, 100, 100);
-		test.setTexture(Loader.loadTexture("D:\\Icons\\Icon2.png", "gui"));
-		this.addComponent(test);
 
+	}
+	
+	@Override
+	public void windowResize(int arg0, int arg1) {
+		calc();
 	}
 
 	@Override

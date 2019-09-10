@@ -32,6 +32,8 @@ public abstract class GUI {
 	
 	public abstract void visibleUpdaet(boolean visible);
 	
+	public abstract void windowResize(int width, int height);
+	
 	public void dispose() {
 		for(GUIComponent c : components) {
 			c.dispose();

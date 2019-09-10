@@ -29,6 +29,10 @@ public class GUIManager {
 		guis.add(gui);
 	}
 	
+	public static CopyOnWriteArrayList<GUI> getGUIS(){
+		return guis;
+	}
+	
 	public static void removeGUI(GUI gui) {
 		guis.remove(gui);
 	}

@@ -35,6 +35,13 @@ public class GUIListener implements Listener{
 	private static boolean mouseDown = false;
 	
 	@EventHandler
+	public void onWindowResize(WindowResizeEvent e) {
+		for(GUI g : GUIManager.getGUIS()) {
+			g.windowResize(e.getWidth(), e.getHeight());
+		}
+	}
+	
+	@EventHandler
 	public void onChar(CharInputEvent e) {
 		String letter = new String(new int[] {e.getCodepoint()}, 0, 1);
 		for(GUIComponent component : components) {

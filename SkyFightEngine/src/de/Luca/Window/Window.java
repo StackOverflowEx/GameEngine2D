@@ -20,6 +20,7 @@ import de.Luca.Events.CursorPositionEvent;
 import de.Luca.Events.KeyEvent;
 import de.Luca.Events.MouseButtonEvent;
 import de.Luca.Events.ScrollEvent;
+import de.Luca.GUI.WindowResizeEvent;
 
 public class Window {
 	
@@ -139,6 +140,7 @@ public class Window {
 				resized = true;
 				size = new Vector2f(width, height);
 				Calc.calcProjectionMatrix();
+				EventManager.fireEvent(new WindowResizeEvent(width, height));
 			}
 		});
 	}

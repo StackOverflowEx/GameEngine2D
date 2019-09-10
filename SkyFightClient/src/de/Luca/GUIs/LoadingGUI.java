@@ -40,6 +40,11 @@ public class LoadingGUI extends GUI{
 			calc();
 		}
 	}
+
+	@Override
+	public void windowResize(int arg0, int arg1) {
+		calc();
+	}
 	
 	
 

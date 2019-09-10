@@ -31,6 +31,7 @@ public class TextManager {
 	private static Texture tex;
 	private static ConcurrentHashMap<Long, HashMap<Character, FontGlyph>> glyphs;
 	private static float[][] buffer;
+	private static float bufferTextAmount;
 	private static boolean changed;
 	private static Matrix4f projection;
 	
@@ -44,6 +45,7 @@ public class TextManager {
 		shader = new TextShader();
 		buffer = new float[2][];
 		changed = true;
+		bufferTextAmount = 0;
 	}
 
 	public static void generateFont(String file, float fontSize, String name, boolean italic, boolean bold) {
@@ -121,10 +123,11 @@ public class TextManager {
 	}
 
 	public static float[][] getBuffer() {
-		if (!changed && buffer != null) {
+		if (!changed && buffer != null && bufferTextAmount == texts.size()) {
 			return buffer;
 		}
 		changed = false;
+		bufferTextAmount = texts.size();
 		buffer[0] = genVertexBuffer();
 		buffer[1] = genTextureBuffer();
 		return buffer;
@@ -232,6 +235,9 @@ public class TextManager {
 			return;
 		}
 		if (tex.getTextureID() == -1) {
+			return;
+		}
+		if(bufferTextAmount != texts.size()) {
 			return;
 		}
 		shader.start();

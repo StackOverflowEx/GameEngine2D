@@ -146,6 +146,11 @@ public class RegisterGUI extends GUI {
 		});
 
 	}
+	
+	@Override
+	public void windowResize(int arg0, int arg1) {
+		calc();
+	}
 
 	@Override
 	public void visibleUpdaet(boolean visible) {

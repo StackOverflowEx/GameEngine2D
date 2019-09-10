@@ -60,10 +60,23 @@ public class PopUp extends GUI{
 				popups.remove(p);
 			}
 		}
+		int x = (int)Window.getWindowSize().x;
 		int i = 0;
 		for(PopUp p : popups) {
 			p.setY(i * 40);
+			p.setWidth(x);
+			GLabel label = (GLabel) p.getComponents().get(0);
+			label.setWidth(p.getWidth());
 			i++;
+		}
+	}
+	
+	@Override
+	public void windowResize(int arg0, int arg1) {
+		update();
+		for(PopUp p : popups) {
+			GLabel label = (GLabel) p.getComponents().get(0);
+			label.setText(label.getParagraph().clone());
 		}
 	}
 
