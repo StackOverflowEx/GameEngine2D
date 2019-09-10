@@ -13,6 +13,6 @@ void main(void){
 
 	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(position, 0, 1.0);
 //	textureCoords = vec2((position.x), 1 - (position.y));
-	pass_textureCoords = textureCoords;
+	pass_textureCoords = vec2(textureCoords.x, 1-textureCoords.y);
 
 }

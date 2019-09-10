@@ -10,6 +10,7 @@ import de.Luca.GUI.GLabel;
 import de.Luca.GUI.GTextBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
+import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.SHAHasing;
@@ -102,6 +103,10 @@ public class LoginGUI extends GUI {
 				}
 			}
 		});
+		
+		GLabel test = new GLabel(0, 0, 100, 100);
+		test.setTexture(Loader.loadTexture("D:\\Icons\\Icon2.png", "gui"));
+		this.addComponent(test);
 
 	}
 

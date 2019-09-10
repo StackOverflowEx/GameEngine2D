@@ -24,7 +24,7 @@ public class LoopHandler implements BeatHandler{
 		SkyFightClient.p.setCollisionWithBlocks(false);
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
-		SkyFightClient.loginGUI.setVisible(true);
+//		SkyFightClient.loginGUI.setVisible(true);
 		
 		EventManager.registerEvent(new ConnectionListener());
 		MasterRenderer.setBackground(SkyFightClient.background);
