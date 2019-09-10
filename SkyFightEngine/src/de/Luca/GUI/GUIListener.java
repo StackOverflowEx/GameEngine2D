@@ -65,6 +65,7 @@ public class GUIListener implements Listener{
 				}
 				GTextBox textBox = (GTextBox) component;
 				if(textBox.isSelected()) {
+					e.setCancelled(true);
 					textBox.fireCharInput(null, INPUT_MODE.DELETE);
 				}
 			}
@@ -76,6 +77,7 @@ public class GUIListener implements Listener{
 				}
 				GTextBox textBox = (GTextBox) component;
 				if(textBox.isSelected()) {
+					e.setCancelled(true);
 					textBox.fireCharInput(null, INPUT_MODE.SEND);
 				}
 			}
@@ -108,6 +110,7 @@ public class GUIListener implements Listener{
 			}
 			
 			if(isMouseInside(mousePixel, corner1, corner2)) {
+				e.setCancelled(true);
 				component.scroll(e.getxOffset(), e.getyOffset());
 			}
 		}
