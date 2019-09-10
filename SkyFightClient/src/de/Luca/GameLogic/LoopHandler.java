@@ -9,6 +9,7 @@ import de.Luca.Entities.Player;
 import de.Luca.EventManager.EventManager;
 import de.Luca.GUIs.PopUp;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Text.TextManager;
 
 public class LoopHandler implements BeatHandler{
@@ -26,6 +27,7 @@ public class LoopHandler implements BeatHandler{
 		SkyFightClient.loginGUI.setVisible(true);
 		
 		EventManager.registerEvent(new ConnectionListener());
+		MasterRenderer.setBackground(SkyFightClient.background);
 		
 	}
 

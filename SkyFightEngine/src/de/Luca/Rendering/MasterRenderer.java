@@ -29,6 +29,7 @@ public class MasterRenderer extends Thread {
 	private CopyOnWriteArrayList<Texture> loadTextures;
 	private Matrix4f projection, view, zoomProjection;
 	private Background background;
+	private Texture backgroundTex;
 	private boolean ProjectionChanged;
 	private boolean viewChanged;
 	private boolean projectionZoomChanged;
@@ -42,11 +43,13 @@ public class MasterRenderer extends Thread {
 		this.viewChanged = true;
 		masterRenderer = this;
 		loadTextures = new CopyOnWriteArrayList<Texture>();
-		
-		background = new Background(Loader.loadTexture("C:\\Users\\andy\\Pictures\\background.png", "background"));
-		
+				
 		GLFW.glfwMakeContextCurrent(0);
 		setName("Rendering Thread");
+	}
+	
+	public static void setBackground(Texture tex) {
+		masterRenderer.backgroundTex = tex;
 	}
 
 	public static Texture getDefaultBackgroundTexture() {
@@ -185,6 +188,12 @@ public class MasterRenderer extends Thread {
 	}
 	
 	private void drawBackground() {
+		if(background == null) {
+			if(backgroundTex == null) {
+				return;
+			}
+			background = new Background(backgroundTex);
+		}
 		background.getShader().start();
 		background.bindTexture();
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
