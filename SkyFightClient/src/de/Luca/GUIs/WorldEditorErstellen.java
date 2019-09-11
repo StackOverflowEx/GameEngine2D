@@ -342,7 +342,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("PNG (*png)", root, "png");
 					int ret = fd.showToUser();
 					if (ret == 0) {
-						Source1.setText(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+						Source1.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
 			}
@@ -362,7 +362,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("OGG (*ogg)", root, "ogg");
 					int ret = fd.showToUser();
 					if (ret == 0) {
-						Source2.setText(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+						Source2.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
 			}
@@ -382,7 +382,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("OGG (*ogg)", root, "ogg");
 					int ret = fd.showToUser();
 					if (ret == 0) {
-						Source3.setText(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+						Source3.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
 			}
@@ -402,7 +402,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("OGG (*ogg)", root, "ogg");
 					int ret = fd.showToUser();
 					if (ret == 0) {
-						Source4.setText(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+						Source4.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
 			}

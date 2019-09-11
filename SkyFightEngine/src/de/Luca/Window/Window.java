@@ -24,6 +24,9 @@ import de.Luca.GUI.WindowResizeEvent;
 
 public class Window {
 	
+	public static final int MIN_WIDTH = 480;
+	public static final int MIN_HEIGHT = 360;
+	
 	private static boolean resized;
 	private static long frameCountTime;
 	private static long frameCount;
@@ -77,6 +80,8 @@ public class Window {
 		float x = (vidMode.width() - width) / 2.0f;
 		float y = (vidMode.height() - height) / 2.0f;
 		GLFW.glfwSetWindowPos(WINDOW_ID, (int) x, (int) y);
+		
+		GLFW.glfwSetWindowSizeLimits(WINDOW_ID, MIN_WIDTH, MIN_HEIGHT, -1, -1);
 		
 		//OPENGL-Debug
 //		GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_DEBUG_CONTEXT, GLFW.GLFW_TRUE);
