@@ -215,6 +215,11 @@ public class Connection {
 			p.b = id;
 			send(p);
 		}
+		Packet p = new Packet();
+		p.packetType = Packet.DEMON_SERVER_CREATED;
+		p.a = id;
+		p.b = i;
+		send(p);
 	}
 	
 	private void handleDemonKey(Packet packet) {

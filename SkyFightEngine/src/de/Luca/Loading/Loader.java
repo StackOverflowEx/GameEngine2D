@@ -21,6 +21,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
@@ -32,7 +34,7 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class Loader {
 
-	public static HashMap<String, ArrayList<Integer>> textures = new HashMap<String, ArrayList<Integer>>();
+	public static HashMap<String, ArrayList<Texture>> textures = new HashMap<String, ArrayList<Texture>>();
 	public static HashMap<Integer, int[]> vbos = new HashMap<Integer, int[]>();
 	public static int QuadVAO = -1;
 
@@ -43,21 +45,26 @@ public class Loader {
 		return QuadVAO;
 	}
 
-	public static int loadTexture(ByteBuffer buffer, int width, int height, String textureType) {
+	public static int loadTexture(Texture tex, String textureType) {
 
-		int textureID = GL11.glGenTextures();
-		if(!textures.containsKey(textureType)) {
-			ArrayList<Integer> a = new ArrayList<Integer>();
-			textures.put(textureType, a);
+		if(tex.getTextureID() != -1) {
+			return tex.getTextureID();
 		}
-		textures.get(textureType).add(textureID);
+		
+		int textureID = GL11.glGenTextures();
+//		if(!textures.containsKey(textureType)) {
+//			ArrayList<Integer> a = new ArrayList<Integer>();
+//			textures.put(textureType, a);
+//		}
+//		textures.get(textureType).add(textureID);
 
-		if (buffer == null) {
+		if (tex.getBuffer() == null) {
 			return textureID;
 		}
 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.getWidth(), tex.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+				tex.getBuffer());
 		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 
@@ -103,9 +110,16 @@ public class Loader {
 		int width = 0;
 		int height = 0;
 		ByteBuffer buffer = null;
+		
+		if(file != null) {
+			Texture loaded = getLoaded(file, textureType);
+			if(loaded != null) {
+				return loaded;
+			}
+		}
 
 		if (file == null || !new File(file).exists()) {
-			Texture texture = new Texture(buffer, width, height, textureType);
+			Texture texture = new Texture(buffer, width, height, textureType, file);
 			MasterRenderer.queueTexture(texture);
 		}
 
@@ -124,13 +138,21 @@ public class Loader {
 			System.exit(-1);
 		}
 
-		Texture texture = new Texture(buffer, width, height, textureType);
+		Texture texture = new Texture(buffer, width, height, textureType, file);
+
+		if (!textures.containsKey(textureType)) {
+			ArrayList<Texture> a = new ArrayList<Texture>();
+			textures.put(textureType, a);
+		}
+		textures.get(textureType).add(texture);
+
 		MasterRenderer.queueTexture(texture);
 
 		return texture;
 	}
 
 	public static Texture loadTexture(BufferedImage image, String textureType) {
+		
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 
@@ -148,7 +170,14 @@ public class Loader {
 
 		buffer.flip();
 
-		Texture texture = new Texture(buffer, image.getWidth(), image.getHeight(), textureType);
+		Texture texture = new Texture(buffer, image.getWidth(), image.getHeight(), textureType, UUID.randomUUID().toString());
+		
+		if (!textures.containsKey(textureType)) {
+			ArrayList<Texture> a = new ArrayList<Texture>();
+			textures.put(textureType, a);
+		}
+		textures.get(textureType).add(texture);
+		
 		MasterRenderer.queueTexture(texture);
 
 		return texture;
@@ -227,25 +256,36 @@ public class Loader {
 		GL30.glBindVertexArray(vaoID);
 		return vaoID;
 	}
-	
+
 	public static void destroyTexture(Texture texture) {
 		GL11.glDeleteTextures(texture.getTextureID());
 		textures.get(texture.getTextureType()).remove(texture.getTextureID());
 		texture.setTextureID(-1);
 	}
 
+	private static Texture getLoaded(String file, String textureType) {
+		if(textures.containsKey(textureType)) {
+			for(Texture tex : textures.get(textureType)) {
+				if(tex.getFile().equals(file)) {
+					return tex;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static void deleteTextures(String type) {
-		if(textures.containsKey(type)) {
-			for(int texture : textures.get(type)) {
-				GL11.glDeleteTextures(texture);
+		if (textures.containsKey(type)) {
+			for (Texture texture : textures.get(type)) {
+				GL11.glDeleteTextures(texture.getTextureID());
 			}
 		}
 	}
-	
+
 	public static void cleanUP() {
 		for (String type : textures.keySet()) {
-			for(int texture : textures.get(type)) {
-				GL11.glDeleteTextures(texture);
+			for (Texture texture : textures.get(type)) {
+				GL11.glDeleteTextures(texture.getTextureID());
 			}
 		}
 		textures.clear();

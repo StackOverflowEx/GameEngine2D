@@ -1,7 +1,10 @@
 package de.Luca.Connection;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 
 import de.Luca.Main.Main;
@@ -39,12 +42,15 @@ public class ServerGenerator {
 		gen.put(id, System.currentTimeMillis());
 		
 		File server = new File(Main.root + "/" + SERVER_FILE);
+
 		try {
-			Runtime.getRuntime().exec("java -jar " + server.getPath() + port + " " + mapPath + " " + id);
+			Runtime.getRuntime().exec("java -jar " + server.getPath() + " " + port + " " + mapPath + " " + id);
+			System.out.println("java -jar " + server.getPath() + " " + port + " " + mapPath + " " + id);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return Packet.ERROR_SERVER;
 		}
+		
+		System.out.println("Generated server");
 		return port;
 	}
 	

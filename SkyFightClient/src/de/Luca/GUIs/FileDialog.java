@@ -1,5 +1,7 @@
 package de.Luca.GUIs;
 
+import java.io.File;
+
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -12,6 +14,9 @@ public class FileDialog extends JFileChooser {
 		this.setAcceptAllFileFilterUsed(false);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(filterName, extensions);
 		this.addChoosableFileFilter(filter);
+		if(rootDir != null) {
+			this.setCurrentDirectory(new File(rootDir));
+		}
 	}
 
 	public int showToUser() {

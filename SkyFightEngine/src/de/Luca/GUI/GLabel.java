@@ -11,6 +11,7 @@ import de.Luca.Text.Text;
 import de.Luca.Text.TextManager;
 import de.Luca.Utils.WorldPosition;
 import de.Luca.Window.Window;
+import de.t0b1.freetype_wrapper.classes.Font;
 
 public class GLabel extends GUIComponent{
 	
@@ -42,6 +43,50 @@ public class GLabel extends GUIComponent{
 		calcText();
 		
 		TextManager.addParagraph(p);
+	}
+	
+	public void setTextCut(String text, long font, Vector4f color, TEXT_ALIGN align, int margin) {
+		this.align = align;
+		this.margin = margin;
+		int maxWith = getWidth() - margin * 2;
+		removeText();
+		String[] lines = text.split("\n");
+		p = new Paragraph(this.getX() + margin, this.getY(), lines, font, color, align);
+		p.setVisible(isVisible());
+		
+		if(p.getBounds().x >= maxWith) {
+			System.out.println("TEXT TO BIG");
+			int delta = (int) (maxWith - p.getBounds().y);
+			int size = (int) Font.getFontSize(font);
+			int letters = 1;
+			if(delta > size) {
+				letters = delta / size;
+			}
+			System.out.println("Attempting to remove " + letters + " from String (Length: " + text.length());
+			if(text.length() > letters) {
+				text = text.substring(0, text.length() - letters);
+				setTextCut(text, font, color, align, margin);
+				return;
+			}
+		}
+
+		calcText();
+		
+		TextManager.addParagraph(p);
+	}
+	
+	public String getLabelText() {
+		String ret = "";
+		if(p != null) {
+			for(Text t : p.getTexts()) {
+				if(ret.isEmpty()) {
+					ret += t.getText();
+				}else {
+					ret += "\n" + t.getText();
+				}
+			}
+		}
+		return ret;
 	}
 	
 	public void calcText() {

@@ -15,9 +15,9 @@ public class GScrollPanel extends GUIComponent{
 		super(x, y, width, height);
 		items = new ArrayList<GUIComponent>();
 		panel = new GPanel(x, y, width, height);
-		sliderLR = new GSlider(0, 0, 0, height, true);
+		sliderLR = new GSlider(x, y, 0, height, true);
 		sliderLR.setSliderPercentage(100);
-		sliderTB = new GSlider(0, 0, width, 0, false);
+		sliderTB = new GSlider(x, y, width, 0, false);
 		sliderTB.setSliderPercentage(100);
 		sliderLR.setParent(this);
 		sliderTB.setParent(this);
@@ -186,27 +186,27 @@ public class GScrollPanel extends GUIComponent{
 		}
 		
 		if(sliderPos == SLIDER_POSITION.LEFT) {
-			sliderLR.setX(0);
-			sliderLR.setY(0);
+			sliderLR.setX(getX());
+			sliderLR.setY(getY());
 		}
 		
 		if(sliderPos == SLIDER_POSITION.RIGHT) {
-			sliderLR.setX(getWidth() - thickness);
-			sliderLR.setY(0);
+			sliderLR.setX(getX() + getWidth() - thickness);
+			sliderLR.setY(getY());
 		}
 		
 		if(sliderPos == SLIDER_POSITION.TOP) {
-			sliderTB.setX(0);
-			sliderTB.setY(0);
+			sliderTB.setX(getX());
+			sliderTB.setY(getY());
 		}
 		
 		if(sliderPos == SLIDER_POSITION.BOTTOM) {
-			sliderTB.setX(0);
-			sliderTB.setY(getHeight() - thickness);
+			sliderTB.setX(getX());
+			sliderTB.setY(getY() + getHeight() - thickness);
 		}
 		
 		if(sliderLR.getX() == 0 && sliderLR.getWidth() != 0) {
-			sliderTB.setX(sliderLR.getWidth());
+			sliderTB.setX(getX() + sliderLR.getWidth());
 			sliderTB.setWidth(getWidth() - sliderLR.getWidth());
 		}else if(sliderLR.getX() != 0 && sliderLR.getWidth() != 0) {
 			sliderTB.setWidth(getWidth() - sliderLR.getWidth());

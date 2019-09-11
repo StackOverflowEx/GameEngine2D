@@ -8,13 +8,19 @@ public class Texture {
 	private ByteBuffer buffer;
 	private int width, height;
 	private String textureType;
+	private String file;
 	
-	public Texture(ByteBuffer buffer, int width, int height, String textureType) {
+	public Texture(ByteBuffer buffer, int width, int height, String textureType, String file) {
 		this.buffer = buffer;
 		this.width = width;
 		this.height = height;
 		textureID = -1;
 		this.textureType = textureType;
+		this.file = file;
+	}
+	
+	public String getFile() {
+		return file;
 	}
 	
 	public String getTextureType() {

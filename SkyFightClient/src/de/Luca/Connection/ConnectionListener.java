@@ -56,7 +56,19 @@ public class ConnectionListener implements Listener{
 //					SkyFightClient.loadingGUI.setVisible(false);
 //					SkyFightClient.loginGUI.setVisible(true);
 //					new PopUp("Falscher Benutzername/Email oder falsches Passwort.", new Vector4f(1, 0, 0, 1));
+				}else {
+					System.out.println("Unknown error recieved (ID: " + errorCode + ")");
 				}
+			}else if(packet.packetType == Packet.CONNECT){
+				int port = (int) packet.a;
+				String ip = (String) packet.b;
+				if(ip.equals("127.0.0.1")) {
+					ip = Connection.HANDLE_SERVER_IP;
+				}
+				new Connection(ip, port);
+				System.out.println("MATCH STARTED");
+			}else {
+				System.out.println("Unknown packet recieved (ID: " + packet.packetType + ")");
 			}
 		}
 	}

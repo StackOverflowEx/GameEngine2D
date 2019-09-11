@@ -20,7 +20,7 @@ public class AudioManager {
 	private static long context;
 	private static long device;
 	private static ALCCapabilities alcc;
-	private static ConcurrentHashMap<String, ArrayList<Integer>> buffers;
+	private static ConcurrentHashMap<String, ArrayList<SoundData>> buffers;
 	private static ArrayList<Source> sources;
 	
 	public static void init() {
@@ -33,7 +33,7 @@ public class AudioManager {
 		alcc = ALC.createCapabilities(device);
 		
 		AL.createCapabilities(alcc);
-		buffers = new ConcurrentHashMap<String, ArrayList<Integer>>();
+		buffers = new ConcurrentHashMap<String, ArrayList<SoundData>>();
 		sources = new ArrayList<Source>();
 		
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
@@ -41,12 +41,17 @@ public class AudioManager {
 	}
 	
 	public static SoundData loadSound(String file, String soundType) {
+		
+		SoundData loaded = getLoaded(file, soundType);
+		if(loaded != null) {
+			return loaded;
+		}
+		
 		int buffer = AL10.alGenBuffers();
 		if(!buffers.containsKey(soundType)) {
-			ArrayList<Integer> a = new ArrayList<Integer>();
+			ArrayList<SoundData> a = new ArrayList<SoundData>();
 			buffers.put(soundType, a);
 		}
-		buffers.get(soundType).add(buffer);
 
 		MemoryStack.stackPush();
 		IntBuffer channelsBuffer = MemoryStack.stackMallocInt(1);
@@ -66,10 +71,22 @@ public class AudioManager {
 		} else if(channels == 2) {
 		    format = AL10.AL_FORMAT_STEREO16;
 		}
-
 		AL10.alBufferData(buffer, format, rawAudioBuffer, sampleRate);
 
-		return new SoundData(buffer);
+		SoundData data = new SoundData(buffer, file);
+		buffers.get(soundType).add(data);
+		return data;
+	}
+	
+	private static SoundData getLoaded(String file, String soundType) {
+		if(buffers.containsKey(soundType)) {
+			for(SoundData data : buffers.get(soundType)) {
+				if(data.getFile().equals(file)) {
+					return data;
+				}
+			}
+		}
+		return null;
 	}
 	
 	public static Source genSource() {
@@ -90,16 +107,16 @@ public class AudioManager {
 	
 	public static void deleteSounds(String type) {
 		if(buffers.containsKey(type)) {
-			for(int buffer : buffers.get(type)) {
-				AL10.alDeleteBuffers(buffer);
+			for(SoundData data : buffers.get(type)) {
+				AL10.alDeleteBuffers(data.getID());
 			}
 		}
 	}
 	
 	public static void cleanUP() {
 		for(String type : buffers.keySet()) {
-			for(int buffer : buffers.get(type)) {
-				AL10.alDeleteBuffers(buffer);
+			for(SoundData data : buffers.get(type)) {
+				AL10.alDeleteBuffers(data.getID());
 			}
 		}
 		for(Source source : sources) {

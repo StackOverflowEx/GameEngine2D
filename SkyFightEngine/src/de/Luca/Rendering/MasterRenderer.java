@@ -75,7 +75,7 @@ public class MasterRenderer extends Thread {
 	private static void loadTextures() {
 		for (Texture texture : masterRenderer.loadTextures) {
 			System.out.println("Loading texture...");
-			int id = Loader.loadTexture(texture.getBuffer(), texture.getWidth(), texture.getHeight(), texture.getTextureType());
+			int id = Loader.loadTexture(texture, texture.getTextureType());
 			System.out.println("Loaded texture: " + id);
 			texture.setTextureID(id);
 			masterRenderer.loadTextures.remove(texture);
@@ -195,6 +195,11 @@ public class MasterRenderer extends Thread {
 			background = new Background(backgroundTex);
 		}
 		background.getShader().start();
+		
+		if(MasterRenderer.hasProjectionChanged()) {
+			background.getShader().loadProjectionMatrix(MasterRenderer.getProjection());
+		}
+		
 		background.bindTexture();
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
 		

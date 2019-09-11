@@ -23,8 +23,8 @@ public class GPanel extends GUIComponent{
 	public void addComponent(GUIComponent c) {
 		calc(c);
 		c.setGUI(getGUI());
-//		c.setVisible(isVisible());
 		c.setParent(this);
+		c.setVisible(isVisible());
 		components.add(c);
 	}
 	
@@ -123,6 +123,7 @@ public class GPanel extends GUIComponent{
 		}
 		GUIListener.removeComponent(this);
 		this.getGUI().removeComponent(this);
+		components.clear();
 	}
 
 	@Override

@@ -140,6 +140,7 @@ public class Window {
 				resized = true;
 				size = new Vector2f(width, height);
 				Calc.calcProjectionMatrix();
+				Calc.calcZoomProjectionMatrix();
 				EventManager.fireEvent(new WindowResizeEvent(width, height));
 			}
 		});

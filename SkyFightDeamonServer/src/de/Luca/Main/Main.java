@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 
 import de.Luca.Connection.Connection;
+import de.Luca.Connection.GameServerConnector;
 
 public class Main {
 
@@ -18,9 +19,19 @@ public class Main {
 			System.exit(-1);
 			e.printStackTrace();
 		}
+		root = new File(root).getParentFile().getPath();
 		
-//		String ip = args[0];
-//		Connection.HANDLE_SERVER_IP = ip;
+		String ip = args[0];
+		Connection.HANDLE_SERVER_IP = ip;
+		
+		Thread th = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				GameServerConnector.start();
+			}
+		});
+		th.start();
 		
 		con = new Connection(Connection.HANDLE_SERVER_IP, Connection.HANDLE_SERVER_PORT);
 	}

@@ -38,20 +38,19 @@ public class DemonConnectionHandler implements Runnable {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public static ArrayList<DemonConnectionHandler> getHandler() {
-		return (ArrayList<DemonConnectionHandler>) DemonConnectionHandler.handler.clone();
+		return DemonConnectionHandler.handler;
 	}
 
 	public static void addHandler(DemonConnectionHandler handler) {
 		DemonConnectionHandler.handler.add(handler);
 	}
-
+	
 	public static void removeHandler(DemonConnectionHandler handler) {
 		DemonConnectionHandler.handler.remove(handler);
 	}
 
-	private void init() {
+	private void init() {		
 		try {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
@@ -82,7 +81,6 @@ public class DemonConnectionHandler implements Runnable {
 					if (clientPublicKey == null) {
 						input = new String(data);
 					} else if(AESKey == null){
-						System.out.println(data[0]);
 						input = RSAUtil.decrypt(data, serverPrivateKey);
 					}else {
 						input = Encryption.decrypt(data, AESKey);
@@ -165,6 +163,7 @@ public class DemonConnectionHandler implements Runnable {
 			Packet p = new Packet();
 			p.packetType = Packet.CONNECT;
 			p.a = port;
+			p.b = socket.getInetAddress().getHostAddress();
 			for(ConnectionHandler c : ch) {
 				c.send(p);
 			}

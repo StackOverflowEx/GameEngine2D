@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 import de.Luca.GameLogic.GameLogic;
+import de.Luca.GameLogic.PlayerData;
 import de.Luca.Main.Server;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.Encryption;
@@ -27,6 +28,8 @@ public class ConnectionHandler implements Runnable {
 	private String serverPublicKey;
 	private String clientPublicKey;
 	private String AESKey;
+	private PlayerData playerData;
+	private Packet sendPacket;
 
 	public ConnectionHandler(Socket socket) {
 		this.socket = socket;
@@ -35,13 +38,21 @@ public class ConnectionHandler implements Runnable {
 		if(Server.player1 == null) {
 			Server.player1 = this;
 		}else if(Server.player2 == null) {
-			Server.player2 = null;
+			Server.player2 = this;
 		}else {
 			disconnect();
 		}
 		
 		System.out.println("Connection established: " + socket.getInetAddress() + ":" + socket.getPort());
 		
+	}
+	
+	public boolean finishedHandshaking() {
+		return AESKey != null;
+	}
+	
+	public PlayerData getPlayerData() {
+		return playerData;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,8 +67,24 @@ public class ConnectionHandler implements Runnable {
 	public static void removeHandler(ConnectionHandler handler) {
 		ConnectionHandler.handler.remove(handler);
 	}
+	
+	public Packet getSendPacket(){
+		return sendPacket;
+	}
+	
+	public boolean isConnected() {
+		return socket.isConnected();
+	}
+	
+	public void sendSendPacket() {
+		sendPacket.packetType = Packet.GAME_DATA;
+		send(sendPacket);
+		sendPacket = new Packet();
+	}
 
 	private void init() {
+		playerData = new PlayerData();
+		sendPacket = new Packet();
 		try {
 			is = socket.getInputStream();
 			os = socket.getOutputStream();
@@ -70,8 +97,8 @@ public class ConnectionHandler implements Runnable {
 			serverPrivateKey = keyGen.getPrivateKey();
 			serverPublicKey = Base64.getEncoder().encodeToString(keyGen.getPublicKey().getEncoded());
 		} catch (NoSuchAlgorithmException e) {
-			disconnect();
 			e.printStackTrace();
+			disconnect();
 		}
 	}
 
@@ -96,6 +123,7 @@ public class ConnectionHandler implements Runnable {
 					handlePacket(packet);
 //				}
 			}catch (Exception e) {
+				e.printStackTrace();
 				disconnect();
 			}
 
@@ -141,9 +169,10 @@ public class ConnectionHandler implements Runnable {
 			}else if(packet.packetType == Packet.SUCCESS) {
 				handleSuccess(packet);
 			}else if (packet.packetType == Packet.KEY) {
+				System.out.println("Key requested");
 				handleKey(packet);
 			}else {
-				GameLogic.processPacket(packet);
+				GameLogic.addRecievedPacket(this, packet);
 			}
 			
 		}
@@ -161,6 +190,7 @@ public class ConnectionHandler implements Runnable {
 		p.a = key;
 		send(p);
 		AESKey = key;
+		System.out.println("Requested key: " + AESKey);
 	}
 	
 	
@@ -190,16 +220,10 @@ public class ConnectionHandler implements Runnable {
 		} catch (IOException e) {}
 		Packet p = new Packet();
 		p.packetType = Packet.ERROR_PLAYER_QUIT;
-		if(Server.player1 == this) {
+		if(Server.player1 == this && Server.player2 != null && Server.player2.finishedHandshaking()) {
 			Server.player2.send(p);
-		}else {
+		}else if(Server.player1 != null && Server.player1.finishedHandshaking()){
 			Server.player1.send(p);
-		}
-		
-		try {
-			Thread.sleep(5*1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 				
 		System.out.println("Player disconnected");
@@ -244,8 +268,9 @@ public class ConnectionHandler implements Runnable {
 			os.write(enMSG);
 			os.flush();
 		} catch (Exception e) {
-			disconnect();
 			e.printStackTrace();
+			System.exit(-1);
+			disconnect();
 		}
 	}
 	

@@ -36,6 +36,7 @@ public class Connection {
 	
 	public Connection(String ip, int port) {
 		try {
+			System.out.println("Connection to " + ip + ":" + port);
 			this.ip = ip;
 			this.port = port;
 			socket = new Socket(ip, port);
@@ -69,6 +70,10 @@ public class Connection {
 			connected = false;
 			return;
 		}
+	}
+	
+	public boolean finishedHandshaking() {
+		return AESKey != null;
 	}
 	
 	public String getIP() {

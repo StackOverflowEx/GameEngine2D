@@ -22,6 +22,9 @@ public class Background {
 		this.defaultTexture = texture;
 		this.afterTex = texture;
 		this.shader = new BackgroundShader();
+		shader.start();
+		shader.loadProjectionMatrix(MasterRenderer.getProjection());
+		shader.stop();
 	}
 	
 	public Texture getDefaultTexture() {

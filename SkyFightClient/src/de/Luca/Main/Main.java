@@ -14,7 +14,7 @@ public class Main {
 			}
 		});
 		th.start();
-		
+				
 		SkyFightEngine.init(new LoopHandler());
 	}
 

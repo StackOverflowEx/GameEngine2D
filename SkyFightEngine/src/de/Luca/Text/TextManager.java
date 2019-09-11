@@ -58,7 +58,7 @@ public class TextManager {
 		buffer.put(FontAtlas.getTexDataAsRGBA32().data);
 		buffer.flip();
 		Loader.deleteTextures("text");
-		tex = new Texture(buffer, FontAtlas.getTexDataAsRGBA32().width, FontAtlas.getTexDataAsRGBA32().height, "text");
+		tex = new Texture(buffer, FontAtlas.getTexDataAsRGBA32().width, FontAtlas.getTexDataAsRGBA32().height, "text", "text");
 		MasterRenderer.queueTexture(tex);
 
 		udpateFontGlyphs();

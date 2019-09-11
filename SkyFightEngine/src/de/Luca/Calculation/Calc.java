@@ -26,7 +26,7 @@ public class Calc {
 		
 
 		Vector2f windowSize = Window.getWindowSize();
-
+		
 		float aspectRatio = windowSize.x / windowSize.y;
 		float halfWidth = 1.0f;
 		float halfHeight = halfWidth / aspectRatio;

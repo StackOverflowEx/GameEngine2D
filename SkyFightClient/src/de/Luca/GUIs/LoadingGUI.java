@@ -12,13 +12,19 @@ import de.Luca.Window.Window;
 
 public class LoadingGUI extends GUI{
 	
-
+	private GLabel background;
+	
 	public LoadingGUI() {
 		super(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
-		calc();
+		init();
 	}
 
 	public void calc() {
+		Vector2f windowSize = Window.getWindowSize();
+		background.setBounds(0, 0, (int) windowSize.x, (int) windowSize.y);
+	}
+	
+	private void init() {
 		for(GUIComponent c : getComponents()) {
 			c.dispose();
 			removeComponent(c);
@@ -26,7 +32,7 @@ public class LoadingGUI extends GUI{
 
 		Vector2f windowSize = Window.getWindowSize();
 
-		GLabel background = new GLabel(0, 0, (int) windowSize.x, (int) windowSize.y);
+		background = new GLabel(0, 0, (int) windowSize.x, (int) windowSize.y);
 		background.setTexture(SkyFightClient.backgroundLOGIN);
 		background.setColor(new Vector4f(1, 1, 1, 1));
 		background.setText("Loading...", SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.CENTER, 0);

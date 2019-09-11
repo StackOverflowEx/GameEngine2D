@@ -13,7 +13,6 @@ import de.Luca.Blocks.Block;
 import de.Luca.Blocks.BlockData;
 import de.Luca.Blocks.BlockManager;
 import de.Luca.GUIs.PopUp;
-import de.Luca.GameLogic.GameState;
 import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Rendering.MasterRenderer;
@@ -23,6 +22,7 @@ public class WorldLoader {
 	
 	private static HashMap<String, BlockData> blockData = new HashMap<String, BlockData>();
 	public static String mapName = "Default";
+	public static Vector2f spawn1, spawn2;
 	
 	public static void clearBlockData() {
 		Loader.deleteTextures("block");
@@ -44,7 +44,16 @@ public class WorldLoader {
 		loadBlockData(map);
 		loadBlocks(map);
 		laodBackground(map);
+		SkyFightClient.worldEditorAuswahl.init();
 		System.out.println("Map " + mapName + " has successfully been loaded.");
+	}
+	
+	public static HashMap<String, BlockData> getBlockData(){
+		return blockData;
+	}
+	
+	public static void addBlockData(BlockData bdp) {
+		blockData.put(bdp.getName(), bdp);
 	}
 	
 	private static void laodBackground(File map) {
@@ -64,6 +73,22 @@ public class WorldLoader {
 				if(!line.isEmpty()) {
 					if(line.startsWith("name=")) {
 						mapName = line.replace("name=", "");
+						continue;
+					}
+					if(line.startsWith("spawn1=")) {
+						line = line.replace("spawn1=", "");
+						float x = Float.parseFloat(line.split(";")[0]);
+						float y = Float.parseFloat(line.split(";")[1]);
+						spawn1 = new Vector2f(x, y);
+						WorldEditor.setSpawn1(spawn1);
+						continue;
+					}
+					if(line.startsWith("spawn2=")) {
+						line = line.replace("spawn2=", "");
+						float x = Float.parseFloat(line.split(";")[0]);
+						float y = Float.parseFloat(line.split(";")[1]);
+						spawn2 = new Vector2f(x, y);
+						WorldEditor.setSpawn2(spawn2);
 						continue;
 					}
 					String[] tmp = line.split(";");
@@ -103,7 +128,7 @@ public class WorldLoader {
 				walkSound = null;
 			}
 			
-			String bname = "defualt";
+			String bname = "default";
 			float value = 1.0f;
 			float hardness = 1.0f;
 			
@@ -119,13 +144,9 @@ public class WorldLoader {
 				clearBlockData();
 				return;
 			}
-			BlockData bd = null;
-			if(SkyFightClient.gameState == GameState.WORLDEDITOR) {
-				bd = new BlockDataPre(value, hardness, bname, texture, breakSound, placeSound, walkSound);
-			}else {
-				bd = new BlockData(value, hardness, bname, Loader.loadTexture(texture, "block"), breakSound, placeSound, walkSound);
-			}
+			BlockData bd = new BlockData(value, hardness, bname, Loader.loadTexture(texture, "block"), breakSound, placeSound, walkSound);
 			blockData.put(bname, bd);
+			WorldEditor.validBlockName(bname);
 		}
 	}
 

@@ -27,17 +27,87 @@ public class WorldEditor {
 	private static ArrayList<String> names;
 	private static boolean saving;
 	private static String background;
+	private static Vector2f spawn1, spawn2;
+	private static boolean newMap;
+	private static boolean mirroring;
+	private static int settingSpawn;
+	
+	public static void start(String mapFolder) {
+		SkyFightClient.gameState = GameState.WORLDEDITOR;
+		listener = new WorldEditorListener();
+		EventManager.registerEvent(listener);
+		saving = false;
+		mirroring = false;
+		if(names == null) {
+			names = new ArrayList<String>();
+		}
+		newMap = true;
+		background = null;
+		names.clear();
+		
+		PopUp p = new PopUp("Die Welt wird geladen...", new Vector4f(1, 0.7f, 0, 1));
+		WorldLoader.loadMap(mapFolder);
+		p.destroy();
+		
+		SkyFightClient.worldEditorOverlay.setVisible(true);
+	}
 	
 	public static void start() {
 		SkyFightClient.gameState = GameState.WORLDEDITOR;
 		listener = new WorldEditorListener();
 		EventManager.registerEvent(listener);
 		saving = false;
+		mirroring = false;
+		spawn1 = null;
+		spawn2 = null;
 		if(names == null) {
 			names = new ArrayList<String>();
 		}
+		newMap = true;
 		background = null;
-		//Show Worldeditor GUI
+		names.clear();
+		
+		SkyFightClient.worldEditorOverlay.setVisible(true);
+	}
+	
+	public static boolean isMirroring() {
+		return mirroring;
+	}
+	
+	public static void setMirroring(boolean mirroring) {
+		WorldEditor.mirroring = mirroring;
+	}
+	
+	public static void setSettingSpawn(int i) {
+		settingSpawn = i;
+	}
+	
+	public static int getSettingSpawn() {
+		return settingSpawn;
+	}
+	
+	public static void setNewMap(boolean newMap) {
+		WorldEditor.newMap = newMap;
+	}
+	
+	public static boolean isNewMap() {
+		return newMap;
+	}
+	
+	public static void setSpawn1(Vector2f location) {
+		spawn1 = location;
+	}
+	
+	public static void setSpawn2(Vector2f location) {
+		spawn2 = location;
+	}
+	
+	public static Vector2f getSpawn1() {
+		return spawn1;
+	}
+	
+	public static Vector2f getSpawn2() {
+		return spawn2;
 	}
 	
 	public static void stop() {
@@ -46,10 +116,19 @@ public class WorldEditor {
 		names.clear();
 		WorldLoader.clearBlockData();
 		BlockManager.removeAllBlocks();
-		//Show mainmenue GUI
+		SkyFightClient.worldEditorOverlay.setVisible(false);
+		SkyFightClient.worldEditorAuswahl.setVisible(false);
+		SkyFightClient.worldEditorSettings.setVisible(false);
+		SkyFightClient.worldEditorErstellen.setVisible(false);
+		MasterRenderer.setBackground(MasterRenderer.getDefaultBackgroundTexture());
 	}
 	
 	public static boolean validBlockName(String name) {
+		
+		if(names == null) {
+			names = new ArrayList<String>();
+		}
+		
 		if(!names.contains(name)) {
 			names.add(name);
 			return true;
@@ -63,15 +142,21 @@ public class WorldEditor {
 	}
 		
 	public static void save(String mapName) {
+		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
 		WorldLoader.mapName = mapName;
 		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
-		if(maps.exists()) {
+		if(maps.exists() && isNewMap()) {
 			new PopUp("Dieser Name ist bereits besetzt", new Vector4f(1, 0, 0, 1));
 			return;
 		}
 		if(saving) {
 			new PopUp("Bitte warte bis der Speichervorgang abgeschlossen ist.", new Vector4f(1, 0, 0, 1));
 			return;
+		}
+		if(!isNewMap()) {
+			maps = new File(SkyFightClient.root + "/maps/tmp/" + WorldLoader.mapName);
+		}else {
+			maps.mkdirs();
 		}
 		saving = true;
 		ArrayList<BlockData> saved = new ArrayList<BlockData>();
@@ -81,7 +166,7 @@ public class WorldEditor {
 				Block b = BlockManager.getBlock(new Vector2f(x, y));
 				BlockData data = b.getBlockData();
 				if(!saved.contains(data)) {
-					if(!saveBlockData((BlockDataPre) data)) {
+					if(!saveBlockData(data)) {
 						return;
 					}
 				}
@@ -95,6 +180,19 @@ public class WorldEditor {
 		if(!saveBackground()) {
 			return;
 		}
+		
+		if(!newMap) {
+			File old = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
+			delete(old);
+			try {
+				Files.move(maps.toPath(), old.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				new PopUp("Ein Fehler ist beim Speichern der Map aufgetreten. Bitte verschiebe die erstellte Map aus den Ornder \"tmp\" in den Ornder \"own\"", new Vector4f(1, 0, 0, 1));
+				e.printStackTrace();
+			}
+		}
+		p.destroy();
+		new PopUp("Die Map wurde gespeichert.", new Vector4f(0, 1, 0, 1));
 		
 	}
 	
@@ -129,6 +227,8 @@ public class WorldEditor {
 		try {
 			PrintWriter pw = new PrintWriter(d);
 			pw.println("name=" + mapName);
+			pw.println("spawn1=" + spawn1.x + ";" + spawn1.y);
+			pw.println("spawn2=" + spawn2.x + ";" + spawn2.y);
 			for(String s : blocks) {
 				pw.println(s);
 			}
@@ -143,7 +243,7 @@ public class WorldEditor {
 		return true;
 	}
 	
-	private static boolean saveBlockData(BlockDataPre data) {
+	private static boolean saveBlockData(BlockData data) {
 		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		File blockdata = new File(maps.getPath() + "/blockdata/" + data.getName());
 		if(!blockdata.exists()) {
@@ -167,7 +267,7 @@ public class WorldEditor {
 			return false;
 		}
 		
-		File file = new File(data.getTexture());
+		File file = new File(data.getBlockModel().getModel().getTexture().getFile());
 		File dest = new File(blockdata.getPath() + "/texture.png");
 		try {
 			Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -179,18 +279,18 @@ public class WorldEditor {
 		}
 		
 		try {
-			if(data.getBreakSoundFile() != null) {
-				file = new File(data.getBreakSoundFile());
+			if(data.getBreakSound() != null) {
+				file = new File(data.getBreakSound().getFile());
 				dest = new File(blockdata.getPath() + "/break.ogg");
 				Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
-			if(data.getPlaceSoundFile() != null) {
-				file = new File(data.getPlaceSoundFile());
+			if(data.getPlaceSound() != null) {
+				file = new File(data.getPlaceSound().getFile());
 				dest = new File(blockdata.getPath() + "/place.ogg");
 				Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
-			if(data.getWalkSoundFile() != null) {
-				file = new File(data.getWalkSoundFile());
+			if(data.getWalkSound() != null) {
+				file = new File(data.getWalkSound().getFile());
 				dest = new File(blockdata.getPath() + "/walk.ogg");
 				Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}

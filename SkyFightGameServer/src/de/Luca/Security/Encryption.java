@@ -12,7 +12,7 @@ public class Encryption {
 
 	public static byte[] encrypt(String strClearText, String strKey) throws Exception {
 		byte[] encrypted = null;;
-		byte[] decodedKey = strKey.getBytes();
+		byte[] decodedKey = Base64.getDecoder().decode(strKey);
 		try {
 			SecretKeySpec skeyspec = new SecretKeySpec(decodedKey, "AES");
 			Cipher cipher = Cipher.getInstance("AES");
@@ -28,7 +28,7 @@ public class Encryption {
 
 	public static String decrypt(byte[] encrypted, String strKey) throws Exception {
 		String strData = "";
-		byte[] decodedKey = strKey.getBytes();
+		byte[] decodedKey = Base64.getDecoder().decode(strKey);
 		try {
 			SecretKeySpec skeyspec = new SecretKeySpec(decodedKey, "AES");
 			Cipher cipher = Cipher.getInstance("AES");
@@ -48,8 +48,7 @@ public class Encryption {
 		keyGen.init(256);
 		SecretKey key = keyGen.generateKey();
 		String keyStr = Base64.getEncoder().encodeToString(key.getEncoded());
-		System.out.println(keyStr);
-		return new String(key.getEncoded());
+		return new String(keyStr);
 	}
 
 }

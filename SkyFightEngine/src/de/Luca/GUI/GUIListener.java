@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import de.Luca.EventManager.EventHandler;
+import de.Luca.EventManager.EventPriority;
 import de.Luca.EventManager.Listener;
 import de.Luca.Events.CharInputEvent;
 import de.Luca.Events.CursorPositionEvent;
@@ -34,14 +35,14 @@ public class GUIListener implements Listener{
 	
 	private static boolean mouseDown = false;
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onWindowResize(WindowResizeEvent e) {
 		for(GUI g : GUIManager.getGUIS()) {
 			g.windowResize(e.getWidth(), e.getHeight());
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onChar(CharInputEvent e) {
 		String letter = new String(new int[] {e.getCodepoint()}, 0, 1);
 		for(GUIComponent component : components) {
@@ -56,8 +57,9 @@ public class GUIListener implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onKey(KeyEvent e) {
+		
 		if(e.getKey() == GLFW.GLFW_KEY_BACKSPACE && (e.getAction() == GLFW.GLFW_PRESS || e.getAction() == GLFW.GLFW_REPEAT)) {
 			for(GUIComponent component : components) {
 				if(!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0 || component.getGUI() == null || !(component instanceof GTextBox)) {
@@ -82,9 +84,17 @@ public class GUIListener implements Listener{
 				}
 			}
 		}
+		for(GUIComponent c : components) {
+			if(c instanceof GTextBox) {
+				GTextBox box = (GTextBox) c;
+				if(box.isSelected()) {
+					e.setCancelled(true);
+				}
+			}
+		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onScroll(ScrollEvent e) {
 		Vector2f mousePixel = WorldPosition.getAbsCursorPos();
 		for(GUIComponent component : components) {
@@ -116,7 +126,7 @@ public class GUIListener implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onMove(CursorPositionEvent e) {
 		Vector2f mousePixel = new Vector2f((float)e.getXpos(), (float)e.getYpos());	
 		mousePosition = new Vector2f((float)e.getXpos(), (float)e.getYpos());
@@ -146,9 +156,8 @@ public class GUIListener implements Listener{
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onClick(MouseButtonEvent e) {
-		boolean clicked = false;
 		Vector2f mousePixel = WorldPosition.getAbsCursorPos();
 		for(GUIComponent component : components) {
 			
@@ -169,12 +178,13 @@ public class GUIListener implements Listener{
 
 			if(isMouseInside(mousePixel, corner1, corner2)) {
 				component.click(e.getButton(), e.getAction(), (int)mousePixel.x, (int)mousePixel.y);
-				clicked = true;
+				e.setCancelled(true);
 			}else {
 				if(component instanceof GTextBox) {
 					if(e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 						GTextBox box = (GTextBox) component;
 						box.setSelected(false);
+						box.fireTextFinish();
 					}
 				}
 			}
@@ -182,7 +192,6 @@ public class GUIListener implements Listener{
 		
 		mouseDown = e.getAction() == GLFW.GLFW_PRESS;
 		
-		e.setCancelled(clicked);
 	}
 	
 	public static boolean isMouseDown() {

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class Packet {
 	
 	public int packetType;	
-	public Object a, b, c, d, e, f, g, h;
+	public Object a, b, c, d, e, f, g, h, i;
 	
 	public static final int HANDSHAKE = 0;
 	public static final int ERROR = 1;
@@ -20,6 +20,8 @@ public class Packet {
 	public static final int MATCH_FOUND = 10;
 	public static final int MATCH_CANCELLED = 11;
 	public static final int CONNECT = 12;
+	public static final int PASSWORD_RESET = 13;
+	public static final int GAME_DATA = 14;
 	
 	public static final int DEMON_HANDSHAKE = 0;
 	public static final int DEMON_ERROR = 1;
@@ -28,7 +30,7 @@ public class Packet {
 	public static final int DEMON_INFO = 4;
 	public static final int DEMON_KEY = 5;
 	public static final int DEMON_SERVER_CREATED = 6;
-	public static final int DEMON_STOP_SERVER = 6;
+	public static final int DEMON_STOP_SERVER = 7;
 	
 	public static final int ERROR_MISSING_HANDSHAKE = 1;
 	public static final int ERROR_SERVER = 2;
@@ -39,6 +41,7 @@ public class Packet {
 	public static final int ERROR_COULD_NOT_CREATE_SERVER = 7;
 	public static final int ERROR_MATCHES_NOT_AVALIABLE = 8;
 	public static final int ERROR_PLAYER_QUIT = 9;
+	public static final int ERROR_COULD_NOT_RESET_PASSWORD = 10;
 	
 	public Packet() {}
 	
@@ -59,6 +62,7 @@ public class Packet {
 			f = fields.get("f");
 			g = fields.get("g");
 			h = fields.get("h");
+			i = fields.get("i");
 		}catch (JSONException e) {}
 	}
 	
@@ -74,6 +78,7 @@ public class Packet {
 		fields.put("f", f);
 		fields.put("g", g);
 		fields.put("h", h);
+		fields.put("i", i);
 		obj.put("fields", fields);
 		return obj.toString();
 	}

@@ -7,7 +7,6 @@ import de.Luca.Main.SkyFightEngine;
 public class BackgroundShader extends ShaderProgramm{
 
 	private int location_projectionMatrix;
-	private int location_transformationMatrix;
 	private int location_blendFactor;
 	private int location_afterTex;
 	
@@ -24,17 +23,12 @@ public class BackgroundShader extends ShaderProgramm{
 	@Override
 	protected void getAllUniformLocations() {
 		location_projectionMatrix = getUniformLocation("projectionMatrix");
-		location_transformationMatrix = getUniformLocation("transformationMatrix");
 		location_blendFactor = getUniformLocation("blendFactor");	
 		location_afterTex = getUniformLocation("afterTex");
 	}
 
 	public void loadProjectionMatrix(Matrix4f mat) {
 		loadMatrix(location_projectionMatrix, mat);
-	}
-	
-	public void loadTransformationMatrix(Matrix4f mat) {
-		loadMatrix(location_transformationMatrix, mat);
 	}
 	
 	public void loadBlendFactor(float factor) {

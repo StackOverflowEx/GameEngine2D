@@ -19,19 +19,27 @@ public class EventManager {
 		listeners.put(listener, createRegisteredListener(listener));
 	}
 	
-	public static void fireEvent(Event e) {
+	private static void fireEvent(Event e, EventPriority p) {
 		final Class<? extends Event> eventClass = e.getClass().asSubclass(Event.class);
 		for(Listener l : listeners.keySet()) {
 			if(listeners.get(l).containsKey(eventClass)) {
 				for(Method m : listeners.get(l).get(eventClass)) {
-					try {
-						m.invoke(l, e);
-					} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-						e1.printStackTrace();
+					if(m.getAnnotation(EventHandler.class).priority() == p) {
+						try {
+							m.invoke(l, e);
+						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
 		}
+	}
+	
+	public static void fireEvent(Event e) {
+		fireEvent(e, EventPriority.HIGH);
+		fireEvent(e, EventPriority.NORMAL);
+		fireEvent(e, EventPriority.LOW);
 	}
 	
 	//Adds all Methods with annotation "EventHandler" to List

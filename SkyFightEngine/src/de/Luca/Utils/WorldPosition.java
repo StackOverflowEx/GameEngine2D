@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import de.Luca.Blocks.BlockData;
+import de.Luca.Calculation.Camera;
 import de.Luca.GUI.GUIListener;
 import de.Luca.Window.Window;
 
@@ -23,6 +24,9 @@ public class WorldPosition {
 	public static Vector2f getMouseWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
 		Vector2f worldFloat = new Vector2f(openGL.x / BlockData.BLOCK_SCALE, openGL.y / BlockData.BLOCK_SCALE);
+		Vector2f add = getExactWorldPos(Camera.getPosition());
+		worldFloat.x = worldFloat.x + add.x;
+		worldFloat.y = worldFloat.y + add.y;
 		return new Vector2f((float)Math.floor(worldFloat.x), (float)Math.floor(worldFloat.y));
 	}
 	

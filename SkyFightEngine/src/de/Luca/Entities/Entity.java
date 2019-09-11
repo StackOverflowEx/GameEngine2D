@@ -34,6 +34,11 @@ public abstract class Entity {
 		EntityManager.addEntity(this);
 	}
 	
+	public void setPosition(Vector2f pos) {
+		this.worldPos = pos;
+		calcOpenGLPos();
+	}
+	
 	public void setCollisionWithBlocks(boolean b) {
 		this.collisionWithBlocks = b;
 	}

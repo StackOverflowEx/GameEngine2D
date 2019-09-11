@@ -43,6 +43,14 @@ public class GTextBox extends GButton{
 		callback();
 	}
 	
+	public void addCharInputCallback(CharInputCallback cic) {
+		callbacks.add(cic);
+	}
+	
+	public void removeCharInputCallback(CharInputCallback cic) {
+		callbacks.remove(cic);
+	}
+	
 	public void setText(String text) {
 		this.text = text;
 		if(passwordBox) {
@@ -100,7 +108,7 @@ public class GTextBox extends GButton{
 		}
 	}
 	
-	private void fireTextFinish() {
+	public void fireTextFinish() {
 		for(TextFinishCallback tfc : finishCallbacks) {
 			tfc.run(text);
 		}
@@ -124,7 +132,7 @@ public class GTextBox extends GButton{
 		return selected;
 	}
 	
-	protected enum INPUT_MODE{
+	public enum INPUT_MODE{
 		TEXT,
 		DELETE,
 		SEND

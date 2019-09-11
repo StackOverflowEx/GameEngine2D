@@ -2,11 +2,14 @@ package de.Luca.Connection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.UUID;
 
 import de.Luca.Packets.Packet;
 
 public class Searching {
+	
+	private static final String[] presetMaps = new String[]{"Test"};
 	
 	private static ArrayList<ConnectionHandler> searching = new ArrayList<ConnectionHandler>();
 	private static HashMap<String, ConnectionHandler[]> found = new HashMap<String, ConnectionHandler[]>();
@@ -46,18 +49,32 @@ public class Searching {
 	}
 
 	private static void process() {
-		if(searching.size() == 2) {
+		System.out.println("Checking qeueu");
+		if(searching.size() >= 2) {
 			DemonConnectionHandler best = getBestDemon();
 			if(best != null) {
+				
+				Random r = new Random();
+				String map = presetMaps[r.nextInt(presetMaps.length)];
+				
 				Packet p = new Packet();
 				p.packetType = Packet.MATCH_FOUND;
+				p.a = map;
 				searching.get(0).send(p);
 				searching.get(1).send(p);
 				String id = UUID.randomUUID().toString();
 				found.put(id, new ConnectionHandler[] {searching.get(0), searching.get(1)});
+				searching.clear();
+			
+				p = new Packet();
+				p.packetType = Packet.DEMON_CREATE_SERVER;
+				p.a = id;
+				p.b = true;
+				p.c = map;
+				best.send(p);
+				
 			}
 		}
-		searching.clear();
 	}
 	
 	private static DemonConnectionHandler getBestDemon() {
