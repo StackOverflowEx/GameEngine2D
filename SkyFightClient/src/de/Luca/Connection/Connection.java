@@ -85,7 +85,7 @@ public class Connection {
 	}
 	
 	public boolean isConnected() {
-		return connected;
+		return connected && !socket.isClosed();
 	}
 	
 	private void init() {
@@ -144,6 +144,7 @@ public class Connection {
 							if(data == null) {
 								continue;
 							}
+							System.out.println(new String(data));
 							String input = null;
 							if(serverPublicKey == null) {
 								input = new String(data);
@@ -156,6 +157,7 @@ public class Connection {
 							handlePacket(packet);
 //						}
 					}catch (Exception e) {
+						e.printStackTrace();
 						disconnect();
 					}
 				}

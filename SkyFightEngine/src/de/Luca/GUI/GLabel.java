@@ -32,6 +32,19 @@ public class GLabel extends GUIComponent{
 		return margin;
 	}
 	
+	public void setText(String text, long font, Vector4f color, TEXT_ALIGN align, int margin, float scale) {
+		this.align = align;
+		this.margin = margin;
+		removeText();
+		String[] lines = text.split("\n");
+		p = new Paragraph(this.getX() + margin, this.getY(), lines, font, color, align, scale);
+		p.setVisible(isVisible());
+
+		calcText();
+		
+		TextManager.addParagraph(p);
+	}
+	
 	public void setText(String text, long font, Vector4f color, TEXT_ALIGN align, int margin) {
 		this.align = align;
 		this.margin = margin;
@@ -39,6 +52,36 @@ public class GLabel extends GUIComponent{
 		String[] lines = text.split("\n");
 		p = new Paragraph(this.getX() + margin, this.getY(), lines, font, color, align);
 		p.setVisible(isVisible());
+
+		calcText();
+		
+		TextManager.addParagraph(p);
+	}
+	
+	public void setTextCut(String text, long font, Vector4f color, TEXT_ALIGN align, int margin, float scale) {
+		this.align = align;
+		this.margin = margin;
+		int maxWith = getWidth() - margin * 2;
+		removeText();
+		String[] lines = text.split("\n");
+		p = new Paragraph(this.getX() + margin, this.getY(), lines, font, color, align, scale);
+		p.setVisible(isVisible());
+		
+		if(p.getBounds().x >= maxWith) {
+			System.out.println("TEXT TO BIG");
+			int delta = (int) (maxWith - p.getBounds().y);
+			int size = (int) Font.getFontSize(font);
+			int letters = 1;
+			if(delta > size) {
+				letters = delta / size;
+			}
+			System.out.println("Attempting to remove " + letters + " from String (Length: " + text.length());
+			if(text.length() > letters) {
+				text = text.substring(0, text.length() - letters);
+				setTextCut(text, font, color, align, margin);
+				return;
+			}
+		}
 
 		calcText();
 		

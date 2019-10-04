@@ -42,13 +42,7 @@ public class Packet {
 	public static final int ERROR_PLAYER_QUIT = 9;
 	public static final int ERROR_COULD_NOT_RESET_PASSWORD = 10;
 	
-	public static final int GAME_POSITION_AND_FACING = 14;
-	public static final int GAME_HEALTH_AND_HUNGER = 15;
-	public static final int GAME_BREAK = 16;
-	public static final int GAME_HIT = 17;
-	public static final int GAME_VALUE_CHANGE = 18;
-	public static final int GAME_MAP_NAME = 19;
-	public static final int GAME_DATA = 20;
+	public static final int GAME_DATA = 14;
 	
 	public Packet() {}
 	
@@ -56,21 +50,27 @@ public class Packet {
 		init(input);
 	}
 	
+	private Object getFieldSave(String field, JSONObject fields) {
+		Object ret = null;
+		try {
+			ret = fields.get(field);
+		}catch (JSONException e) {}
+		return ret;
+	}
+	
 	private void init(String input) {
 		JSONObject obj = new JSONObject(input);
 		packetType = obj.getInt("packetType");
 		JSONObject fields = obj.getJSONObject("fields");
-		try {
-			a = fields.get("a");
-			b = fields.get("b");
-			c = fields.get("c");
-			d = fields.get("d");
-			e = fields.get("e");
-			f = fields.get("f");
-			g = fields.get("g");
-			h = fields.get("h");
-			i = fields.get("i");
-		}catch (JSONException e) {}
+		a = getFieldSave("a", fields);
+		b = getFieldSave("b", fields);
+		c = getFieldSave("c", fields);
+		d = getFieldSave("d", fields);
+		e = getFieldSave("e", fields);
+		f = getFieldSave("f", fields);
+		g = getFieldSave("g", fields);
+		h = getFieldSave("h", fields);
+		i = getFieldSave("i", fields);
 	}
 	
 	public String toJSONString() {

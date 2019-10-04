@@ -3,6 +3,7 @@ package de.Luca.GameLogic;
 import org.joml.Vector2f;
 
 import de.Luca.Calculation.BeatHandler;
+import de.Luca.Connection.Connection;
 import de.Luca.Connection.ConnectionListener;
 import de.Luca.Entities.EntityManager;
 import de.Luca.Entities.Player;
@@ -21,13 +22,13 @@ public class LoopHandler implements BeatHandler{
 		SkyFightClient.load();
 		
 		SkyFightClient.p = new Player(SkyFightClient.playerUP, SkyFightClient.playerDown, new Vector2f(0, 2));
-		SkyFightClient.p.setVisible(false);
-		SkyFightClient.p.setFlying(true);
-		SkyFightClient.p.setCollisionWithBlocks(false);
+		SkyFightClient.p.setVisible(true);
+		SkyFightClient.p.setFlying(false);
+		SkyFightClient.p.setCollisionWithBlocks(true);
 		SkyFightClient.pother = new Player(SkyFightClient.playerUP, SkyFightClient.playerDown, new Vector2f(-1, 2));
 		SkyFightClient.pother.setFlying(false);
 		SkyFightClient.pother.setCollisionWithBlocks(true);
-		SkyFightClient.pother.setVisible(false);
+		SkyFightClient.pother.setVisible(true);
 		
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
@@ -36,10 +37,15 @@ public class LoopHandler implements BeatHandler{
 		EventManager.registerEvent(new ConnectionListener());
 		MasterRenderer.setBackground(SkyFightClient.background);
 		
-		WorldEditor.start("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\LOL");
+		WorldEditor.start("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\Test");
 		
-//		Connection con = new Connection("167.86.87.105", 33334);
-//		ServerTicker.startTicking(con);
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Connection con = new Connection("167.86.87.105", 33334);
+			}
+		}).start();
 	}
 
 	@Override

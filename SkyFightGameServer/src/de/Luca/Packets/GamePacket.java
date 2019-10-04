@@ -2,19 +2,19 @@ package de.Luca.Packets;
 
 public class GamePacket extends Packet{
 	
-	public GamePacket(String input) {
-		super(input);
+	public static final int INFO = 0;
+	public static final int POSITION = 1;
+	
+	public GamePacket(String json) {
+		super(json);
 	}
 	
 	public GamePacket() {
 		super();
 	}
 	
-	public Packet getMovementPacket() {
-		if(a == null) {
-			return null;
-		}
-		return new Packet((String) a);
+	public void setGamePacketType(int type) {
+		a = type;
 	}
 
 }
