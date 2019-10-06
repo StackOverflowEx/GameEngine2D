@@ -16,5 +16,9 @@ public class GamePacket extends Packet{
 	public void setGamePacketType(int type) {
 		a = type;
 	}
+	
+	public int getGamePacketType() {
+		return Integer.parseInt(a.toString());
+	}
 
 }

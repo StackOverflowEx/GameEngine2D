@@ -40,6 +40,7 @@ public class WorldLoader {
 			new PopUp("Die Map wurde nicht gefunden und kann nicht geladen werden.", new Vector4f(1, 0, 0, 1));
 			return;
 		}
+		BlockManager.removeAllBlocks();
 		clearBlockData();
 		loadBlockData(map);
 		loadBlocks(map);

@@ -1,5 +1,6 @@
 package de.Luca.Rendering;
 
+import java.io.File;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Matrix4f;
@@ -19,6 +20,7 @@ import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
 import de.Luca.Shader.BlockShader;
 import de.Luca.Text.TextManager;
+import de.Luca.Window.Window;
 
 public class MasterRenderer extends Thread {
 
@@ -34,6 +36,8 @@ public class MasterRenderer extends Thread {
 	private boolean viewChanged;
 	private boolean projectionZoomChanged;
 	
+	private File screenShot;
+	
 	public MasterRenderer(RenderLoop loop) {
 		super(loop);
 		if (masterRenderer != null) {
@@ -46,6 +50,10 @@ public class MasterRenderer extends Thread {
 				
 		GLFW.glfwMakeContextCurrent(0);
 		setName("Rendering Thread");
+	}
+	
+	public static void queueScreenshot(File save) {
+		masterRenderer.screenShot = save;
 	}
 	
 	public static void setBackground(Texture tex) {
@@ -151,7 +159,7 @@ public class MasterRenderer extends Thread {
 		
 	}
 
-	public static void render() {
+	public static void render() {		
 		masterRenderer.draw();
 	}
 
@@ -175,6 +183,12 @@ public class MasterRenderer extends Thread {
 			BlockManager.render();
 			EntityManager.render();
 			EffectManager.render();
+			
+			if(masterRenderer.screenShot != null) {
+				Window.takeScreenshot(masterRenderer.screenShot);
+				masterRenderer.screenShot = null;
+			}
+			
 			GUIManager.render();
 			TextManager.render();
 

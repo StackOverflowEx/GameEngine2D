@@ -41,18 +41,28 @@ public class WorldEditor {
 		if(names == null) {
 			names = new ArrayList<String>();
 		}
-		newMap = true;
+		newMap = false;
 		background = null;
 		names.clear();
 		
 		PopUp p = new PopUp("Die Welt wird geladen...", new Vector4f(1, 0.7f, 0, 1));
 		WorldLoader.loadMap(mapFolder);
+		if(new File(mapFolder + "/mapdata/background.png").exists()) {
+			SkyFightClient.worldEditorSettings.setup(WorldLoader.getMapName(), mapFolder + "/mapdata/background.png");
+		}else {
+			SkyFightClient.worldEditorSettings.setup(WorldLoader.getMapName());
+		}
+		
 		p.destroy();
+		
+		SkyFightClient.p.setVisible(false);
+		SkyFightClient.pother.setVisible(false);
 		
 		SkyFightClient.worldEditorOverlay.setVisible(true);
 	}
 	
 	public static void start() {
+		BlockManager.removeAllBlocks();
 		SkyFightClient.gameState = GameState.WORLDEDITOR;
 		listener = new WorldEditorListener();
 		EventManager.registerEvent(listener);
@@ -142,7 +152,7 @@ public class WorldEditor {
 	}
 		
 	public static void save(String mapName) {
-		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
+//		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
 		WorldLoader.mapName = mapName;
 		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		if(maps.exists() && isNewMap()) {
@@ -153,12 +163,16 @@ public class WorldEditor {
 			new PopUp("Bitte warte bis der Speichervorgang abgeschlossen ist.", new Vector4f(1, 0, 0, 1));
 			return;
 		}
+		
+		String screenshotFolder = maps.getPath();
 		if(!isNewMap()) {
 			maps = new File(SkyFightClient.root + "/maps/tmp/" + WorldLoader.mapName);
-		}else {
-			maps.mkdirs();
 		}
+		maps.mkdirs();
+		
 		saving = true;
+		
+		
 		ArrayList<BlockData> saved = new ArrayList<BlockData>();
 		ArrayList<String> bs = new ArrayList<String>();
 		for(int x : BlockManager.getBlocks().keySet()) {
@@ -166,7 +180,7 @@ public class WorldEditor {
 				Block b = BlockManager.getBlock(new Vector2f(x, y));
 				BlockData data = b.getBlockData();
 				if(!saved.contains(data)) {
-					if(!saveBlockData(data)) {
+					if(!saveBlockData(data, maps.getPath())) {
 						return;
 					}
 				}
@@ -174,35 +188,36 @@ public class WorldEditor {
 				bs.add(blocks);
 			}
 		}
-		if(!saveBlocksAndMapName(bs, mapName)) {
+		if(!saveBlocksAndMapName(bs, mapName, maps.getPath())) {
 			return;
 		}
-		if(!saveBackground()) {
+		if(!saveBackground(maps.getPath())) {
 			return;
 		}
 		
 		if(!newMap) {
 			File old = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
-			delete(old);
 			try {
+				delete(old);
 				Files.move(maps.toPath(), old.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				new PopUp("Ein Fehler ist beim Speichern der Map aufgetreten. Bitte verschiebe die erstellte Map aus den Ornder \"tmp\" in den Ornder \"own\"", new Vector4f(1, 0, 0, 1));
 				e.printStackTrace();
+				return;
 			}
 		}
-		p.destroy();
+		MasterRenderer.queueScreenshot(new File(screenshotFolder + "/preview.png"));
+//		p.destroy();
 		new PopUp("Die Map wurde gespeichert.", new Vector4f(0, 1, 0, 1));
 		
 	}
 	
 	
-	
-	private static boolean saveBackground() {
+	private static boolean saveBackground(String map) {
 		if(background == null) {
 			return true;
 		}
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
+		File maps = new File(map);
 		File mapdata = new File(maps.getPath() + "/mapdata");
 		File file = new File(background);
 		File dest = new File(mapdata.getPath() + "/background.png");
@@ -217,8 +232,8 @@ public class WorldEditor {
 		return true;
 	}
 	
-	private static boolean saveBlocksAndMapName(ArrayList<String> blocks, String mapName) {
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
+	private static boolean saveBlocksAndMapName(ArrayList<String> blocks, String mapName, String map) {
+		File maps = new File(map);
 		File mapdata = new File(maps.getPath() + "/mapdata");
 		if(!mapdata.exists()) {
 			mapdata.mkdirs();
@@ -243,8 +258,8 @@ public class WorldEditor {
 		return true;
 	}
 	
-	private static boolean saveBlockData(BlockData data) {
-		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
+	private static boolean saveBlockData(BlockData data, String map) {
+		File maps = new File(map);
 		File blockdata = new File(maps.getPath() + "/blockdata/" + data.getName());
 		if(!blockdata.exists()) {
 			blockdata.mkdirs();
@@ -252,7 +267,6 @@ public class WorldEditor {
 		
 		File d = new File(blockdata.getPath() + "/data.properties");
 		try {
-			System.out.println(d.getPath());
 			d.createNewFile();
 			PrintWriter pw = new PrintWriter(d);
 			pw.println("name=" + data.getName());

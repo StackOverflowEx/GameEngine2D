@@ -10,7 +10,11 @@ import de.Luca.Entities.Player;
 import de.Luca.EventManager.EventManager;
 import de.Luca.GUIs.PopUp;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Networking.GameServerHandler;
 import de.Luca.Rendering.MasterRenderer;
+import de.Luca.Sound.AudioManager;
+import de.Luca.Sound.SoundData;
+import de.Luca.Sound.Source;
 import de.Luca.Text.TextManager;
 import de.Luca.World.WorldEditor;
 
@@ -32,26 +36,34 @@ public class LoopHandler implements BeatHandler{
 		
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
-//		SkyFightClient.loginGUI.setVisible(true);
+		SkyFightClient.loginGUI.setVisible(true);
 		
 		EventManager.registerEvent(new ConnectionListener());
 		MasterRenderer.setBackground(SkyFightClient.background);
 		
-		WorldEditor.start("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\Test");
+		SoundData background = AudioManager.loadSound(SkyFightClient.root + "/res/sounds/background.ogg", "background");
+		Source source = AudioManager.genSource();
+		source.setVolume(0.1f);
+		source.playSound(background);
+		
+//		WorldEditor.start("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\Test");
 		
 		new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
 				Connection con = new Connection("167.86.87.105", 33334);
+				GameServerHandler.setConnection(con);
 			}
 		}).start();
+		
 	}
 
 	@Override
 	public void loop() {
 		PlayerCalc.calc();
 		PopUp.update();
+		GameManager.calcGameData();
 	}
 	
 	private void loadFonts() {

@@ -178,9 +178,17 @@ public class ConnectionHandler implements Runnable {
 				if(DatabaseManager.doseEmailExist(mail.toLowerCase())) {
 					try {
 						PasswordReset.sendReset(mail, DatabaseManager.getUsername(mail), token);
+						Packet p = new Packet();
+						p.packetType = Packet.SUCCESS;
+						p.a = Packet.PASSWORD_RESET;
+						p.b = 0;
+						send(p);
 					} catch (UnsupportedEncodingException | MessagingException e) {
+						send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
 						e.printStackTrace();
 					}
+				}else {
+					send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
 				}
 			} catch (NoSuchAlgorithmException e) {
 				send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
@@ -195,6 +203,12 @@ public class ConnectionHandler implements Runnable {
 				PasswordReset.removeTokcen(token);
 				if(!DatabaseManager.setPassword(mail, newPass)) {
 					send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));
+				}else {
+					Packet p = new Packet();
+					p.packetType = Packet.SUCCESS;
+					p.a = Packet.PASSWORD_RESET;
+					p.b = 1;
+					send(p);
 				}
 			}else {
 				send(genErrorPacket(Packet.ERROR_COULD_NOT_RESET_PASSWORD));

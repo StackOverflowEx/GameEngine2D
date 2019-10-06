@@ -11,6 +11,7 @@ import de.Luca.GUI.GLabel;
 import de.Luca.GUI.GTextBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
+import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
@@ -69,7 +70,19 @@ public class WorldEditorSettings extends GUI {
 				Calc.getPixelHeight(0.077f));
 		Exit.setBounds(Calc.getPixelWidth(0.4088125f), 0, Calc.getPixelWidth(0.024f), Calc.getPixelHeight(0.043f));
 	}
+	
+	public void setup(String name, String backgroundTexture) {
+		Mapname.setText(name);
+		Preview.setTexture(Loader.loadTexture(backgroundTexture, "gui"));
+		Source.setTextCut(backgroundTexture, SkyFightClient.Impact20,
+				new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
+	}
 
+	public void setup(String name) {
+		Mapname.setText(name);
+	}
+
+	
 	private void init() {
 		for (GUIComponent c : getComponents()) {
 			c.dispose();
@@ -145,7 +158,7 @@ public class WorldEditorSettings extends GUI {
 					FileDialog fd = new FileDialog("PNG (*.png)", rootDir, "png");
 					int ret = fd.showToUser();
 					if (ret == 0) {
-						Source.setText(fd.getSelectedFile().getPath(), SkyFightClient.Impact20,
+						Source.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20,
 								new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 						WorldEditor.setBackground(fd.getSelectedFile().getPath());
 					}

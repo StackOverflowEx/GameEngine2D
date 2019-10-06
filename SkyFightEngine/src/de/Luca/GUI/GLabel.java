@@ -230,6 +230,7 @@ public class GLabel extends GUIComponent{
 	protected void addedToGUI(GUI gui) {
 		if(p != null && gui != null) {
 			calcText();
+			p.setVisible(gui.isVisible());
 		}
 	}
 

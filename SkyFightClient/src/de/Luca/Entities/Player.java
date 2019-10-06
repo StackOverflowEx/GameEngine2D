@@ -14,17 +14,26 @@ public class Player extends Entity{
 	private Animation down, up;
 	private Texture defaultDown, defaultUp;
 	private boolean fly;
+	private float yVel;
 		
 	public Player(Texture up, Texture down, Vector2f worldPos) {
 		super(worldPos, 2, 1);
 		this.defaultDown = down;
 		this.defaultUp = up;
+		this.yVel = 0;
 		this.fly = false;
 		this.renderModel[1] = new RenderModel(new Vector2f(0, 0), new Model(up, new Vector2f(BlockData.BLOCK_SCALE, BlockData.BLOCK_SCALE)), 0);
 		this.renderModel[0] = new RenderModel(new Vector2f(0, 0), new Model(down, new Vector2f(BlockData.BLOCK_SCALE, BlockData.BLOCK_SCALE)), 0);
 		calcOpenGLPos();
 	}
 	
+	public float getyVel() {
+		return yVel;
+	}
+	
+	public void setyVel(float vel) {
+		this.yVel = vel;
+	}
 	
 	protected void calcOpenGLPos() {
 		float x = worldPos.x * BlockData.BLOCK_SCALE;

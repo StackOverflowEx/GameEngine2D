@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.ArrayList;
@@ -38,7 +39,11 @@ public class ConnectionHandler implements Runnable {
 		}else if(Server.player2 == null) {
 			Server.player2 = this;
 		}else {
-			disconnect();
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		System.out.println("Client connection established: " + socket.getInetAddress() + ":" + socket.getPort());
@@ -83,6 +88,7 @@ public class ConnectionHandler implements Runnable {
 			e.printStackTrace();
 			disconnect();
 		}
+		ServerTicker.connect(this);
 	}
 
 	@Override
@@ -107,6 +113,10 @@ public class ConnectionHandler implements Runnable {
 //				}
 			}catch (Exception e) {
 				e.printStackTrace();
+				if(e instanceof SocketException) {
+					disconnect();
+					return;
+				}
 				System.out.println("Packet lost");
 			}
 

@@ -141,6 +141,7 @@ public class GScrollPanel extends GUIComponent{
 			add.setX(-(width - subWidth));
 		}
 		
+		panel.setVisible(false);
 		panel.removeAll();
 		for(GUIComponent c : added) {
 			if(sliderLR.getWidth() != 0 && sliderLR.getX() == 0) {
@@ -152,6 +153,7 @@ public class GScrollPanel extends GUIComponent{
 			}
 			panel.addComponent(c);
 		}
+		panel.setVisible(true);
 		
 	}
 	
@@ -160,6 +162,7 @@ public class GScrollPanel extends GUIComponent{
 	}
 	
 	public void addItem(GUIComponent item) {
+		item.setVisible(false);
 		items.add(item);
 		item.setGUI(getGUI());
 		calcSliderPercentage();		

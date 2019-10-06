@@ -12,6 +12,7 @@ import de.Luca.Main.SkyFightClient;
 import de.Luca.Utils.Calc;
 import de.Luca.Window.Window;
 import de.Luca.World.WorldEditor;
+import de.Luca.World.WorldLoader;
 
 public class WorldEditorOverlay extends GUI {
 

@@ -1,7 +1,11 @@
 package de.Luca.Main;
 
+import java.io.File;
+
 import de.Luca.Connection.ClientConnector;
 import de.Luca.Connection.Connection;
+import de.Luca.GameTraffic.ServerTicker;
+import de.Luca.GameTraffic.WorldLoader;
 
 public class Main {
 
@@ -16,6 +20,11 @@ public class Main {
 		mapFolder = args[1]; //For later cheat protection
 		id = args[2];
 
+		con = new Connection(Connection.HANDLE_SERVER_IP, Connection.HANDLE_SERVER_PORT);
+		
+		WorldLoader.load(new File(mapFolder));
+		ServerTicker.startTicking(60);
+
 		Thread th = new Thread(new Runnable() {
 
 			@Override
@@ -25,7 +34,7 @@ public class Main {
 		});
 		th.start();
 
-		con = new Connection(Connection.HANDLE_SERVER_IP, Connection.HANDLE_SERVER_PORT);
+		
 	}
 
 }

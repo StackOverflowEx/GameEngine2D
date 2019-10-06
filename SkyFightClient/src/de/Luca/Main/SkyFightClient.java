@@ -7,9 +7,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import de.Luca.Connection.Connection;
 import de.Luca.Entities.Player;
-import de.Luca.GUIs.LoadingGUI;
 import de.Luca.GUIs.LoginGUI;
-import de.Luca.GUIs.RegisterGUI;
+import de.Luca.GUIs.MainMenuGUI;
+import de.Luca.GUIs.PasswortVergessenGUI;
+import de.Luca.GUIs.RegistrierenGUI;
+import de.Luca.GUIs.WeltenAuswahlGUI;
 import de.Luca.GUIs.WorldEditorAuswahl;
 import de.Luca.GUIs.WorldEditorErstellen;
 import de.Luca.GUIs.WorldEditorOverlay;
@@ -29,9 +31,13 @@ public class SkyFightClient {
 	public static Player pother;
 
 	// GUIs
+//	public static LoginGUIOLD loginGUI;
+//	public static RegisterGUIOLD registesrGUI;
 	public static LoginGUI loginGUI;
-	public static RegisterGUI registesrGUI;
-	public static LoadingGUI loadingGUI;
+	public static MainMenuGUI mainGUI;
+	public static PasswortVergessenGUI forgotPWGUI;
+	public static RegistrierenGUI registerGUI;
+	public static WeltenAuswahlGUI worldSelctGUI;
 	public static WorldEditorOverlay worldEditorOverlay;
 	public static WorldEditorAuswahl worldEditorAuswahl;
 	public static WorldEditorErstellen worldEditorErstellen;
@@ -110,11 +116,47 @@ public class SkyFightClient {
 	public static Texture weAuswahlGruenB;
 	public static Texture weAuswahlGruenC;
 	public static Texture weErstellenSave2A;
-    public static Texture weErstellenSave2B;
-    public static Texture weErstellenSave2C;
+	public static Texture weErstellenSave2B;
+	public static Texture weErstellenSave2C;
+	public static Texture LoginBackground;
+	public static Texture LoginRahmen;
+	public static Texture LoginEingabeA;
+	public static Texture LoginEingabeB;
+	public static Texture LoginEingabeC;
+	public static Texture LoginLoginA;
+	public static Texture LoginLoginB;
+	public static Texture LoginLoginC;
+	public static Texture LoginVergessenA;
+	public static Texture LoginVergessenB;
+	public static Texture LoginVergessenC;
+	public static Texture LoginRegistrierenA;
+	public static Texture LoginRegistrierenB;
+	public static Texture LoginRegistrierenC;
+	public static Texture MainBackground;
+	public static Texture MainButtonA;
+	public static Texture MainButtonB;
+	public static Texture MainButtonC;
+	public static Texture AuswahlRahmen;
+	public static Texture AuswahlPreview;
+	public static Texture AuswahlEingabeG;
+	public static Texture AuswahlEingabeK;
+	public static Texture AuswahlScrollingRahmen;
+	public static Texture AuswahlScrollingKnopfA;
+	public static Texture AuswahlScrollingKnopfB;
+	public static Texture AuswahlScrollingKnopfC;
+	public static Texture AuswahlErstellenA;
+	public static Texture AuswahlErstellenB;
+	public static Texture AuswahlErstellenC;
 
 	// Fonts
 	public static long Impact20;
+	public static long Constantia86;
+	public static long ConstantiaB40;
+	public static long ConstantiaB32;
+	public static long ConstantiaB80;
+	public static long ConstantiaB56;
+	public static long ConstantiaB38;
+	public static long ConstantiaB26;
 
 	// Gamestate
 	public static GameState gameState = GameState.MENUE;
@@ -139,7 +181,6 @@ public class SkyFightClient {
 		Impact20 = TextManager.getFont("Impact");
 
 		String path = root + "/res/gui/worldeditor/";
-		backgroundLOGIN = Loader.loadTexture(root + "/res/gui/login/login.png", "gui");
 		playerUP = Loader.loadTexture(root + "/res/player/up.png", "player");
 		playerDown = Loader.loadTexture(root + "/res/player/down.png", "player");
 		background = Loader.loadTexture(root + "/res/background/background.png", "background");
@@ -211,12 +252,47 @@ public class SkyFightClient {
 		weAuswahlGruenB = Loader.loadTexture(path + "we_li_Tx5(2)b.png", "gui");
 		weAuswahlGruenC = Loader.loadTexture(path + "we_li_Tx5(2)c.png", "gui");
 		weErstellenSave2A = Loader.loadTexture(path + "we_re_Tx20a.png", "gui");
-        weErstellenSave2B = Loader.loadTexture(path + "we_re_Tx20b.png", "gui");
-        weErstellenSave2C = Loader.loadTexture(path + "we_re_Tx20c.png", "gui");
+		weErstellenSave2B = Loader.loadTexture(path + "we_re_Tx20b.png", "gui");
+		weErstellenSave2C = Loader.loadTexture(path + "we_re_Tx20c.png", "gui");
+		
+		path = root + "/res/gui/preGame/";
+		LoginBackground = Loader.loadTexture(path + "LoginBackground.png", "gui");
+		LoginRahmen = Loader.loadTexture(path + "Login_Rahmen.png", "gui");
+		LoginEingabeA = Loader.loadTexture(path + "Login_Login1a.png", "gui");
+		LoginEingabeB = Loader.loadTexture(path + "Login_Login1b.png", "gui");
+		LoginEingabeC = Loader.loadTexture(path + "Login_Login1c.png", "gui");
+		LoginLoginA = Loader.loadTexture(path + "Login_AnmeldenA.png", "gui");
+		LoginLoginB = Loader.loadTexture(path + "Login_AnmeldenB.png", "gui");
+		LoginLoginC = Loader.loadTexture(path + "Login_AnmeldenC.png", "gui");
+		LoginVergessenA = Loader.loadTexture(path + "Login_VergessenA.png", "gui");
+		LoginVergessenB = Loader.loadTexture(path + "Login_VergessenB.png", "gui");
+		LoginVergessenC = Loader.loadTexture(path + "Login_VergessenC.png", "gui");
+		LoginRegistrierenA = Loader.loadTexture(path + "Login_RegistrierenA.png", "gui");
+		LoginRegistrierenB = Loader.loadTexture(path + "Login_RegistrierenB.png", "gui");
+		LoginRegistrierenC = Loader.loadTexture(path + "Login_RegistrierenC.png", "gui");
+		MainBackground = Loader.loadTexture(path + "PxBackMenu.png", "gui");
+		MainButtonA = Loader.loadTexture(path + "Menu_ButtonA.png", "gui");
+		MainButtonB = Loader.loadTexture(path + "Menu_ButtonB.png", "gui");
+		MainButtonC = Loader.loadTexture(path + "Menu_ButtonC.png", "gui");
+		AuswahlRahmen = Loader.loadTexture(path + "Auswahl_Rahmen.png", "gui");
+		AuswahlPreview = Loader.loadTexture(path + "Auswahl_Preview.png", "gui");
+		AuswahlEingabeG = Loader.loadTexture(path + "Auswahl_EingabeGroﬂ.png", "gui");
+		AuswahlEingabeK = Loader.loadTexture(path + "Auswahl_EingabeKlein.png", "gui");
+		AuswahlScrollingRahmen = Loader.loadTexture(path + "Auswahl_SliderRahmen.png", "gui");
+		AuswahlScrollingKnopfA = Loader.loadTexture(path + "Auswahl_SliderKnopfA.png", "gui");
+		AuswahlScrollingKnopfB = Loader.loadTexture(path + "Auswahl_SliderKnopfB.png", "gui");
+		AuswahlScrollingKnopfC = Loader.loadTexture(path + "Auswahl_SliderKnopfC.png", "gui");
+		AuswahlErstellenA = Loader.loadTexture(path + "Auswahl_ErstellenA.png", "gui");
+		AuswahlErstellenB = Loader.loadTexture(path + "Auswahl_ErstellenB.png", "gui");
+		AuswahlErstellenC = Loader.loadTexture(path + "Auswahl_ErstellenC.png", "gui");
 
+//		loginGUI = new LoginGUIOLD();
+//		registesrGUI = new RegisterGUIOLD();
 		loginGUI = new LoginGUI();
-		registesrGUI = new RegisterGUI();
-		loadingGUI = new LoadingGUI();
+		registerGUI = new RegistrierenGUI();
+		worldSelctGUI = new WeltenAuswahlGUI();
+		mainGUI = new MainMenuGUI();
+		forgotPWGUI = new PasswortVergessenGUI();
 		worldEditorOverlay = new WorldEditorOverlay();
 		worldEditorAuswahl = new WorldEditorAuswahl();
 		worldEditorErstellen = new WorldEditorErstellen();

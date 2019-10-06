@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 
 import de.Luca.Calculation.Camera;
 import de.Luca.Entities.Player;
+import de.Luca.Main.SkyFightClient;
 import de.Luca.Utils.DefaultKeyListener;
 
 public class PlayerCalc {
@@ -57,8 +58,38 @@ public class PlayerCalc {
 			addY += sec * upSpeed;
 		}
 		p.move(new Vector2f(addX, addY));
+		
+		calcOther(sec);
+		
 		Camera.setPos(p.getModels()[1].getLocation().x, p.getModels()[1].getLocation().y);
 		lastCalc = System.currentTimeMillis();
+	}
+	
+	private static float xSpeedOther, ySpeedOther;
+	private static long finishedOtherMove;
+	private static Vector2f setPos;
+	public static void setOtherData(float xSpeedPerSec, float ySpeedPerSec, long finishedMove, Vector2f set) {
+		xSpeedOther = xSpeedPerSec;
+		ySpeedOther = ySpeedPerSec;
+		finishedOtherMove = finishedMove;
+		setPos = set;
+	}
+	
+	public static void tpOtherToExact() {
+		if(setPos == null) {
+			return;
+		}
+		Vector2f move = new Vector2f(setPos.x - SkyFightClient.pother.getWorldPos().x, setPos.y - SkyFightClient.pother.getWorldPos().y);
+		SkyFightClient.pother.move(move);
+	}
+	
+	private static void calcOther(float sec) {
+		if(finishedOtherMove > System.currentTimeMillis()) {
+			return;
+		}
+		float addX = xSpeedOther * sec;
+		float addY = ySpeedOther * sec;
+		SkyFightClient.pother.move(new Vector2f(addX, addY));
 	}
 		
 	public Player getPlayer() {

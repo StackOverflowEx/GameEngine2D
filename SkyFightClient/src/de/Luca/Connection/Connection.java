@@ -144,7 +144,6 @@ public class Connection {
 							if(data == null) {
 								continue;
 							}
-							System.out.println(new String(data));
 							String input = null;
 							if(serverPublicKey == null) {
 								input = new String(data);
@@ -188,7 +187,6 @@ public class Connection {
 			return null;
 		}
 		if(t == 0) {
-			System.out.println(0);
 			return null;
 		}
 		nullCount = 0;

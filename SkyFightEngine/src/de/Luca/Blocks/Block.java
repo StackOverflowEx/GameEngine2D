@@ -14,6 +14,10 @@ public class Block {
 		setPosition(worldPos);
 	}
 	
+	public void setBreakPercentage(float percentage) {
+		this.breakPercentage = percentage;
+	}
+	
 	public BlockData getBlockData() {
 		return blockData;
 	}

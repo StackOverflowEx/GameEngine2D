@@ -9,6 +9,7 @@ public class BlockShader extends ShaderProgramm{
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
 	private int location_transformationMatrix;
+	private int location_alpha;
 	
 	public BlockShader() {
 		super(SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/vertex.glsl"), SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/fragment.glsl"));
@@ -25,6 +26,11 @@ public class BlockShader extends ShaderProgramm{
 		location_projectionMatrix = getUniformLocation("projectionMatrix");
 		location_transformationMatrix = getUniformLocation("transformationMatrix");
 		location_viewMatrix = getUniformLocation("viewMatrix");
+		location_alpha = getUniformLocation("alpha");
+	}
+	
+	public void loadAlpha(float alpha) {
+		loadFloat(location_alpha, alpha);
 	}
 
 	public void loadProjectionMatrix(Matrix4f mat) {

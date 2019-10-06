@@ -23,6 +23,7 @@ public abstract class Entity {
 	private ArrayList<Block> colliding;
 	private boolean collisionWithBlocks;
 	private ConcurrentHashMap<SoundData, Source> audioSources;
+	private boolean facingRight;
 	
 	public Entity(Vector2f worldPos, int yHeight, int xWidth) {
 		this.renderModel = new RenderModel[yHeight * xWidth];
@@ -30,8 +31,17 @@ public abstract class Entity {
 		this.worldPos = worldPos;
 		this.visible = true;
 		this.onGround = true;
+		facingRight = true;
 		collisionWithBlocks = true;
 		EntityManager.addEntity(this);
+	}
+	
+	public boolean isFacingRight() {
+		return facingRight;
+	}
+	
+	public void setFacingRight(boolean facingRight) {
+		this.facingRight = facingRight;
 	}
 	
 	public void setPosition(Vector2f pos) {
