@@ -29,6 +29,7 @@ public class ConnectionHandler implements Runnable {
 	private String serverPublicKey;
 	private String clientPublicKey;
 	private String AESKey;
+	private String username;
 
 	public ConnectionHandler(Socket socket) {
 		this.socket = socket;
@@ -106,9 +107,13 @@ public class ConnectionHandler implements Runnable {
 		} catch (IOException e) {}
 		ConnectionHandler p = Searching.getFoundPartner(this);
 		if(p != null) {
+			Searching.removeSearching(this);
+			Searching.removeSearching(p);
+			Searching.removeFound(this);
 			Packet pa = new Packet();
 			pa.packetType = Packet.MATCH_CANCELLED;
 			pa.a = Packet.ERROR_PLAYER_QUIT;
+			System.out.println("Matchmaking canceled");
 			p.send(pa);
 		}
 		System.out.println("Client disconnected");
@@ -160,10 +165,18 @@ public class ConnectionHandler implements Runnable {
 				handleSuccess(packet);
 			}else if (packet.packetType == Packet.KEY) {
 				handleKey(packet);
-			}else if (packet.packetType == Packet.SEARCHING) {
-				handleSearch(packet);
 			}else if (packet.packetType == Packet.PASSWORD_RESET) {
 				handlePasswordReset(packet);
+			}else {
+				if(username == null) {
+					Packet send = genErrorPacket(Packet.ERROR_NOT_LOGGED_IN);
+					send(send);
+					System.out.println("UNAUTHORIZED >> " + packet.packetType);
+					return;
+				}
+				if (packet.packetType == Packet.SEARCHING) {
+					handleSearch(packet);
+				}
 			}
 			
 		}
@@ -224,7 +237,28 @@ public class ConnectionHandler implements Runnable {
 			send(p);
 			return;
 		}
-		Searching.searching(this);
+		
+		Packet res = new Packet();
+		res.packetType = Packet.SUCCESS;
+		res.a = Packet.SEARCHING;
+		
+		if(Searching.getSearching().contains(this)) {
+			res.b = 0;
+			Searching.removeSearching(this);
+		}else {
+			res.b = 1;
+			try {
+				Searching.searching(this);
+			}catch (Exception e) {
+				System.out.println("ERROR");
+				e.printStackTrace();
+			}
+		}
+		
+		
+		if(Searching.getFoundPartner(this) == null) {
+			send(res);
+		}
 	}
 	
 	private void handleKey(Packet packet) {
@@ -262,12 +296,33 @@ public class ConnectionHandler implements Runnable {
 	private void handleLogin(Packet packet) {
 		String username = (String) packet.a;
 		String password = (String) packet.b;
-		System.out.println("PW: " + password);
+		
+		if(isLoggedIn(username)) {
+			send(genErrorPacket(Packet.ERROR_ACCOUNT_LOGGED_IN));
+			return;
+		}
+		
 		int status = DatabaseManager.login(username, password);
-		if(status == 0)
+		if(status == 0) {
 			send(genSuccess(packet.packetType));
+			this.username = username.toLowerCase();
+		}
 		
 		send(genErrorPacket(status));
+	}
+	
+	private static boolean isLoggedIn(String username) {
+		String search = username.toLowerCase();
+		for(ConnectionHandler con : handler) {
+			if(con.getUsername() != null && con.getUsername().equals(search)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public String getUsername() {
+		return username;
 	}
 	
 	private void handleSuccess(Packet packet) {
@@ -308,6 +363,7 @@ public class ConnectionHandler implements Runnable {
 			byte[] bMSG = msg.getBytes();
 			os.write(bMSG);
 			os.flush();
+			handler.remove(this);
 		} catch (IOException e) {
 			disconnect();
 			e.printStackTrace();
@@ -319,10 +375,8 @@ public class ConnectionHandler implements Runnable {
 			String msg = packet.toJSONString();
 			byte[] enMSG = null;
 			if(AESKey == null) {
-				System.out.println("SENDING RSA ENCRYPTED");
 				enMSG = RSAUtil.encrypt(msg, clientPublicKey);
 			}else {
-				System.out.println("SENDING AES ENCRYPTED");
 				enMSG = Encryption.encrypt(msg, AESKey);
 			}
 			os.write(enMSG);
@@ -337,10 +391,8 @@ public class ConnectionHandler implements Runnable {
 		try {
 			byte[] enMSG = null;
 			if(AESKey == null) {
-				System.out.println("SENDING RSA ENCRYPTED");
 				enMSG = RSAUtil.encrypt(msg, clientPublicKey);
 			}else {
-				System.out.println("SENDING AES ENCRYPTED");
 				enMSG = Encryption.encrypt(msg, AESKey);
 			}
 			os.write(enMSG);

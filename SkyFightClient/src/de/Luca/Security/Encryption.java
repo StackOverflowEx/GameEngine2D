@@ -37,7 +37,6 @@ public class Encryption {
 			strData = new String(decrypted);
 
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new Exception(e);
 		}
 		return strData;

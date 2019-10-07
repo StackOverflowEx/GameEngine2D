@@ -65,8 +65,10 @@ public class PopUp extends GUI{
 		for(PopUp p : popups) {
 			p.setY(i * 40);
 			p.setWidth(x);
-			GLabel label = (GLabel) p.getComponents().get(0);
-			label.setWidth(p.getWidth());
+			if(p.getComponents().size() > 0) {
+				GLabel label = (GLabel) p.getComponents().get(0);
+				label.setWidth(p.getWidth());
+			}
 			i++;
 		}
 	}

@@ -37,10 +37,12 @@ public class SkyFightEngine {
 				Paragraph p = new Paragraph(100, 100, new String[] {"Te-st"},  TextManager.getFont("Impact"), new Vector4f(0, 0, 0, 1));
 				TextManager.addParagraph(p);
 			}
+
 		});
 	}
 		
 	public static void init(BeatHandler bh) {
+						
 		Window.init(1280, 720, "SkyFight");
 		
 		GL11.glGenTextures();
@@ -56,12 +58,11 @@ public class SkyFightEngine {
 		
 		new MasterRenderer(new RenderLoop());
 		MasterRenderer.begin();
-		
-		TextManager.generateFont("C:\\Windows\\Fonts\\Arial.ttf", 20f, "Arial", false, false);	
-		
-				
+						
 		MainBeat.init(bh);
+		TextManager.generateFont("C:\\Windows\\Fonts\\Arial.ttf", 20f, "Arial", false, false);		
 	}
+	 
 	
 	public static void stop() {
 		AudioManager.cleanUP();

@@ -23,6 +23,23 @@ public class Searching {
 		return found.get(id);
 	}
 	
+	public static ArrayList<ConnectionHandler> getSearching(){
+		return searching;
+	}
+	
+	public static void removeFound(ConnectionHandler ch) {
+		String rm = null;
+		for(String s : found.keySet()) {
+			ConnectionHandler[] t = found.get(s);
+			if(t[0] == ch || t[1] == ch) {
+				rm = s;
+			}
+		}
+		if(rm != null) {
+			found.remove(rm);
+		}
+	}
+	
 	public static ConnectionHandler getFoundPartner(ConnectionHandler ch) {
 		for(String s : found.keySet()) {
 			ConnectionHandler[] t = found.get(s);
@@ -34,6 +51,10 @@ public class Searching {
 				continue;
 		}
 		return null;
+	}
+	
+	public static void removeSearching(ConnectionHandler con) {
+		searching.remove(con);
 	}
 	
 	public static void cancleMatch(String id, int error) {

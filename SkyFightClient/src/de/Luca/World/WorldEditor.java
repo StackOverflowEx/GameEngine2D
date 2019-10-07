@@ -55,7 +55,10 @@ public class WorldEditor {
 		
 		p.destroy();
 		
+		SkyFightClient.p.setPosition(new Vector2f(0, 0));
 		SkyFightClient.p.setVisible(false);
+		SkyFightClient.p.setCollisionWithBlocks(false);
+		SkyFightClient.p.setFlying(true);
 		SkyFightClient.pother.setVisible(false);
 		
 		SkyFightClient.worldEditorOverlay.setVisible(true);
@@ -76,6 +79,12 @@ public class WorldEditor {
 		newMap = true;
 		background = null;
 		names.clear();
+		
+		SkyFightClient.p.setPosition(new Vector2f(0, 0));
+		SkyFightClient.p.setVisible(false);
+		SkyFightClient.p.setCollisionWithBlocks(false);
+		SkyFightClient.p.setFlying(true);
+		SkyFightClient.pother.setVisible(false);
 		
 		SkyFightClient.worldEditorOverlay.setVisible(true);
 	}

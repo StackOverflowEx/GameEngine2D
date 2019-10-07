@@ -19,12 +19,21 @@ public class GameServerHandler {
 	
 	public static int TPS;
 	private static Connection con;
+	private static int highest;
 	
 	public static void setConnection(Connection con) {
 		GameServerHandler.con = con;
+		highest = -1;
+		SkyFightClient.mainGUI.setIsSearching(false, false);
 	}
 	
 	public static void handlePacket(Packet packet) {
+		
+		if(packet.i != null && (int) packet.i < highest) {
+			return;
+		}
+		highest = (int) packet.i;
+		
 		GamePacket gp = new GamePacket(packet.toJSONString());
 		
 		if(gp.getGamePacketType() == GamePacket.INFO) {
@@ -47,6 +56,13 @@ public class GameServerHandler {
 			TPS = tps;
 			PlayerCalc.setOtherData(0, 0, System.currentTimeMillis(), new Vector2f(0, 0));
 			
+			SkyFightClient.p.setVisible(true);
+			SkyFightClient.p.setFlying(false);
+			SkyFightClient.p.setCollisionWithBlocks(true);
+			SkyFightClient.pother.setVisible(true);
+			SkyFightClient.pother.setFlying(false);
+			SkyFightClient.pother.setCollisionWithBlocks(true);
+			
 			SkyFightClient.gameState = GameState.RUNNING;
 			ServerTicker.startTicking(TPS, con);
 		}else if(gp.getGamePacketType() == GamePacket.POSITION){
@@ -55,13 +71,12 @@ public class GameServerHandler {
 				float y = Float.parseFloat(gp.c.toString()); //x
 				boolean facingRight = Boolean.parseBoolean(gp.d.toString()); //x
 				
-//				Vector2f move = new Vector2f(x - SkyFightClient.pother.getWorldPos().x, y - SkyFightClient.pother.getWorldPos().y);
-//				SkyFightClient.pother.move(move);
-//				PlayerCalc.tpOtherToExact();
 				if(gp.e != null) {
 					processBlockChanges(gp.e.toString());
 				}
 				
+				SkyFightClient.pother.setPosition(PlayerCalc.getSetPosOther());
+								
 				float xSpeed = ((x - SkyFightClient.pother.getWorldPos().x) * 1000f / (float)(1000 / TPS)) * 1;
 				float ySpeed = ((y - SkyFightClient.pother.getWorldPos().y) * 1000f / (float)(1000 / TPS)) * 1;
 				
@@ -79,6 +94,7 @@ public class GameServerHandler {
 			int x = blockData.getInt("x");
 			int y = blockData.getInt("y");
 			float breakPercent = blockData.getFloat("breakPercent");
+			System.out.println("BREAK: " + breakPercent);
 			String name = blockData.getString("name");
 			Block b = BlockManager.getBlock(new Vector2f(x, y));
 			if(b == null || !name.equals(b.getBlockData().getName())) {

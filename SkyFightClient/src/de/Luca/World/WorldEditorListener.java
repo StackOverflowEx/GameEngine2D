@@ -51,6 +51,10 @@ public class WorldEditorListener implements Listener{
 				}
 			}
 			
+			if(WorldEditor.getSettingSpawn() != -1) {
+				return;
+			}
+			
 			if((e.getAction() == GLFW.GLFW_PRESS || e.getAction() == GLFW.GLFW_REPEAT) && e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 				Block block = BlockManager.getBlock(WorldPosition.getMouseWorldPos());
 				if(block != null) {

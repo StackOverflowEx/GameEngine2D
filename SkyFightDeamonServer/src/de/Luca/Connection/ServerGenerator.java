@@ -43,12 +43,24 @@ public class ServerGenerator {
 		
 		File server = new File(Main.root + "/" + SERVER_FILE);
 
-		try {
-			Runtime.getRuntime().exec("java -jar " + server.getPath() + " " + port + " " + mapPath + " " + id);
-			System.out.println("java -jar " + server.getPath() + " " + port + " " + mapPath + " " + id);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		final int fport = port;
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					Process p = Runtime.getRuntime().exec("java -jar " + server.getPath() + " " + fport + " " + mapPath + " " + id);
+					BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					String line;
+					while((line = br.readLine()) != null) {
+						System.out.println(id + ">> " + line);
+					}
+					p.waitFor();
+				} catch (IOException | InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 		
 		System.out.println("Generated server");
 		return port;

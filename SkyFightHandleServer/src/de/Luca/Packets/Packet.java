@@ -42,6 +42,8 @@ public class Packet {
 	public static final int ERROR_MATCHES_NOT_AVALIABLE = 8;
 	public static final int ERROR_PLAYER_QUIT = 9;
 	public static final int ERROR_COULD_NOT_RESET_PASSWORD = 10;
+	public static final int ERROR_ACCOUNT_LOGGED_IN = 11;
+	public static final int ERROR_NOT_LOGGED_IN = 12;
 	
 	public Packet() {}
 	

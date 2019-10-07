@@ -9,6 +9,7 @@ public class EntityShader extends ShaderProgramm{
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
 	private int location_transformationMatrix;
+	private int location_facingRight;
 	
 	public EntityShader() {
 		super(SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/vertex.glsl"), SkyFightEngine.class.getResourceAsStream("/de/Luca/Shader/fragment.glsl"));
@@ -25,8 +26,17 @@ public class EntityShader extends ShaderProgramm{
 		location_projectionMatrix = getUniformLocation("projectionMatrix");
 		location_transformationMatrix = getUniformLocation("transformationMatrix");
 		location_viewMatrix = getUniformLocation("viewMatrix");
+		location_facingRight = getUniformLocation("facingRight");
 	}
 
+	public void loadFacingRight(boolean facingRight) {
+		int i = 0;
+		if(facingRight) {
+			i = 1;
+		}
+		loadInt(location_facingRight, i);
+	}
+	
 	public void loadProjectionMatrix(Matrix4f mat) {
 		loadMatrix(location_projectionMatrix, mat);
 	}

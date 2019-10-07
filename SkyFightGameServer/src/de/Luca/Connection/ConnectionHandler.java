@@ -112,7 +112,6 @@ public class ConnectionHandler implements Runnable {
 					handlePacket(packet);
 //				}
 			}catch (Exception e) {
-				e.printStackTrace();
 				if(e instanceof SocketException) {
 					disconnect();
 					return;

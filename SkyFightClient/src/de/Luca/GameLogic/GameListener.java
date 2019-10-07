@@ -13,64 +13,94 @@ import de.Luca.Main.SkyFightClient;
 import de.Luca.Utils.DefaultKeyListener;
 import de.Luca.Utils.WorldPosition;
 
-public class GameListener implements Listener{
-	
+public class GameListener implements Listener {
+
 	private Block breaking;
-	
+	private long lastHit;
+
+	@EventHandler
+	public void onAttach(MouseButtonEvent e) {
+
+		if(e.getAction() != GLFW.GLFW_PRESS || e.getButton() != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			return;
+		}
+		
+		// ONLY WITH SWORD
+		float distance = SkyFightClient.p.getWorldPos().distance(SkyFightClient.pother.getWorldPos());
+		if (distance < 3) {
+			if (Math.abs(SkyFightClient.pother.getWorldPos().y - SkyFightClient.p.getWorldPos().y) < 1) {
+				if ((SkyFightClient.p.isFacingRight()
+						&& SkyFightClient.pother.getWorldPos().x > SkyFightClient.p.getWorldPos().x)
+						|| (!SkyFightClient.p.isFacingRight()
+								&& SkyFightClient.pother.getWorldPos().x < SkyFightClient.p.getWorldPos().x)) {
+					if((System.currentTimeMillis() - lastHit) > 50) {
+						lastHit = System.currentTimeMillis();
+						//HIT
+					}
+				}
+			}
+		}
+
+	}
+
 	@EventHandler
 	public void onMouse(MouseButtonEvent e) {
-		if(e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-			if(e.getAction() == GLFW.GLFW_PRESS) {
+
+		// ONLY IF PICKAXW
+
+		if (e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+			if (e.getAction() == GLFW.GLFW_PRESS) {
 				Vector2f mouse = WorldPosition.getMouseWorldPos();
 				Vector2f pPos = new Vector2f(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y);
 				pPos.x += 0.5f;
 				pPos.y += 1;
-				if(mouse.distance(pPos) > 5) {
+				if (mouse.distance(pPos) > 5) {
 					return;
 				}
-				if(BlockManager.doseBlockExist(mouse)) {
+				if (BlockManager.doseBlockExist(mouse)) {
 					breaking = BlockManager.getBlock(mouse);
 				}
-			}else if(e.getAction() == GLFW.GLFW_RELEASE) {
+			} else if (e.getAction() == GLFW.GLFW_RELEASE) {
 				reset();
 			}
-		}else if(e.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-			if(e.getAction() == GLFW.GLFW_PRESS) {
+		} else if (e.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
+			if (e.getAction() == GLFW.GLFW_PRESS) {
 				Vector2f mouse = WorldPosition.getMouseWorldPos();
 				Vector2f pPos = new Vector2f(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y);
 				pPos.x += 0.5f;
 				pPos.y += 1;
-				if(mouse.distance(pPos) > 5) {
+				if (mouse.distance(pPos) > 5) {
 					return;
 				}
-				if(BlockManager.doseBlockExist(mouse)) {
+				if (BlockManager.doseBlockExist(mouse)) {
 					return;
 				}
-				//PLACE Block --> Collisioncheck: Addblock with Breakpercent = 1 --> Check for Collision. If Player is colliding with this block, cancle
+				// PLACE Block --> Collisioncheck: Addblock with Breakpercent = 1 --> Check for
+				// Collision. If Player is colliding with this block, cancle
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onMove(CursorPositionEvent e) {
-		if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
+		if (DefaultKeyListener.isKeyPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
 			Block newBlock = BlockManager.getBlock(WorldPosition.getMouseWorldPos());
-			if(newBlock != breaking) {
+			if (newBlock != breaking) {
 				reset();
 			}
-			if(newBlock != null) {
+			if (newBlock != null) {
 				breaking = newBlock;
 			}
 		}
 	}
-	
+
 	public void reset() {
-		if(breaking != null) {
+		if (breaking != null) {
 			breaking.setBreakPercentage(0);
 		}
 		breaking = null;
 	}
-	
+
 	public Block getBreaking() {
 		return breaking;
 	}

@@ -59,6 +59,12 @@ public class PlayerCalc {
 		}
 		p.move(new Vector2f(addX, addY));
 		
+		if(addX > 0) {
+			p.setFacingRight(true);
+		}else if(addX < 0){
+			p.setFacingRight(false);
+		}
+		
 		calcOther(sec);
 		
 		Camera.setPos(p.getModels()[1].getLocation().x, p.getModels()[1].getLocation().y);
@@ -68,6 +74,11 @@ public class PlayerCalc {
 	private static float xSpeedOther, ySpeedOther;
 	private static long finishedOtherMove;
 	private static Vector2f setPos;
+	
+	public static Vector2f getSetPosOther() {
+		return setPos;
+	}
+	
 	public static void setOtherData(float xSpeedPerSec, float ySpeedPerSec, long finishedMove, Vector2f set) {
 		xSpeedOther = xSpeedPerSec;
 		ySpeedOther = ySpeedPerSec;

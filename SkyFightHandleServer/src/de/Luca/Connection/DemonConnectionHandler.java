@@ -89,6 +89,7 @@ public class DemonConnectionHandler implements Runnable {
 					handlePacket(packet);
 //				}
 			} catch (Exception e) {
+				e.printStackTrace();
 				disconnect();
 			}
 
@@ -164,9 +165,9 @@ public class DemonConnectionHandler implements Runnable {
 			p.packetType = Packet.CONNECT;
 			p.a = port;
 			p.b = socket.getInetAddress().getHostAddress();
-			for(ConnectionHandler c : ch) {
-				c.send(p);
-			}
+			ch[0].send(p);
+			ch[1].send(p);
+			Searching.removeFound(ch[0]);
 		}else {
 			Packet p = new Packet();
 			p.packetType = Packet.DEMON_STOP_SERVER;

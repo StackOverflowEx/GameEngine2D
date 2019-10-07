@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.joml.Vector2i;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ public class ServerTicker {
 	private static int TPS;
 	private static Timer timer;
 	private static Connection con;
+	private static int counter;
 
 	private static ArrayList<JSONObject> blockChanges = new ArrayList<JSONObject>();
 
@@ -31,8 +33,10 @@ public class ServerTicker {
 	}
 
 	public static void startTicking(int tps, Connection connection) {
+		System.out.println("Running with " + tps + " ticks per second");
 		TPS = tps;
 		con = connection;
+		counter = 0;
 		if (timer == null) {
 			timer = new Timer();
 			timer.scheduleAtFixedRate(new TimerTask() {
@@ -71,6 +75,8 @@ public class ServerTicker {
 			changes.put(blockData);
 		}
 		send.e = changes.toString();
+		send.i = counter;
+		counter++;
 		blockChanges.clear();
 
 		if (con != null && con.isConnected() && con.finishedHandshaking()) {

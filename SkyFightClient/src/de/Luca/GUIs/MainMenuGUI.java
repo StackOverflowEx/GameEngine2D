@@ -8,7 +8,9 @@ import de.Luca.GUI.GButton;
 import de.Luca.GUI.GLabel;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
+import de.Luca.GameLogic.GameState;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Packets.Packet;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
 import de.Luca.Window.Window;
@@ -79,12 +81,15 @@ public class MainMenuGUI extends GUI {
 				TEXT_ALIGN.CENTER, 0);
 		this.addComponent(einstellungen);
 		
+		
 		spiel.addClickCallback(new ClickCallback() {
 
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-					//SPIEL SUCHEN
+					Packet send = new Packet();
+					send.packetType = Packet.SEARCHING;
+					SkyFightClient.handleServerConnection.send(send);
 				}
 			}
 		});
@@ -113,6 +118,31 @@ public class MainMenuGUI extends GUI {
 		
 
 
+	}
+	
+	
+	
+	private PopUp info;
+	public void setIsSearching(boolean b, boolean msg) {
+		if(b) {
+			spielSuchen.setText("Suche abbrechen", SkyFightClient.ConstantiaB56, new Vector4f(1f, 1f, 1f, 1f),
+					TEXT_ALIGN.CENTER, 0);
+			SkyFightClient.gameState = GameState.SEARCHING;
+			if(msg) {
+				info = new PopUp("Es wird nach einem Gegner gesucht...", new Vector4f(0.26f, 0.96f, 0.63f, 1f), true);
+			}
+		}else {
+			spielSuchen.setText("Spiel Suchen", SkyFightClient.ConstantiaB56, new Vector4f(1f, 1f, 1f, 1f),
+					TEXT_ALIGN.CENTER, 0);
+			if(info != null) {
+				info.destroy();
+			}
+			info = null;
+			if(msg) {
+				new PopUp("Die Gegnersuche wurde abgebrochen.", new Vector4f(0.5f, 0.96f, 0.63f, 1f));
+			}
+			SkyFightClient.gameState = GameState.MENUE;
+		}
 	}
 
 	@Override

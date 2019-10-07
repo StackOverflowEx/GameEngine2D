@@ -50,6 +50,7 @@ public class EntityManager {
 					MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());
 					Matrix4f transformation = Calc.getTransformationMatrix(model.getLocation(), model.getModel().getScale(), model.getRoll());
 					shader.loadTransformationMatrix(transformation);
+					shader.loadFacingRight(e.isFacingRight());
 					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8, 4);
 				}
 			}

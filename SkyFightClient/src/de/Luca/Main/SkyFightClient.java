@@ -162,7 +162,7 @@ public class SkyFightClient {
 	public static GameState gameState = GameState.MENUE;
 
 	// Files
-	public static String root = System.getenv("APPDATA") + "/SkyFight";
+	public static String root = System.getenv("APPDATA") + "\\SkyFight";
 
 	public static void load() {
 		root.replace("\\", "/");

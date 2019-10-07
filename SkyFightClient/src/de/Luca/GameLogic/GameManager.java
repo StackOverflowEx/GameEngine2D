@@ -13,14 +13,19 @@ public class GameManager {
 	private static boolean started = false;
 	
 	private static float value;
+		
+	private static void start() {
+		listener = new GameListener();
+		EventManager.registerEvent(listener);
+		started = true;
+		last = System.currentTimeMillis();
+		SkyFightClient.mainGUI.setVisible(false);
+	}
 	
 	public static void calcGameData() {
 		if(SkyFightClient.gameState == GameState.RUNNING) {
 			if(!started) {
-				listener = new GameListener();
-				EventManager.registerEvent(listener);
-				started = true;
-				last = System.currentTimeMillis();
+				start();
 			}
 			
 			float sec = (System.currentTimeMillis() - last) / 1000f;
@@ -32,8 +37,10 @@ public class GameManager {
 				if(listener.getBreaking().getBreakPercentage() >= 1) {
 					BlockManager.removeBlock(listener.getBreaking());
 					value += listener.getBreaking().getBlockData().getValue();
-					ServerTicker.addBlockChange((int)listener.getBreaking().getWorldPos().x, (int)listener.getBreaking().getWorldPos().y, listener.getBreaking().getBlockData().getName(), 1f);
+					System.out.println("BROKE");
+					Block b = listener.getBreaking();
 					listener.reset();
+					ServerTicker.addBlockChange((int)b.getWorldPos().x, (int)b.getWorldPos().y, b.getBlockData().getName(), 1f);
 				}
 			}
 			

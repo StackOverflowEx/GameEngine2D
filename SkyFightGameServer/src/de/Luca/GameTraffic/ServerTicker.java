@@ -16,6 +16,7 @@ public class ServerTicker{
 	
 	private static ConnectionHandler con1, con2;
 	private static GamePacket in1, in2;
+	private static int counter = 0;
 	
 	private static Timer timer;
 	private static int TPS;
@@ -35,6 +36,7 @@ public class ServerTicker{
 			}
 			con1.send(craftPacketForPlayer(con1));
 			con2.send(craftPacketForPlayer(con2));
+			counter++;
 			blockChanges1.clear();
 			blockChanges2.clear();
 		}
@@ -51,8 +53,14 @@ public class ServerTicker{
 	
 	public static void recievePacket(GamePacket p, ConnectionHandler con) {
 		if(con == con1) {
+			if(in1 != null && (int)p.i < (int)in1.i) {
+				return;
+			}
 			in1 = p;
 		}else {
+			if(in2 != null && (int)p.i < (int)in2.i) {
+				return;
+			}
 			in2 = p;
 		}
 		processBlockChanges(p, con);
@@ -109,6 +117,8 @@ public class ServerTicker{
 		info.f = WorldLoader.spawn2.y;
 		info.g = true;
 		info.h = TPS;	
+		info.i = counter;
+		counter++;
 		con1.send(info);
 		in1 = info;
 		
@@ -137,6 +147,7 @@ public class ServerTicker{
 			p.d = in1.d; //facing Right
 		}
 		
+		p.i = counter;
 		p.e = getBlockChangesFor(con).toString();
 		
 		return p;

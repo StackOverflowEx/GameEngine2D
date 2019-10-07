@@ -23,7 +23,7 @@ public class Main {
 		con = new Connection(Connection.HANDLE_SERVER_IP, Connection.HANDLE_SERVER_PORT);
 		
 		WorldLoader.load(new File(mapFolder));
-		ServerTicker.startTicking(60);
+		ServerTicker.startTicking(30);
 
 		Thread th = new Thread(new Runnable() {
 

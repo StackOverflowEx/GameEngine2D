@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.util.Base64;
@@ -156,8 +157,12 @@ public class Connection {
 							handlePacket(packet);
 //						}
 					}catch (Exception e) {
-						e.printStackTrace();
-						disconnect();
+						if((e instanceof SocketException)) {
+//							e.printStackTrace();
+							disconnect();
+						}else {
+							System.out.println("Packet lost");
+						}
 					}
 				}
 			}
