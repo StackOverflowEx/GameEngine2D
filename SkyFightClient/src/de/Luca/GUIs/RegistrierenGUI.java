@@ -219,8 +219,7 @@ public class RegistrierenGUI extends GUI {
 
 	@Override
 	public void windowResize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-
+		calc();
 	}
 
 }

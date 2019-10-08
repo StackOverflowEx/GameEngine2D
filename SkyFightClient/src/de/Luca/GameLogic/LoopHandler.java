@@ -1,5 +1,7 @@
 package de.Luca.GameLogic;
 
+import java.lang.reflect.Field;
+
 import org.joml.Vector2f;
 
 import de.Luca.Calculation.BeatHandler;
@@ -10,21 +12,29 @@ import de.Luca.EventManager.EventManager;
 import de.Luca.GUIs.PopUp;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Rendering.MasterRenderer;
-import de.Luca.Sound.AudioManager;
-import de.Luca.Sound.SoundData;
-import de.Luca.Sound.Source;
 import de.Luca.Text.TextManager;
 
-public class LoopHandler implements BeatHandler{
+public class LoopHandler implements BeatHandler {
 
 	@Override
 	public void init() {
 		
-		System.setProperty("java.library.path", System.getProperty("java.library.path") + ";" + SkyFightClient.root + "\\res\\dlls;");
+		System.setProperty("java.library.path",
+				SkyFightClient.root + "\\res\\dlls;" + System.getProperty("java.library.path"));
+		Field fieldSysPath;
+		try {
+			fieldSysPath = ClassLoader.class.getDeclaredField("sys_paths");
+			fieldSysPath.setAccessible(true);
+			fieldSysPath.set(null, null);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			System.out.println("ERROR TO SET DLL LOCATION");
+			e.printStackTrace();
+		}
+		System.loadLibrary("freetype");
 		
 		loadFonts();
 		SkyFightClient.load();
-		
+
 		SkyFightClient.p = new Player(SkyFightClient.playerUP, SkyFightClient.playerDown, new Vector2f(0, 2));
 		SkyFightClient.p.setVisible(true);
 		SkyFightClient.p.setFlying(false);
@@ -33,30 +43,32 @@ public class LoopHandler implements BeatHandler{
 		SkyFightClient.pother.setFlying(false);
 		SkyFightClient.pother.setCollisionWithBlocks(true);
 		SkyFightClient.pother.setVisible(true);
-		
+
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
+		ArrowCalc.init();
 		SkyFightClient.loginGUI.setVisible(true);
-		
+
 		EventManager.registerEvent(new ConnectionListener());
 		MasterRenderer.setBackground(SkyFightClient.background);
-		
+
 //		SoundData background = AudioManager.loadSound(SkyFightClient.root + "/res/sounds/background.ogg", "background");
 //		Source source = AudioManager.genSource();
 //		source.setVolume(0.1f);
 //		source.playSound(background);
-		
+
 //		WorldEditor.start("C:\\Users\\Luca\\AppData\\Roaming\\SkyFight\\maps\\own\\Test");
-		
+
 	}
 
 	@Override
 	public void loop() {
 		PlayerCalc.calc();
+		ArrowCalc.calc();
 		PopUp.update();
 		GameManager.calcGameData();
 	}
-	
+
 	private void loadFonts() {
 		TextManager.generateFont("C:\\Windows\\Fonts\\impact.ttf", 20, "Impact", false, false);
 	}

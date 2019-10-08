@@ -9,6 +9,10 @@ public class GScrollPanel extends GUIComponent{
 	private GPanel panel;
 	private GSlider sliderLR;
 	private GSlider sliderTB;
+	
+	private SLIDER_POSITION LR, TB;
+	private int LRT, TBT;
+	
 	private ArrayList<GUIComponent> items;
 	
 	public GScrollPanel(int x, int y, int width, int height) {
@@ -180,10 +184,15 @@ public class GScrollPanel extends GUIComponent{
 	}
 	
 	public void setSlider(SLIDER_POSITION sliderPos, int thickness) {
+				
 		if(sliderPos == SLIDER_POSITION.LEFT || sliderPos == SLIDER_POSITION.RIGHT) {
+			LR = sliderPos;
+			LRT = thickness;
 			sliderLR.setWidth(thickness);
 			panel.setWidth(getWidth() - thickness);
 		}else {
+			TB = sliderPos;
+			TBT = thickness;
 			sliderTB.setHeight(thickness);
 			panel.setHeight(getHeight() - thickness);
 		}
@@ -257,8 +266,18 @@ public class GScrollPanel extends GUIComponent{
 
 	@Override
 	protected void reCalc() {
-		// TODO Auto-generated method stub
+		panel.setBounds(getX(), getY(), getWidth(), getHeight());
+		calcPanel();
 		
+		sliderLR.setBounds(getX(), getY(), 0, getHeight());
+		sliderTB.setBounds(getX(), getY(), getWidth(), 0);
+		
+		if(LR != null) {
+			setSlider(LR, LRT);
+		}
+		if(TB != null) {
+			setSlider(TB, TBT);
+		}
 	}
 
 	@Override

@@ -18,6 +18,10 @@ public class RenderModel {
 		this.roll = roll;
 	}
 	
+	public void setRoll(float roll) {
+		this.roll = roll;
+	}
+	
 	public float getRoll() {
 		return roll;
 	}

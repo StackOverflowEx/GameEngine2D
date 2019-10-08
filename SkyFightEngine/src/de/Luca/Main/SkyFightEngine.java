@@ -60,6 +60,7 @@ public class SkyFightEngine {
 		MasterRenderer.begin();
 						
 		MainBeat.init(bh);
+		
 		TextManager.generateFont("C:\\Windows\\Fonts\\Arial.ttf", 20f, "Arial", false, false);		
 	}
 	 

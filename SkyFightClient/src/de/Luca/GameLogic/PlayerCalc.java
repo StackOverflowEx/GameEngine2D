@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFW;
 import de.Luca.Calculation.Camera;
 import de.Luca.Entities.Player;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Networking.ServerTicker;
 import de.Luca.Utils.DefaultKeyListener;
 
 public class PlayerCalc {
@@ -45,7 +46,7 @@ public class PlayerCalc {
 				addY -= sec * 5;
 			}
 		}else {
-			if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_SPACE)) {
+			if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_SPACE) && !GameManager.isShooting()) {
 				if(p.isOnGround()) {
 					upSpeed = 4.5f;
 				}
@@ -53,9 +54,18 @@ public class PlayerCalc {
 			if(!p.isOnGround() || upSpeed > 0) {
 				upSpeed -= sec * GRAVITY;
 			}else if(upSpeed < 0){
+				if(upSpeed < -20) {
+					float fallDmg = Math.abs(upSpeed) / 10 * 2;
+					fallDmg = Math.round(fallDmg * 10f) / 10f;
+					GameManager.setHealth(GameManager.getHealth() - fallDmg);
+					ServerTicker.addDmgTaken(Math.abs(upSpeed) / 10 * 2);
+				}
 				upSpeed = 0;
 			}
 			addY += sec * upSpeed;
+		}
+		if(GameManager.isShooting()) {
+			addX = 0;
 		}
 		p.move(new Vector2f(addX, addY));
 		

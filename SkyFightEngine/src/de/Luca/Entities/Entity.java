@@ -134,6 +134,12 @@ public abstract class Entity {
 	
 	public abstract Vector4f getHitBox(Vector2f position);
 
+	public void moveWithoutCollisionCheck(Vector2f addPos) {
+		nextPos = new Vector2f(worldPos.x + addPos.x, worldPos.y + addPos.y);
+		worldPos = nextPos;
+		calcOpenGLPos();
+	}
+	
 	public void move(Vector2f addPos) {
 		nextPos = new Vector2f(worldPos.x + addPos.x, worldPos.y + addPos.y);
 		if(canCollideWithBlocks()) {

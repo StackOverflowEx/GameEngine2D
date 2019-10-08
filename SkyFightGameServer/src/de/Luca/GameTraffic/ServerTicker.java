@@ -16,6 +16,7 @@ public class ServerTicker{
 	
 	private static ConnectionHandler con1, con2;
 	private static GamePacket in1, in2;
+	private static float health1 = 100, health2 = 100;
 	private static int counter = 0;
 	
 	private static Timer timer;
@@ -23,6 +24,9 @@ public class ServerTicker{
 	
 	private static ArrayList<JSONObject> blockChanges1 = new ArrayList<JSONObject>();
 	private static ArrayList<JSONObject> blockChanges2 = new ArrayList<JSONObject>();
+	
+	private static ArrayList<JSONObject> arrowChanges1 = new ArrayList<JSONObject>();
+	private static ArrayList<JSONObject> arrowChanges2 = new ArrayList<JSONObject>();
 	
 	private static boolean started = false;
 	
@@ -39,6 +43,18 @@ public class ServerTicker{
 			counter++;
 			blockChanges1.clear();
 			blockChanges2.clear();
+			arrowChanges1.clear();
+			arrowChanges2.clear();
+			
+			if(health1 <= 0 || health2 <= 0) {
+				if(health1 <= 0) {
+					sendEndInfo(con2);
+				}else if(health2 <= 0) {
+					sendEndInfo(con1);
+				}else if(health1 <= 0 && health2 <= 0){
+					sendEndInfo(null);
+				}
+			}
 		}
 		
 	}
@@ -57,13 +73,18 @@ public class ServerTicker{
 				return;
 			}
 			in1 = p;
+			health2 -= Float.parseFloat(in1.f.toString());
+			health1 -= Float.parseFloat(in1.g.toString());
 		}else {
 			if(in2 != null && (int)p.i < (int)in2.i) {
 				return;
 			}
 			in2 = p;
+			health1 -= Float.parseFloat(in2.f.toString()); //Damge to other
+			health2 -= Float.parseFloat(in2.g.toString()); //Damage e: falldamage
 		}
 		processBlockChanges(p, con);
+		processArrowChanges(p, con);
 	}
 	
 	
@@ -88,6 +109,35 @@ public class ServerTicker{
 		}
 	}
 	
+	private static void processArrowChanges(GamePacket p, ConnectionHandler con) {
+		if(p.h != null) {
+			String arrow = p.h.toString();
+			JSONArray changes = new JSONArray(arrow);
+			for(int i = 0; i < changes.length(); i++) {
+				JSONObject blockData = changes.getJSONObject(i);
+				if(con == con1) {
+					arrowChanges1.add(blockData);
+				}else {
+					arrowChanges2.add(blockData);
+				}
+			}
+		}
+	}
+	
+	private static JSONArray getArrowChangesFor(ConnectionHandler con) {
+		JSONArray ret = new JSONArray();
+		if(con == con1) {
+			for(JSONObject arrowData : arrowChanges2) {
+				ret.put(arrowData);
+			}
+		}else {
+			for(JSONObject arrowData : arrowChanges1) {
+				ret.put(arrowData);
+			}
+		}
+		return ret;
+	}
+	
 	private static JSONArray getBlockChangesFor(ConnectionHandler con) {
 		JSONArray ret = new JSONArray();
 		if(con == con1) {
@@ -100,6 +150,31 @@ public class ServerTicker{
 			}
 		}
 		return ret;
+	}
+	
+	public static void sendEndInfo(ConnectionHandler winner) {
+		GamePacket info = new GamePacket();
+		info.packetType = Packet.GAME_DATA;
+		info.setGamePacketType(GamePacket.INFO);
+		info.i = Integer.MAX_VALUE;
+		
+		if(winner == con1) {
+			info.b = true;
+			con1.send(info);
+			info.b = false;
+			con2.send(info);
+		}else if(winner == con2) {
+			info.b = true;
+			con2.send(info);
+			info.b = false;
+			con1.send(info);
+		}else {
+			info.b = true;
+			info.c = true;
+			con1.send(info);
+			con2.send(info);
+		}
+		
 	}
 	
 	public static void sendInfo() {
@@ -141,14 +216,17 @@ public class ServerTicker{
 			p.b = in2.b; //x
 			p.c = in2.c; //y
 			p.d = in2.d; //facing Right
+			p.f = health1;
 		}else {
 			p.b = in1.b; //x
 			p.c = in1.c; //y
 			p.d = in1.d; //facing Right
+			p.f = health2;
 		}
 		
 		p.i = counter;
 		p.e = getBlockChangesFor(con).toString();
+		p.h = getArrowChangesFor(con).toString();
 		
 		return p;
 	}

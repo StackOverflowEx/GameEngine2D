@@ -1,6 +1,7 @@
 package de.Luca.Networking;
 
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -8,8 +9,14 @@ import de.Luca.Blocks.Block;
 import de.Luca.Blocks.BlockData;
 import de.Luca.Blocks.BlockManager;
 import de.Luca.Connection.Connection;
+import de.Luca.Entities.Arrow;
+import de.Luca.Entities.Entity;
+import de.Luca.Entities.EntityManager;
+import de.Luca.GUIs.PopUp;
+import de.Luca.GameLogic.GameManager;
 import de.Luca.GameLogic.GameState;
 import de.Luca.GameLogic.PlayerCalc;
+import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.GamePacket;
 import de.Luca.Packets.Packet;
@@ -37,6 +44,28 @@ public class GameServerHandler {
 		GamePacket gp = new GamePacket(packet.toJSONString());
 		
 		if(gp.getGamePacketType() == GamePacket.INFO) {
+			
+			if(SkyFightClient.gameState == GameState.RUNNING) {
+				//END INFO
+				boolean win = Boolean.parseBoolean(gp.b.toString());
+				boolean bothWin = false;
+				if(gp.c != null) {
+					Boolean.parseBoolean(gp.c.toString());
+				}
+				SkyFightClient.blockSelect.setVisible(false);
+				if(bothWin) {
+					new PopUp("Unentschieden", new Vector4f(0, 1, 0, 1));
+				}else {
+					if(win) {
+						new PopUp("Du hast gewonnen", new Vector4f(0, 1, 0, 1));
+					}else {
+						new PopUp("Du hast verloren", new Vector4f(0, 1, 0, 1));
+					}
+				}
+				SkyFightClient.gameState = GameState.MENUE;
+				return;
+			}
+			
 			float x = Float.parseFloat(gp.b.toString()); //x
 			float y = Float.parseFloat(gp.c.toString()); //x
 			boolean facingRight = Boolean.parseBoolean(gp.d.toString()); //x
@@ -65,14 +94,21 @@ public class GameServerHandler {
 			
 			SkyFightClient.gameState = GameState.RUNNING;
 			ServerTicker.startTicking(TPS, con);
+			
 		}else if(gp.getGamePacketType() == GamePacket.POSITION){
 			if(SkyFightClient.gameState == GameState.RUNNING) {
 				float x = Float.parseFloat(gp.b.toString()); //x
 				float y = Float.parseFloat(gp.c.toString()); //x
 				boolean facingRight = Boolean.parseBoolean(gp.d.toString()); //x
 				
+				float health = Float.parseFloat(gp.f.toString()); //health
+				GameManager.setHealth(health);
+				
 				if(gp.e != null) {
 					processBlockChanges(gp.e.toString());
+				}
+				if(gp.h != null) {
+					processArrowChanges(gp.h.toString());
 				}
 				
 				SkyFightClient.pother.setPosition(PlayerCalc.getSetPosOther());
@@ -100,6 +136,9 @@ public class GameServerHandler {
 			if(b == null || !name.equals(b.getBlockData().getName())) {
 				BlockData bd = WorldLoader.getBlockData().get(name);
 				if(b != null) {
+					if(GameManager.getBreaking() == b) {
+						GameManager.resetListener();
+					}
 					BlockManager.removeBlock(b);
 				}
 				b = new Block(bd, new Vector2f(x, y));
@@ -108,6 +147,34 @@ public class GameServerHandler {
 			b.setBreakPercentage(breakPercent);
 			if(breakPercent >= 1) {
 				BlockManager.removeBlock(b);
+			}
+		}
+	}
+	
+	private static void processArrowChanges(String arrows) {
+		JSONArray changes = new JSONArray(arrows);
+		for(int i = 0; i < changes.length(); i++) {
+			JSONObject arrowData = changes.getJSONObject(i);
+			float x = arrowData.getFloat("x");
+			float y = arrowData.getFloat("y");
+			float xVel = arrowData.getFloat("xVel");
+			float yVel = arrowData.getFloat("yVel");
+			boolean added = arrowData.getBoolean("add");
+			String uuid = arrowData.getString("uuid");
+			
+			if(added) {
+				Arrow a = new Arrow(new Vector2f(x, y), Loader.loadTexture("D:/Test.png", "arrow"), yVel, xVel, SkyFightClient.pother);
+				EntityManager.addEntity(a);
+			}else {
+				for(Entity e : EntityManager.getEntities()) {
+					if(e instanceof Arrow) {
+						Arrow a = (Arrow) e;
+						if(a.getUUID().toString().equals(uuid)) {
+							a.setVisible(false);
+							EntityManager.removeEntity(a);
+						}
+					}
+				}
 			}
 		}
 	}

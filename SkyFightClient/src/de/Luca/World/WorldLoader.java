@@ -46,6 +46,7 @@ public class WorldLoader {
 		loadBlocks(map);
 		laodBackground(map);
 		SkyFightClient.worldEditorAuswahl.init();
+		SkyFightClient.blockSelect.init();
 		System.out.println("Map " + mapName + " has successfully been loaded.");
 	}
 	

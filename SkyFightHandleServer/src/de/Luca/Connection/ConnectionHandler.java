@@ -314,7 +314,7 @@ public class ConnectionHandler implements Runnable {
 	private static boolean isLoggedIn(String username) {
 		String search = username.toLowerCase();
 		for(ConnectionHandler con : handler) {
-			if(con.getUsername() != null && con.getUsername().equals(search)) {
+			if(con.getUsername() != null && con.getUsername().equalsIgnoreCase(search)) {
 				return true;
 			}
 		}

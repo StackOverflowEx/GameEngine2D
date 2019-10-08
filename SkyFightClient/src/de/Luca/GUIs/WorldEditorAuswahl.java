@@ -43,8 +43,8 @@ public class WorldEditorAuswahl extends GUI {
 		
 	}
 
-	private GScrollPanel getScrollPanel() {
-				
+	public GScrollPanel getScrollPanel() {
+			
 		scroll = new GScrollPanel(0, Calc.getPixelHeight(0.14167f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.44723f));
 		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));

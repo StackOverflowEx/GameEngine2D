@@ -22,10 +22,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/SkyFightEngine/lib/lwjgl-nuklear-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/FreeTypeWrapper.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="SkyFightEngine/lib"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="lib/FreeTypeWrapper.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

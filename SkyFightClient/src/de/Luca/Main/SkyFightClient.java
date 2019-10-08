@@ -7,6 +7,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import de.Luca.Connection.Connection;
 import de.Luca.Entities.Player;
+import de.Luca.GUIs.BlockAuswahl;
+import de.Luca.GUIs.IngameOverlayGUI;
 import de.Luca.GUIs.LoginGUI;
 import de.Luca.GUIs.MainMenuGUI;
 import de.Luca.GUIs.PasswortVergessenGUI;
@@ -42,6 +44,8 @@ public class SkyFightClient {
 	public static WorldEditorAuswahl worldEditorAuswahl;
 	public static WorldEditorErstellen worldEditorErstellen;
 	public static WorldEditorSettings worldEditorSettings;
+	public static IngameOverlayGUI ingameOverlay;
+	public static BlockAuswahl blockSelect;
 
 	// Textures
 	public static Texture backgroundLOGIN;
@@ -147,6 +151,17 @@ public class SkyFightClient {
 	public static Texture AuswahlErstellenA;
 	public static Texture AuswahlErstellenB;
 	public static Texture AuswahlErstellenC;
+	public static Texture IngameOverlayStatsPicture;
+	public static Texture IngameOverlayStatsHeart;
+	public static Texture IngameOverlayStatsCoin;
+	public static Texture IngameOverlayHotbarLinks;
+	public static Texture IngameOverlayHotbarMitte;
+	public static Texture IngameOverlayHotbarRechts;
+	public static Texture IngameOverlayHotbarHover;
+	public static Texture IngameOverlayHotbarSword;
+	public static Texture IngameOverlayHotbarBow;
+	public static Texture IngameOverlayHotbarPickaxe;
+	public static Texture IngameOverlayHotbarBlockStone;
 
 	// Fonts
 	public static long Impact20;
@@ -157,6 +172,8 @@ public class SkyFightClient {
 	public static long ConstantiaB56;
 	public static long ConstantiaB38;
 	public static long ConstantiaB26;
+	public static long CalibriB20;
+	public static long Alba18;
 
 	// Gamestate
 	public static GameState gameState = GameState.MENUE;
@@ -285,6 +302,18 @@ public class SkyFightClient {
 		AuswahlErstellenA = Loader.loadTexture(path + "Auswahl_ErstellenA.png", "gui");
 		AuswahlErstellenB = Loader.loadTexture(path + "Auswahl_ErstellenB.png", "gui");
 		AuswahlErstellenC = Loader.loadTexture(path + "Auswahl_ErstellenC.png", "gui");
+		path = root + "/res/gui/ingame/";
+		IngameOverlayStatsPicture = Loader.loadTexture(path + "IngameOverlay_StatsPicture.png", "gui");
+		IngameOverlayStatsHeart = Loader.loadTexture(path + "IngameOverlay_StatsHeart.png", "gui");
+		IngameOverlayStatsCoin = Loader.loadTexture(path + "IngameOverlay_StatsCoin.png", "gui");
+		IngameOverlayHotbarLinks = Loader.loadTexture(path + "IngameOverlay_HotbarLinks.png", "gui");
+		IngameOverlayHotbarMitte = Loader.loadTexture(path + "IngameOverlay_HotbarMitte.png", "gui");
+		IngameOverlayHotbarRechts = Loader.loadTexture(path + "IngameOverlay_HotbarRechts.png", "gui");
+		IngameOverlayHotbarHover = Loader.loadTexture(path + "IngameOverlay_HotbarHover.png", "gui");
+		IngameOverlayHotbarSword = Loader.loadTexture(path + "IngameOverlay_HotbarSword.png", "gui");
+		IngameOverlayHotbarBow = Loader.loadTexture(path + "IngameOverlay_HotbarBow.png", "gui");
+		IngameOverlayHotbarPickaxe = Loader.loadTexture(path + "IngameOverlay_HotbarPickaxe.png", "gui");
+		IngameOverlayHotbarBlockStone = Loader.loadTexture(path + "IngameOverlay_HotbarBlockStone.png", "gui");
 
 //		loginGUI = new LoginGUIOLD();
 //		registesrGUI = new RegisterGUIOLD();
@@ -297,6 +326,8 @@ public class SkyFightClient {
 		worldEditorAuswahl = new WorldEditorAuswahl();
 		worldEditorErstellen = new WorldEditorErstellen();
 		worldEditorSettings = new WorldEditorSettings();
+		ingameOverlay = new IngameOverlayGUI();
+		blockSelect = new BlockAuswahl();
 	}
 
 }

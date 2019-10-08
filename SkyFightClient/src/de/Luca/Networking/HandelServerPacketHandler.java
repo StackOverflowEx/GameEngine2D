@@ -10,6 +10,8 @@ import de.Luca.Packets.Packet;
 import de.Luca.World.WorldLoader;
 
 public class HandelServerPacketHandler {
+	
+	public static String username = "UNKNOWN";
 
 	public static void handlePacket(Packet packet) {
 		if (packet.packetType == Packet.PING) {

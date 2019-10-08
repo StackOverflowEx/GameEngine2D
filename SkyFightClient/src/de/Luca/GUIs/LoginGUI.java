@@ -10,6 +10,7 @@ import de.Luca.GUI.GTextBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Networking.HandelServerPacketHandler;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.SHAHasing;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
@@ -191,6 +192,7 @@ public class LoginGUI extends GUI {
 					packet.packetType = Packet.LOGIN;
 					packet.a = name;
 					packet.b = SHAHasing.getHash(pw);
+					HandelServerPacketHandler.username = name;
 					SkyFightClient.handleServerConnection.send(packet);
 				}
 			}
@@ -227,8 +229,7 @@ public class LoginGUI extends GUI {
 
 	@Override
 	public void windowResize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-
+		calc();
 	}
 
 }

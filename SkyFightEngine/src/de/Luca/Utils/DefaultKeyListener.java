@@ -4,10 +4,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.glfw.GLFW;
 
-import de.Luca.Calculation.Calc;
 import de.Luca.EventManager.EventHandler;
 import de.Luca.EventManager.Listener;
 import de.Luca.Events.KeyEvent;
+import de.Luca.Events.MouseButtonEvent;
 import de.Luca.Events.ScrollEvent;
 import de.Luca.Window.Window;
 
@@ -29,6 +29,18 @@ public class DefaultKeyListener implements Listener{
 			keysPressed.remove(e.getKey() + "");
 		}
 	}	
+	
+	@EventHandler
+	public void onMouse(MouseButtonEvent e) {
+		if(e.isCancelled()) {
+			return;
+		}
+		if(e.getAction() == GLFW.GLFW_PRESS) {
+			keysPressed.add(e.getButton() + "");		
+		}else if(e.getAction() == GLFW.GLFW_RELEASE){
+			keysPressed.remove(e.getButton() + "");
+		}
+	}
 	
 	@EventHandler
 	public void onScroll(ScrollEvent e) {

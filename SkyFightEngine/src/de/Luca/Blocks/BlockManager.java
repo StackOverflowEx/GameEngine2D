@@ -67,7 +67,7 @@ public class BlockManager {
 		float block1Y = (float) Math.floor(hitBox.w());
 				
 		ArrayList<Block> ret = new ArrayList<Block>();
-						 
+						 		
 		for(float i = blockX; i <= block1X; i++) {
 			if(!blocks.containsKey((int)i)) {
 				continue;

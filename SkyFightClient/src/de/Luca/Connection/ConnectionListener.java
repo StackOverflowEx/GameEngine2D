@@ -9,6 +9,7 @@ import de.Luca.GameLogic.GameState;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Networking.GameServerHandler;
 import de.Luca.Networking.HandelServerPacketHandler;
+import de.Luca.Networking.ServerTicker;
 import de.Luca.Packets.Packet;
 
 public class ConnectionListener implements Listener{
@@ -61,6 +62,11 @@ public class ConnectionListener implements Listener{
 				notConnected = new PopUp("Die Verbindung zum Server wurde unterbrochen.", new Vector4f(1, 0, 0, 1), true);
 			}
 			e.getConnection().retry();
+		}else {
+			if(SkyFightClient.gameState == GameState.RUNNING) {
+				ServerTicker.stopTicking();
+				new PopUp("Das Match wurde abgebrochen", new Vector4f(1, 0, 0, 1));
+			}
 		}
 	}
 
