@@ -31,7 +31,10 @@ public class WorldEditorAuswahl extends GUI {
 	private GLabel UmrahmungC;
 	private GButton Exit;
 	private GButton Gruen;
-
+	private GLabel title;
+	private GLabel bearbeiten;
+	private GLabel erstellen;
+	
 	public WorldEditorAuswahl() {
 		super(Calc.getPixelWidth(0.042f), Calc.getPixelHeight(0.056f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.7728f));
@@ -50,7 +53,7 @@ public class WorldEditorAuswahl extends GUI {
 		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));
 
 		int width = Calc.getPixelWidth(0.4328125f);
-		int spacing = Calc.getPixelWidth(0.01f);
+		int spacing = Calc.getPixelWidth(0.0075f);
 		int rowAmount = (width + spacing) / Calc.getPixelWidth(0.05f);
 		
 		int added = 0;
@@ -63,13 +66,13 @@ public class WorldEditorAuswahl extends GUI {
 			
 			int h = (int) (Calc.getPixelWidth(0.05f));
 			int w = Calc.getPixelWidth(0.05f);
-			GButton block = new GButton(spacing, 0, w, h);
-			GButton name = new GButton(spacing, h, w, Calc.getPixelHeight(0.05f));
+			GButton block = new GButton(spacing*2, spacing, w, h);
+			GButton name = new GButton(spacing*2, h + spacing, w, Calc.getPixelHeight(0.05f));
 			name.setText(bdp.getName(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.CENTER, 0);
 			name.setColor(new Vector4f(0, 0, 0, 0));
 			block.setTexture(bdp.getBlockModel().getModel().getTexture());
 			
-			GPanel all = new GPanel(0, 0, w, h + Calc.getPixelHeight(0.05f));
+			GPanel all = new GPanel(0, 0, w+2*spacing, h + Calc.getPixelHeight(0.05f) + spacing);
 			all.addComponent(block);
 			all.addComponent(name);
 			
@@ -134,6 +137,12 @@ public class WorldEditorAuswahl extends GUI {
 		
 		scroll.setBounds(0, Calc.getPixelHeight(0.14167f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.44723f));
+		title.setBounds(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bearbeiten.setBounds(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.58f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		erstellen.setBounds(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.66f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
 
 	}
 	
@@ -142,6 +151,24 @@ public class WorldEditorAuswahl extends GUI {
 			c.dispose();
 			removeComponent(c);
 		}
+		
+		title = new GLabel(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		title.setText("Block Auswählen", SkyFightClient.ConstantiaB40, new Vector4f(1f, 1f, 1f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(title);
+		
+		bearbeiten = new GLabel(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.58f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bearbeiten.setText("Block Bearbeiten", SkyFightClient.ConstantiaB32, new Vector4f(1f, 1f, 1f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(bearbeiten);
+		
+		erstellen = new GLabel(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.66f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		erstellen.setText("Block Erstellen", SkyFightClient.ConstantiaB32, new Vector4f(1f, 1f, 1f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(erstellen);
 		
 		UmrahmungA = new GLabel(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.09167f));
 		UmrahmungA.setTexture(SkyFightClient.weAuswahlUmrahmungA);

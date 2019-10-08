@@ -49,6 +49,16 @@ public class WorldEditorErstellen extends GUI {
 	private GLabel Preview;
 	private GButton Save2;
 	
+	private GLabel title;
+	private GLabel name2;
+	private GLabel value2;
+	private GLabel hardness3;
+	private GLabel texture;
+	private GLabel breakSound;
+	private GLabel playSound;
+	private GLabel walkSound;
+	private GLabel save3;
+	
 	private Source source;
 
 	public WorldEditorErstellen() {
@@ -102,6 +112,26 @@ public class WorldEditorErstellen extends GUI {
 				Calc.getPixelHeight(0.06389f));
 		Save2.setBounds(Calc.getPixelWidth(0.325f), Calc.getPixelHeight(0.0194f), Calc.getPixelWidth(0.0594f),
                 Calc.getPixelHeight(0.0556f));
+		
+		title.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		save3.setBounds(Calc.getPixelWidth(0.305f), Calc.getPixelHeight(0.004f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		name2.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.105f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		value2.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.245f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		hardness3.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.31f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		texture.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.45f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		breakSound.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.52f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		playSound.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.59f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		walkSound.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.66f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		
 	}
 
 	public void init() {
@@ -113,6 +143,61 @@ public class WorldEditorErstellen extends GUI {
 			removeComponent(c);
 		}
 
+		title = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		title.setText("Block Erstellen", SkyFightClient.ConstantiaB40, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(title);
+		
+		save3 = new GLabel(Calc.getPixelWidth(0.305f), Calc.getPixelHeight(0.004f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		save3.setText("Save", SkyFightClient.ConstantiaB26, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(save3);
+		
+		name2 = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.105f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		name2.setText("Name", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(name2);
+		
+		value2 = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.245f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		value2.setText("Value", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(value2);
+
+		hardness3 = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.31f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		hardness3.setText("Hardness", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(hardness3);
+		
+		texture = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.45f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		texture.setText("Texture", SkyFightClient.ConstantiaB32, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(texture);
+		
+		breakSound = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.52f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		breakSound.setText("Break Sound", SkyFightClient.ConstantiaB26, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(breakSound);
+		
+		playSound = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.59f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		playSound.setText("Play Sound", SkyFightClient.ConstantiaB26, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(playSound);
+		
+		
+		walkSound = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.66f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		walkSound.setText("Walk Sound", SkyFightClient.ConstantiaB26, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(walkSound);
+		
 		Fenster1 = new GLabel(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.245f));
 		Fenster1.setTexture(SkyFightClient.weErstellenFenster1);
 		this.addComponent(Fenster1);

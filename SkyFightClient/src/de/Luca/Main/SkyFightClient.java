@@ -8,6 +8,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import de.Luca.Connection.Connection;
 import de.Luca.Entities.Player;
 import de.Luca.GUIs.BlockAuswahl;
+import de.Luca.GUIs.EndscreenOverlayGUI;
 import de.Luca.GUIs.IngameOverlayGUI;
 import de.Luca.GUIs.LoginGUI;
 import de.Luca.GUIs.MainMenuGUI;
@@ -46,6 +47,7 @@ public class SkyFightClient {
 	public static WorldEditorSettings worldEditorSettings;
 	public static IngameOverlayGUI ingameOverlay;
 	public static BlockAuswahl blockSelect;
+	public static EndscreenOverlayGUI endGUI;
 
 	// Textures
 	public static Texture backgroundLOGIN;
@@ -162,6 +164,12 @@ public class SkyFightClient {
 	public static Texture IngameOverlayHotbarBow;
 	public static Texture IngameOverlayHotbarPickaxe;
 	public static Texture IngameOverlayHotbarBlockStone;
+	public static Texture EndscreenOverlayGewonnenRahmen;
+	public static Texture EndscreenOverlayVerlorenRahmen;
+	public static Texture EndscreenOverlayAbbruchRahmen;
+	public static Texture EndscreenOverlayWeitermachenA;
+	public static Texture EndscreenOverlayWeitermachenB;
+	public static Texture EndscreenOverlayWeitermachenC;
 
 	// Fonts
 	public static long Impact20;
@@ -172,8 +180,10 @@ public class SkyFightClient {
 	public static long ConstantiaB56;
 	public static long ConstantiaB38;
 	public static long ConstantiaB26;
+	public static long Calibri26;
 	public static long CalibriB20;
 	public static long Alba18;
+	public static long Alba38;
 
 	// Gamestate
 	public static GameState gameState = GameState.MENUE;
@@ -195,7 +205,29 @@ public class SkyFightClient {
 		}
 
 		TextManager.generateFont("C:\\Windows\\Fonts\\impact.ttf", 20, "Impact", false, false);
+		TextManager.generateFont(root + "/res/fonts/constan.ttf", 86 , "Constantia", false, true);
+		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 40 , "ConstantiaB", false, false);
+		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 30 , "ConstantiaB2", false, false);
+		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 62 , "ConstantiaB3", false, false);
+		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 48 , "ConstantiaB4", false, false);
+		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 36 , "ConstantiaB5", false, false);
+		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 24 , "ConstantiaB6", false, false);
+		TextManager.generateFont(root + "/res/fonts/calibri.ttf", 24 , "Calibri", false, false);
+		TextManager.generateFont(root + "/res/fonts/calibrib.ttf", 20 , "CalibriB1", false, false);
+		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 26 , "Alba1", false, false);
+		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 36 , "Alba2", false, false);
 		Impact20 = TextManager.getFont("Impact");
+		Constantia86 = TextManager.getFont("Constantia");
+		ConstantiaB40 = TextManager.getFont("ConstantiaB");
+		ConstantiaB32 = TextManager.getFont("ConstantiaB2");
+		ConstantiaB80 = TextManager.getFont("ConstantiaB3");
+		ConstantiaB56 = TextManager.getFont("ConstantiaB4");
+		ConstantiaB38 = TextManager.getFont("ConstantiaB5");
+		ConstantiaB26 = TextManager.getFont("ConstantiaB6");
+		Calibri26 = TextManager.getFont("Calibri");
+		CalibriB20 = TextManager.getFont("CalibriB1");
+		Alba18 = TextManager.getFont("Alba1");
+		Alba38 = TextManager.getFont("Alba2");
 
 		String path = root + "/res/gui/worldeditor/";
 		playerUP = Loader.loadTexture(root + "/res/player/up.png", "player");
@@ -271,7 +303,7 @@ public class SkyFightClient {
 		weErstellenSave2A = Loader.loadTexture(path + "we_re_Tx20a.png", "gui");
 		weErstellenSave2B = Loader.loadTexture(path + "we_re_Tx20b.png", "gui");
 		weErstellenSave2C = Loader.loadTexture(path + "we_re_Tx20c.png", "gui");
-		
+
 		path = root + "/res/gui/preGame/";
 		LoginBackground = Loader.loadTexture(path + "LoginBackground.png", "gui");
 		LoginRahmen = Loader.loadTexture(path + "Login_Rahmen.png", "gui");
@@ -314,9 +346,16 @@ public class SkyFightClient {
 		IngameOverlayHotbarBow = Loader.loadTexture(path + "IngameOverlay_HotbarBow.png", "gui");
 		IngameOverlayHotbarPickaxe = Loader.loadTexture(path + "IngameOverlay_HotbarPickaxe.png", "gui");
 		IngameOverlayHotbarBlockStone = Loader.loadTexture(path + "IngameOverlay_HotbarBlockStone.png", "gui");
+		EndscreenOverlayGewonnenRahmen = Loader.loadTexture(path + "EndscreenOverlay_GewonnenRahmen.png", "gui");
+		EndscreenOverlayVerlorenRahmen = Loader.loadTexture(path + "EndscreenOverlay_VerlorenRahmen.png", "gui");
+		EndscreenOverlayAbbruchRahmen = Loader.loadTexture(path + "EndscreenOverlay_AbbruchRahmen.png", "gui");
+		EndscreenOverlayWeitermachenA = Loader.loadTexture(path + "EndscreenOverlay_WeitermachenA.png", "gui");
+		EndscreenOverlayWeitermachenB = Loader.loadTexture(path + "EndscreenOverlay_WeitermachenB.png", "gui");
+		EndscreenOverlayWeitermachenC = Loader.loadTexture(path + "EndscreenOverlay_WeitermachenC.png", "gui");
 
 //		loginGUI = new LoginGUIOLD();
 //		registesrGUI = new RegisterGUIOLD();
+		endGUI = new EndscreenOverlayGUI();
 		loginGUI = new LoginGUI();
 		registerGUI = new RegistrierenGUI();
 		worldSelctGUI = new WeltenAuswahlGUI();

@@ -113,12 +113,12 @@ public class ArrowCalc {
 		a.setxVel(a.getxVel() - addX);
 		a.setyVel(a.getyVel() - addY);
 
-		Vector2f tra = new Vector2f(a.getxVel(), a.getyVel());
-		tra = tra.normalize();
-		Vector2f xAxis = new Vector2f(1, 0);
-		float angle = -tra.angle(xAxis);
-		angle = (float) Math.toDegrees(angle);
-		a.getModels()[0].setRoll(angle + 180);
+//		Vector2f tra = new Vector2f(a.getxVel(), a.getyVel());
+//		tra = tra.normalize();
+//		Vector2f xAxis = new Vector2f(1, 0);
+//		float angle = -tra.angle(xAxis);
+//		angle = (float) Math.toDegrees(angle);
+//		a.getModels()[0].setRoll(angle + 180);
 
 	}
 

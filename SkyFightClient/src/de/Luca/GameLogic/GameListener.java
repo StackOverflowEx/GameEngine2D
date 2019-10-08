@@ -52,6 +52,7 @@ public class GameListener implements Listener {
 		}
 		
 		if(GameManager.getValue() < 4) {
+			startedBow = -1;
 			return;
 		}
 		
@@ -78,6 +79,7 @@ public class GameListener implements Listener {
 		
 		Arrow a = new Arrow(new Vector2f(SkyFightClient.p.getWorldPos()), Loader.loadTexture("D:\\Test.png", "bow"), yVel, xVel, SkyFightClient.p);
 		EntityManager.addEntity(a);
+		GameManager.setValue(GameManager.getValue() - 4);
 		ServerTicker.addArrowChange(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y, xVel, yVel, a.getUUID(), true);
 		startedBow = -1;
 	}
@@ -114,6 +116,7 @@ public class GameListener implements Listener {
 	public void onMouse(MouseButtonEvent e) {
 		
 		if(SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.BOW)) {
+			breaking = null;
 			return;
 		}
 
@@ -175,6 +178,12 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void onMove(CursorPositionEvent e) {
+		
+		if(SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.BOW)) {
+			breaking = null;
+			return;
+		}
+		
 		if (DefaultKeyListener.isKeyPressed(GLFW.GLFW_MOUSE_BUTTON_LEFT)) {
 			Block newBlock = BlockManager.getBlock(WorldPosition.getMouseWorldPos());
 			if (newBlock != null && breaking != null && !newBlock.equals(breaking)) {

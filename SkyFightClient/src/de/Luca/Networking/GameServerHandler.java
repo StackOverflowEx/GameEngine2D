@@ -1,7 +1,6 @@
 package de.Luca.Networking;
 
 import org.joml.Vector2f;
-import org.joml.Vector4f;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,7 +11,6 @@ import de.Luca.Connection.Connection;
 import de.Luca.Entities.Arrow;
 import de.Luca.Entities.Entity;
 import de.Luca.Entities.EntityManager;
-import de.Luca.GUIs.PopUp;
 import de.Luca.GameLogic.GameManager;
 import de.Luca.GameLogic.GameState;
 import de.Luca.GameLogic.PlayerCalc;
@@ -53,13 +51,15 @@ public class GameServerHandler {
 					Boolean.parseBoolean(gp.c.toString());
 				}
 				SkyFightClient.blockSelect.setVisible(false);
+				SkyFightClient.ingameOverlay.setVisible(false);
+				SkyFightClient.endGUI.setVisible(true);
 				if(bothWin) {
-					new PopUp("Unentschieden", new Vector4f(0, 1, 0, 1));
+					SkyFightClient.endGUI.showWin();
 				}else {
 					if(win) {
-						new PopUp("Du hast gewonnen", new Vector4f(0, 1, 0, 1));
+						SkyFightClient.endGUI.showWin();
 					}else {
-						new PopUp("Du hast verloren", new Vector4f(0, 1, 0, 1));
+						SkyFightClient.endGUI.showLoos();
 					}
 				}
 				SkyFightClient.gameState = GameState.MENUE;

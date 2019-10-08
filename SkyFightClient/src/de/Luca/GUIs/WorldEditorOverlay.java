@@ -9,6 +9,7 @@ import de.Luca.GUI.GLabel;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
 import de.Luca.Window.Window;
 import de.Luca.World.WorldEditor;
@@ -25,6 +26,11 @@ public class WorldEditorOverlay extends GUI {
 	private GButton Back;
 	private GButton Save;
 
+	private GLabel bloecke;
+	private GLabel bloecke2;
+	private GLabel bloecke3;
+	private GLabel save2;
+	
 	public WorldEditorOverlay() {
 		super(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
 		init();
@@ -54,6 +60,15 @@ public class WorldEditorOverlay extends GUI {
 		Back.setBounds(0, 0, Calc.getPixelWidth(0.056f), Calc.getPixelHeight(0.047f));
 		Save.setBounds(Calc.getPixelWidth(0.883f), Calc.getPixelHeight(0.928f), Calc.getPixelWidth(0.117f),
 				Calc.getPixelHeight(0.072f));
+		
+		bloecke.setBounds(Calc.getPixelWidth(0.29f), Calc.getPixelHeight(0.915f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bloecke2.setBounds(Calc.getPixelWidth(0.45f), Calc.getPixelHeight(0.915f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bloecke3.setBounds(Calc.getPixelWidth(0.61f), Calc.getPixelHeight(0.915f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		save2.setBounds(Calc.getPixelWidth(0.89f), Calc.getPixelHeight(0.925f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
 	}
 
 	private void init() {
@@ -61,6 +76,30 @@ public class WorldEditorOverlay extends GUI {
 			c.dispose();
 			removeComponent(c);
 		}
+		
+		bloecke = new GLabel(Calc.getPixelWidth(0.29f), Calc.getPixelHeight(0.915f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bloecke.setText("Blockauswahl", SkyFightClient.ConstantiaB32, new Vector4f(0.35f, 0.2f, 0.11f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(bloecke);
+		
+		bloecke2 = new GLabel(Calc.getPixelWidth(0.45f), Calc.getPixelHeight(0.915f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bloecke2.setText("Welteinstel-" + "\n" + "lungen", SkyFightClient.ConstantiaB26, new Vector4f(0.35f, 0.2f, 0.11f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(bloecke2);
+		
+		bloecke3 = new GLabel(Calc.getPixelWidth(0.61f), Calc.getPixelHeight(0.915f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		bloecke3.setText("Spiegeln", SkyFightClient.ConstantiaB32, new Vector4f(0.35f, 0.2f, 0.11f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(bloecke3);
+		
+		save2 = new GLabel(Calc.getPixelWidth(0.89f), Calc.getPixelHeight(0.925f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		save2.setText("Save", SkyFightClient.ConstantiaB38, new Vector4f(1f, 1f, 1f, 1f),
+				TEXT_ALIGN.CENTER, 0);
+		this.addComponent(save2);
 
 		LinkerRahmen = new GLabel(Calc.getPixelWidth(0.23125f), Calc.getPixelHeight(0.9084f),
 				Calc.getPixelWidth(0.0296875f), Calc.getPixelHeight(0.0917f));

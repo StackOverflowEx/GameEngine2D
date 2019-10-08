@@ -29,6 +29,14 @@ public class WorldEditorSettings extends GUI {
 	private GButton Gelb2;
 	private GButton Rot2;
 	private GButton Exit;
+	
+	private GLabel title;
+	private GLabel mapname2;
+	private GLabel background;
+	private GLabel gelb1;
+	private GLabel gelb2;
+	private GLabel rot1;
+	private GLabel rot2;
 
 	public WorldEditorSettings() {
 		super(Calc.getPixelWidth(0.28359375f), Calc.getPixelHeight(0.056f), Calc.getPixelWidth(0.4328125f),
@@ -69,6 +77,22 @@ public class WorldEditorSettings extends GUI {
 		Rot2.setBounds(Calc.getPixelWidth(0.23640625f), Calc.getPixelHeight(0.652f), Calc.getPixelWidth(0.159f),
 				Calc.getPixelHeight(0.077f));
 		Exit.setBounds(Calc.getPixelWidth(0.4088125f), 0, Calc.getPixelWidth(0.024f), Calc.getPixelHeight(0.043f));
+		
+		title.setBounds(Calc.getPixelWidth(0.165f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		mapname2.setBounds(Calc.getPixelWidth(0.037f), Calc.getPixelHeight(0.1f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		background.setBounds(Calc.getPixelWidth(0.037f), Calc.getPixelHeight(0.26f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		gelb1.setBounds(Calc.getPixelWidth(0.065f), Calc.getPixelHeight(0.55f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		rot1.setBounds(Calc.getPixelWidth(0.265f), Calc.getPixelHeight(0.55f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		gelb2.setBounds(Calc.getPixelWidth(0.065f), Calc.getPixelHeight(0.645f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		rot2.setBounds(Calc.getPixelWidth(0.265f), Calc.getPixelHeight(0.645f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		
 	}
 	
 	public void setup(String name, String backgroundTexture) {
@@ -89,6 +113,48 @@ public class WorldEditorSettings extends GUI {
 			removeComponent(c);
 		}
 
+		title = new GLabel(Calc.getPixelWidth(0.165f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		title.setText("Welteinstellungen", SkyFightClient.ConstantiaB40, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(title);
+		
+		mapname2 = new GLabel(Calc.getPixelWidth(0.037f), Calc.getPixelHeight(0.1f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		mapname2.setText("Mapname", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(mapname2);
+		
+		background = new GLabel(Calc.getPixelWidth(0.037f), Calc.getPixelHeight(0.26f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		background.setText("Hintergrund", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+				0);
+		this.addComponent(background);
+		
+		gelb1 = new GLabel(Calc.getPixelWidth(0.065f), Calc.getPixelHeight(0.55f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		gelb1.setText("Spawn 1 Setzen", SkyFightClient.ConstantiaB26, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(gelb1);
+		
+		rot1 = new GLabel(Calc.getPixelWidth(0.265f), Calc.getPixelHeight(0.55f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		rot1.setText("Spawn 2 Setzen", SkyFightClient.ConstantiaB26, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(rot1);
+		
+		gelb2 = new GLabel(Calc.getPixelWidth(0.065f), Calc.getPixelHeight(0.645f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		gelb2.setText("Zu Spawn 1 Gehen", SkyFightClient.ConstantiaB26, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(gelb2);
+		
+		rot2 = new GLabel(Calc.getPixelWidth(0.265f), Calc.getPixelHeight(0.645f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		rot2.setText("Zu Spawn 2 Gehen", SkyFightClient.ConstantiaB26, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(rot2);
+		
 		Fenster = new GLabel(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.7728f));
 		Fenster.setTexture(SkyFightClient.weSettingsRahmen);
 		this.addComponent(Fenster);

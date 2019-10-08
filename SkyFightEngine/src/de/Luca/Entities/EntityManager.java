@@ -52,10 +52,9 @@ public class EntityManager {
 			for(RenderModel model : e.getModels()) {
 				if(model.getModel().getTexture() != null && model.getModel().getTexture().getTextureID() != -1) {
 					MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());
-					Matrix4f transformation = Calc.getTransformationMatrix(model.getLocation(), model.getModel().getScale(), 0);
+					Matrix4f transformation = Calc.getTransformationMatrix(model.getLocation(), model.getModel().getScale(), model.getRoll());
 					shader.loadTransformationMatrix(transformation);
 					shader.loadFacingRight(e.isFacingRight());
-					shader.loadTextureRotation((float) Math.toRadians(model.getRoll()));
 					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8, 4);
 				}
 			}

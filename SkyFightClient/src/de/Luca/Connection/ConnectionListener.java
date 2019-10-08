@@ -65,7 +65,9 @@ public class ConnectionListener implements Listener{
 		}else {
 			if(SkyFightClient.gameState == GameState.RUNNING) {
 				ServerTicker.stopTicking();
-				new PopUp("Das Match wurde abgebrochen", new Vector4f(1, 0, 0, 1));
+				SkyFightClient.gameState = GameState.MENUE;
+				SkyFightClient.endGUI.setVisible(true);
+				SkyFightClient.endGUI.showAbort();
 			}
 		}
 	}
