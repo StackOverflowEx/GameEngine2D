@@ -127,18 +127,19 @@ public class Player extends Entity{
 	}
 	
 	public void stopAnimation(int i) {
-		if(i == 0) {
-			if(down != null) {
-				System.out.println("STOP: " + down.getTitle());
-				down.stop();
+		try {
+			if(i == 0) {
+				if(down != null) {
+					down.stop();
+				}
+				this.renderModel[0].getModel().setTexture(defaultDown);
+			}else {
+				if(up != null) {
+					up.stop();
+				}
+				this.renderModel[1].getModel().setTexture(defaultUp);
 			}
-			this.renderModel[0].getModel().setTexture(defaultDown);
-		}else {
-			if(up != null) {
-				up.stop();
-			}
-			this.renderModel[1].getModel().setTexture(defaultUp);
-		}
+		}catch (NullPointerException e) {}
 	}
 
 

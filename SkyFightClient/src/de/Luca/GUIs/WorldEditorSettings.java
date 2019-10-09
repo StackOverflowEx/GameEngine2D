@@ -37,6 +37,8 @@ public class WorldEditorSettings extends GUI {
 	private GLabel gelb2;
 	private GLabel rot1;
 	private GLabel rot2;
+	
+	private String S = "";
 
 	public WorldEditorSettings() {
 		super(Calc.getPixelWidth(0.28359375f), Calc.getPixelHeight(0.056f), Calc.getPixelWidth(0.4328125f),
@@ -55,7 +57,7 @@ public class WorldEditorSettings extends GUI {
 	}
 	
 	public String getBackground() {
-		return Source.getLabelText();
+		return S;
 	}
 	
 	public void calc() {
@@ -224,6 +226,7 @@ public class WorldEditorSettings extends GUI {
 					FileDialog fd = new FileDialog("PNG (*.png)", rootDir, "png");
 					int ret = fd.showToUser();
 					if (ret == 0) {
+						S = fd.getSelectedFile().getPath();
 						Source.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20,
 								new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 						WorldEditor.setBackground(fd.getSelectedFile().getPath());
