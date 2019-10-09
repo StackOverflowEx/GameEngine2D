@@ -1,5 +1,7 @@
 package de.Luca.GameLogic;
 
+import java.util.Random;
+
 import de.Luca.Blocks.Block;
 import de.Luca.Blocks.BlockManager;
 import de.Luca.EventManager.EventManager;
@@ -15,7 +17,7 @@ public class GameManager {
 	
 	private static float health;
 	private static float value;
-		
+			
 	private static void start() {
 		value = 0;
 		health = 100;
@@ -69,6 +71,14 @@ public class GameManager {
 					multiplyer = 0.5f;
 				}
 				listener.getBreaking().setBreakPercentage(listener.getBreaking().getBreakPercentage() + multiplyer * (sec / listener.getBreaking().getBlockData().getHardness()));
+								
+				Random r = new Random();
+				float ran = r.nextFloat() - 0.5f;
+				if(listener.getBreaking().getBlockData().getBreakSound() != null) {
+					listener.getBreaking().playSound(listener.getBreaking().getBlockData().getBreakSound(), 1 + ran, 1);
+				}else {
+					listener.getBreaking().playSound(SkyFightClient.breakingSound, 1 + ran, 1);
+				}
 				
 				if(listener.getBreaking().getBreakPercentage() >= 1) {
 					BlockManager.removeBlock(listener.getBreaking());

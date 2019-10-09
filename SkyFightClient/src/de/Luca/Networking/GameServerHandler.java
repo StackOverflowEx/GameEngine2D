@@ -1,5 +1,7 @@
 package de.Luca.Networking;
 
+import java.util.Random;
+
 import org.joml.Vector2f;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,6 +16,7 @@ import de.Luca.Entities.EntityManager;
 import de.Luca.GameLogic.GameManager;
 import de.Luca.GameLogic.GameState;
 import de.Luca.GameLogic.PlayerCalc;
+import de.Luca.GameLogic.GameManager.HOTBARSLOT;
 import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.GamePacket;
@@ -98,11 +101,34 @@ public class GameServerHandler {
 		}else if(gp.getGamePacketType() == GamePacket.POSITION){
 			if(SkyFightClient.gameState == GameState.RUNNING) {
 				float x = Float.parseFloat(gp.b.toString()); //x
-				float y = Float.parseFloat(gp.c.toString()); //x
-				boolean facingRight = Boolean.parseBoolean(gp.d.toString()); //x
+				float y = Float.parseFloat(gp.c.toString().split("/")[0]); //x
+				boolean facingRight = Boolean.parseBoolean(gp.d.toString().split("/")[0]);
+				boolean dmg = false;
+				try {
+					HOTBARSLOT slot = HOTBARSLOT.valueOf(gp.d.toString().split("/")[1]);
+					SkyFightClient.pother.setSelected(slot);
+				}catch (ArrayIndexOutOfBoundsException e) {}
+				
 				
 				float health = Float.parseFloat(gp.f.toString()); //health
+				if(health != GameManager.getHealth()) {
+					if((GameManager.getHealth() - health) == 5) {
+						dmg = true;
+						SkyFightClient.p.playSound(SkyFightClient.hit, 50, false);
+					}
+				}
 				GameManager.setHealth(health);
+				
+				try {
+					boolean hit = Boolean.parseBoolean(gp.c.toString().split("/")[1]);
+					if(hit && !dmg) {
+						SkyFightClient.pother.playSound(SkyFightClient.missHit, 50, false);
+					}
+					if(hit) {
+						SkyFightClient.pother.startAnimation(0, SkyFightClient.punchDown);
+						SkyFightClient.pother.startAnimation(1, SkyFightClient.punchUp);
+					}
+				}catch (ArrayIndexOutOfBoundsException e) {}
 				
 				if(gp.e != null) {
 					processBlockChanges(gp.e.toString());
@@ -148,6 +174,15 @@ public class GameServerHandler {
 			if(breakPercent >= 1) {
 				BlockManager.removeBlock(b);
 			}
+			if(b.getBlockData().getBreakSound() != null) {
+				Random r = new Random();
+				float ran = r.nextFloat() - 0.5f;
+				b.playSound(b.getBlockData().getBreakSound(), ran, 1);
+			}else {
+				Random r = new Random();
+				float ran = r.nextFloat() - 0.5f;
+				b.playSound(SkyFightClient.footstep, ran, 1);
+			}
 		}
 	}
 	
@@ -172,6 +207,7 @@ public class GameServerHandler {
 						if(a.getUUID().toString().equals(uuid)) {
 							a.setVisible(false);
 							EntityManager.removeEntity(a);
+							a.playSound(SkyFightClient.arrowHit, 50, false);
 						}
 					}
 				}

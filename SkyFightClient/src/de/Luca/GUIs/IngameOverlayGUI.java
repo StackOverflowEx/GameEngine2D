@@ -93,6 +93,7 @@ public class IngameOverlayGUI extends GUI {
 		}else if(slot == HOTBARSLOT.PICKAXE) {
 			selectedLabel = hotbarPickaxe;
 		}
+		SkyFightClient.p.setSelected(slot);
 		hotbarHover.setBounds(selectedLabel.getX(), selectedLabel.getY(), selectedLabel.getWidth(), selectedLabel.getHeight());
 		
 	}

@@ -1,5 +1,7 @@
 package de.Luca.GameLogic;
 
+import java.util.Random;
+
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
@@ -15,7 +17,7 @@ public class PlayerCalc {
 	private static float upSpeed;
 	private static final float GRAVITY = 9.81f;
 	private static long lastCalc;
-	
+		
 	public static void init(Player p) {
 		PlayerCalc.p = p;
 		upSpeed = 0;
@@ -23,6 +25,7 @@ public class PlayerCalc {
 	}
 	
 	public static void calc() {
+		
 		float addX = 0, addY = 0;
 		float sec = (System.currentTimeMillis() - lastCalc) / 1000f;
 		if(lastCalc == -1) {
@@ -67,7 +70,45 @@ public class PlayerCalc {
 		if(GameManager.isShooting()) {
 			addX = 0;
 		}
+		
+		if(addX != 0) {
+			if(!SkyFightClient.walking.isPlaying() && p.isOnGround()) {
+				Random r = new Random();
+				float ran = r.nextFloat() - 0.5f;
+				SkyFightClient.walking.setPitch(1-ran);
+				SkyFightClient.walking.playSound(SkyFightClient.footstep);
+			}
+			
+			if(!p.isOnGround()) {
+				try {
+					if(SkyFightClient.p.getAnimationTitle(0).equals("run")) {
+						SkyFightClient.p.stopAnimation(0);
+						SkyFightClient.p.stopAnimation(1);
+					}
+				}catch (NullPointerException e) {}
+			}else {
+				if(!SkyFightClient.p.isAnimationRunning(0)) {
+					SkyFightClient.p.startAnimation(0, SkyFightClient.downRun);
+				}
+				if(!SkyFightClient.p.isAnimationRunning(1)) {
+					SkyFightClient.p.startAnimation(1, SkyFightClient.upRun);
+				}
+			}
+		}else {
+			try {
+				if(sec > 0 && SkyFightClient.p.getAnimationTitle(0).equals("run")) {
+					SkyFightClient.p.stopAnimation(0);
+					SkyFightClient.p.stopAnimation(1);
+				}
+			}catch (NullPointerException e) {}
+		}
+		
 		p.move(new Vector2f(addX, addY));
+		
+		if(p.getWorldPos().y < -100) {
+			GameManager.setHealth(0);
+			ServerTicker.addDmgTaken(100);		
+		}
 		
 		if(addX > 0) {
 			p.setFacingRight(true);
@@ -110,6 +151,33 @@ public class PlayerCalc {
 		}
 		float addX = xSpeedOther * sec;
 		float addY = ySpeedOther * sec;
+		
+		if(addX != 0) {
+			if(!SkyFightClient.walkingOther.isPlaying() && SkyFightClient.pother.isOnGround()) {
+				Random r = new Random();
+				float ran = r.nextFloat() - 0.5f;
+				SkyFightClient.walkingOther.setPitch(1-ran);
+				SkyFightClient.walkingOther.playSound(SkyFightClient.footstep);
+			}
+			
+			if(!SkyFightClient.pother.isOnGround()) {
+				try {
+					if(SkyFightClient.pother.getAnimationTitle(0).equals("run")) {
+						SkyFightClient.pother.stopAnimation(0);
+						SkyFightClient.pother.stopAnimation(1);
+					}
+				}catch (NullPointerException e) {}
+			}else {
+				if(!SkyFightClient.pother.isAnimationRunning(0)) {
+					SkyFightClient.pother.startAnimation(0, SkyFightClient.downRun);
+				}
+				if(!SkyFightClient.pother.isAnimationRunning(1)) {
+					SkyFightClient.pother.startAnimation(1, SkyFightClient.upRun);
+				}
+			}
+			
+		}
+		
 		SkyFightClient.pother.move(new Vector2f(addX, addY));
 	}
 		

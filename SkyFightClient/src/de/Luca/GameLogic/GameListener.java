@@ -80,6 +80,7 @@ public class GameListener implements Listener {
 		Arrow a = new Arrow(new Vector2f(SkyFightClient.p.getWorldPos()), Loader.loadTexture("D:\\Test.png", "bow"), yVel, xVel, SkyFightClient.p);
 		EntityManager.addEntity(a);
 		GameManager.setValue(GameManager.getValue() - 4);
+		a.playSound(SkyFightClient.bowShoot, 50, false);
 		ServerTicker.addArrowChange(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y, xVel, yVel, a.getUUID(), true);
 		startedBow = -1;
 	}
@@ -90,6 +91,13 @@ public class GameListener implements Listener {
 		if(e.getAction() != GLFW.GLFW_PRESS || e.getButton() != GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 			return;
 		}
+		
+		if(SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.BOW)) {
+			return;
+		}
+		
+		SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
+		SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
 		
 		float distance = SkyFightClient.p.getWorldPos().distance(SkyFightClient.pother.getWorldPos());
 		if (distance < 3) {
@@ -104,11 +112,15 @@ public class GameListener implements Listener {
 						if(!SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.SWORD)) {
 							dmg = 1;
 						}
+						SkyFightClient.p.playSound(SkyFightClient.hit, 50, false);
 						ServerTicker.addDmgDelt(dmg);
+						return;
 					}
 				}
 			}
 		}
+		
+		SkyFightClient.p.playSound(SkyFightClient.missHit, 50, false);
 
 	}
 

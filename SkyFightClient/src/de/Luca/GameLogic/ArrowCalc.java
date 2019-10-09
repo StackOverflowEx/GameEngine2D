@@ -81,6 +81,7 @@ public class ArrowCalc {
 					ServerTicker.addArrowChange(0, 0, 0, 0, a.getUUID(), false);
 					EntityManager.removeEntity(a);
 					ServerTicker.addDmgDelt(8);
+					a.playSound(SkyFightClient.arrowHit, 50, false);
 				}
 			}
 		}
@@ -96,6 +97,7 @@ public class ArrowCalc {
 				GameManager.setValue(GameManager.getValue() + b.getBlockData().getValue());
 				ServerTicker.addBlockChange((int) b.getWorldPos().x, (int) b.getWorldPos().y,
 						b.getBlockData().getName(), 1f);
+				a.playSound(SkyFightClient.arrowHit, 50, false);
 				return;
 			}
 			continue;

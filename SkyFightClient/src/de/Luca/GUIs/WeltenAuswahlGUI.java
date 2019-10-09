@@ -68,6 +68,9 @@ public class WeltenAuswahlGUI extends GUI {
 		int wholeHeight = Calc.getPixelHeight(0.3f);
 
 		File customMaps = new File(SkyFightClient.root + "/maps/own");
+		if(!customMaps.exists()) {
+			customMaps.mkdirs();
+		}
 		int i = 0;
 		for (File map : customMaps.listFiles()) {
 			if (map.isDirectory()) {

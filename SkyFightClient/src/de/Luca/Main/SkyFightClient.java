@@ -7,6 +7,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import de.Luca.Connection.Connection;
 import de.Luca.Entities.Player;
+import de.Luca.GIF.Animation;
 import de.Luca.GUIs.BlockAuswahl;
 import de.Luca.GUIs.EndscreenOverlayGUI;
 import de.Luca.GUIs.IngameOverlayGUI;
@@ -22,7 +23,9 @@ import de.Luca.GUIs.WorldEditorSettings;
 import de.Luca.GameLogic.GameState;
 import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
-import de.Luca.Text.TextManager;
+import de.Luca.Sound.AudioManager;
+import de.Luca.Sound.SoundData;
+import de.Luca.Sound.Source;
 
 public class SkyFightClient {
 
@@ -184,6 +187,27 @@ public class SkyFightClient {
 	public static long CalibriB20;
 	public static long Alba18;
 	public static long Alba38;
+	
+	// Sounds
+	public static SoundData backMusic;
+	public static SoundData footstep;
+	public static SoundData breakingSound;
+	public static SoundData arrowHit;
+	public static SoundData bowShoot;
+	public static SoundData missHit;
+	public static SoundData hit;
+	public static SoundData click;
+	
+	//Sound sources
+	public static Source walking;
+	public static Source walkingOther;
+	public static Source backgroundMusic;
+	
+	//Animations
+	public static Animation upRun;
+	public static Animation downRun;
+	public static Animation punchUp;
+	public static Animation punchDown;
 
 	// Gamestate
 	public static GameState gameState = GameState.MENUE;
@@ -203,31 +227,49 @@ public class SkyFightClient {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+		
+		walking = AudioManager.genSource();
+		walkingOther = AudioManager.genSource();
+		backgroundMusic = AudioManager.genSource();
+		
+		upRun = new Animation(root + "/res/player/upRun.gif", "run");
+		downRun = new Animation(root + "/res/player/downRun.gif", "run");
+		punchUp = new Animation(root + "/res/player/punchUp.gif", "punch");
+		punchDown = new Animation(root + "/res/player/punchDown.gif", "punch");
+		
+		breakingSound = AudioManager.loadSound(root + "/res/sounds/ingame/breaking.ogg", "breaking");
+		backMusic = AudioManager.loadSound(root + "/res/sounds/background.ogg", "background");
+		footstep = AudioManager.loadSound(root + "/res/sounds/ingame/footstep.ogg", "footsteop");
+		arrowHit = AudioManager.loadSound(root + "/res/sounds/ingame/arrow_hit.ogg", "footsteop");
+		bowShoot = AudioManager.loadSound(root + "/res/sounds/ingame/Bow_release.ogg", "footsteop");
+		hit = AudioManager.loadSound(root + "/res/sounds/ingame/sword_hit_2.ogg", "footsteop");
+		missHit = AudioManager.loadSound(root + "/res/sounds/ingame/sword_swing.ogg", "footsteop");
+		click = AudioManager.loadSound(root + "/res/sounds/ingame/Button.ogg", "footsteop");
 
-		TextManager.generateFont("C:\\Windows\\Fonts\\impact.ttf", 20, "Impact", false, false);
-		TextManager.generateFont(root + "/res/fonts/constan.ttf", 86 , "Constantia", false, true);
-		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 40 , "ConstantiaB", false, false);
-		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 30 , "ConstantiaB2", false, false);
-		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 62 , "ConstantiaB3", false, false);
-		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 48 , "ConstantiaB4", false, false);
-		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 36 , "ConstantiaB5", false, false);
-		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 24 , "ConstantiaB6", false, false);
-		TextManager.generateFont(root + "/res/fonts/calibri.ttf", 24 , "Calibri", false, false);
-		TextManager.generateFont(root + "/res/fonts/calibrib.ttf", 20 , "CalibriB1", false, false);
-		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 26 , "Alba1", false, false);
-		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 36 , "Alba2", false, false);
-		Impact20 = TextManager.getFont("Impact");
-		Constantia86 = TextManager.getFont("Constantia");
-		ConstantiaB40 = TextManager.getFont("ConstantiaB");
-		ConstantiaB32 = TextManager.getFont("ConstantiaB2");
-		ConstantiaB80 = TextManager.getFont("ConstantiaB3");
-		ConstantiaB56 = TextManager.getFont("ConstantiaB4");
-		ConstantiaB38 = TextManager.getFont("ConstantiaB5");
-		ConstantiaB26 = TextManager.getFont("ConstantiaB6");
-		Calibri26 = TextManager.getFont("Calibri");
-		CalibriB20 = TextManager.getFont("CalibriB1");
-		Alba18 = TextManager.getFont("Alba1");
-		Alba38 = TextManager.getFont("Alba2");
+//		TextManager.generateFont("C:\\Windows\\Fonts\\impact.ttf", 20, "Impact", false, false);
+//		TextManager.generateFont(root + "/res/fonts/constan.ttf", 86 , "Constantia", false, true);
+//		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 40 , "ConstantiaB", false, false);
+//		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 30 , "ConstantiaB2", false, false);
+//		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 62 , "ConstantiaB3", false, false);
+//		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 48 , "ConstantiaB4", false, false);
+//		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 36 , "ConstantiaB5", false, false);
+//		TextManager.generateFont(root + "/res/fonts/constanb.ttf", 24 , "ConstantiaB6", false, false);
+//		TextManager.generateFont(root + "/res/fonts/calibri.ttf", 24 , "Calibri", false, false);
+//		TextManager.generateFont(root + "/res/fonts/calibrib.ttf", 20 , "CalibriB1", false, false);
+//		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 26 , "Alba1", false, false);
+//		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 36 , "Alba2", false, false);
+//		Impact20 = TextManager.getFont("Impact");
+//		Constantia86 = TextManager.getFont("Constantia");
+//		ConstantiaB40 = TextManager.getFont("ConstantiaB");
+//		ConstantiaB32 = TextManager.getFont("ConstantiaB2");
+//		ConstantiaB80 = TextManager.getFont("ConstantiaB3");
+//		ConstantiaB56 = TextManager.getFont("ConstantiaB4");
+//		ConstantiaB38 = TextManager.getFont("ConstantiaB5");
+//		ConstantiaB26 = TextManager.getFont("ConstantiaB6");
+//		Calibri26 = TextManager.getFont("Calibri");
+//		CalibriB20 = TextManager.getFont("CalibriB1");
+//		Alba18 = TextManager.getFont("Alba1");
+//		Alba38 = TextManager.getFont("Alba2");
 
 		String path = root + "/res/gui/worldeditor/";
 		playerUP = Loader.loadTexture(root + "/res/player/up.png", "player");

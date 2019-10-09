@@ -13,9 +13,17 @@ public class Effect {
 	private Animation a;
 	private RenderModel model;
 	private Vector2f worldPos;
+	private Texture tex;
+	private boolean stopped = false;
 	
 	public Effect(Animation effect, Vector2f worldPos, Vector2f size) {
 		a = effect.copy();
+		this.worldPos = worldPos;
+		model = new RenderModel(new Vector2f(0, 0), new Model(size), 0);
+	}
+	
+	public Effect(Texture effect, Vector2f worldPos, Vector2f size) {
+		tex = effect;
 		this.worldPos = worldPos;
 		model = new RenderModel(new Vector2f(0, 0), new Model(size), 0);
 	}
@@ -33,26 +41,44 @@ public class Effect {
 		calcOpenGLPos();
 	}
 	
+	public void changeTexture(Texture tex) {
+		this.tex = tex;
+		update();
+	}
+	
 	public RenderModel getRenderModel() {
 		return model;
 	}
 	
 	public void update() {
-		Texture tex = a.getFrame();
-		model.getModel().setTexture(tex);
+		if(a != null) {
+			Texture tex = a.getFrame();
+			model.getModel().setTexture(tex);
+		}else {
+			model.getModel().setTexture(tex);
+		}
 	}
 	
 	public boolean isPlaying() {
-		return a.isRunning();
+		if(a != null) {
+			return a.isRunning();
+		}
+		return !stopped;
 	}
 	
 	public void play() {
-		a.start(false);
+		if(a != null) {
+			a.start(false);
+		}
+		stopped = false;
 		EffectManager.addEffect(this);
 	}
 	
 	public void stop() {
-		a.stop();
+		if(a != null) {
+			a.stop();
+		}
+		stopped = true;
 		EffectManager.removeEffect(this);
 	}
 

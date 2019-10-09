@@ -26,7 +26,7 @@ public class BufferLoader {
 		float[][] buffer = TextManager.getBuffer();
 		// -0.5f, -0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f
 		verticies = combineBuffer(new float[] {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, -0.5f, 0.5f, 0.5f, -1, -1, -1, 1, 1, -1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[0]);
-		textureCoords = combineBuffer(new float[] {0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[1]);
+		textureCoords = combineBuffer(new float[] {0, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1 }, buffer[1]);
 		
 		countFrame();
 		frame++;

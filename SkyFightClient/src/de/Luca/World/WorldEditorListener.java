@@ -1,6 +1,7 @@
 package de.Luca.World;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
@@ -11,6 +12,7 @@ import de.Luca.Blocks.BlockManager;
 import de.Luca.EventManager.EventHandler;
 import de.Luca.EventManager.Listener;
 import de.Luca.Events.MouseButtonEvent;
+import de.Luca.Sound.SoundData;
 import de.Luca.Utils.DefaultKeyListener;
 import de.Luca.Utils.WorldPosition;
 
@@ -45,6 +47,9 @@ public class WorldEditorListener implements Listener{
 					}
 					for(Block b : add) {
 						BlockManager.addBlock(b);
+						if(b.getBlockData().getPlaceSound() != null) {
+							playSound(b.getBlockData().getPlaceSound(), b);
+						}
 					}
 					WorldEditor.setMirroring(false);
 					return;
@@ -66,16 +71,28 @@ public class WorldEditorListener implements Listener{
 				if(selectedBlock != null) {
 					Block b = new Block(selectedBlock, WorldPosition.getMouseWorldPos());
 					BlockManager.addBlock(b);
+					if(b.getBlockData().getPlaceSound() != null) {
+						playSound(b.getBlockData().getPlaceSound(), b);
+					}
 				}
 				return;
 			}else if((e.getAction() == GLFW.GLFW_PRESS || e.getAction() == GLFW.GLFW_REPEAT) && e.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
 				Block b = BlockManager.getBlock(WorldPosition.getMouseWorldPos());
 				if(b != null) {
 					BlockManager.removeBlock(b);
+					if(b.getBlockData().getBreakSound() != null) {
+						playSound(b.getBlockData().getBreakSound(), b);
+					}
 				}
 			}
 			
 		}
+	}
+	
+	public void playSound(SoundData sd, Block b) {
+		Random r = new Random();
+		float ran = r.nextFloat() - 0.5f;
+		b.playSound(sd, 1 + ran, 1);
 	}
 
 }

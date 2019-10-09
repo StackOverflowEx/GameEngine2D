@@ -2,16 +2,37 @@ package de.Luca.Blocks;
 
 import org.joml.Vector2f;
 
+import de.Luca.Sound.AudioManager;
+import de.Luca.Sound.SoundData;
+import de.Luca.Sound.Source;
+
 public class Block {
 	
 	private BlockData blockData;
 	private Vector2f worldPos;
 	private float breakPercentage;
+	private Source source;
 	
 	public Block(BlockData blockData, Vector2f worldPos) {
 		this.blockData = blockData;
 		this.breakPercentage = 0;
 		setPosition(worldPos);
+	}
+	
+	public void playSound(SoundData d, float pitch, float volume) {
+		if(source == null || source.isDeleted() || source.isPlaying()) {
+			if(source != null && source.isDeleted()) {
+				source = null;
+			}
+			return;
+		}
+		Source s = AudioManager.genSource();
+		source = s;
+		s.setPosition(worldPos);
+		s.setPitch(pitch);
+		s.setVolume(volume);
+		s.playSound(d);
+		AudioManager.deleteWhenFinished(s);
 	}
 	
 	public void setBreakPercentage(float percentage) {

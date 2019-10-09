@@ -2,6 +2,7 @@ package de.Luca.GUIs;
 
 import java.io.File;
 
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
@@ -58,6 +59,8 @@ public class WorldEditorErstellen extends GUI {
 	private GLabel playSound;
 	private GLabel walkSound;
 	private GLabel save3;
+
+	private String S3 = "", S2 = "", S1 = "", S4 = "";
 	
 	private Source source;
 
@@ -187,7 +190,7 @@ public class WorldEditorErstellen extends GUI {
 		
 		playSound = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.59f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
-		playSound.setText("Play Sound", SkyFightClient.ConstantiaB26, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+		playSound.setText("Place Sound", SkyFightClient.ConstantiaB26, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
 				0);
 		this.addComponent(playSound);
 		
@@ -339,10 +342,10 @@ public class WorldEditorErstellen extends GUI {
 			if(bd.getBreakSound() != null) {
 				Source2.setTextCut(bd.getBreakSound().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			}
-			if(bd.getBreakSound() != null) {
+			if(bd.getPlaceSound() != null) {
 				Source3.setTextCut(bd.getPlaceSound().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			}
-			if(bd.getBreakSound() != null) {
+			if(bd.getWalkSound() != null) {
 				Source4.setTextCut(bd.getWalkSound().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			}
 		}
@@ -375,13 +378,13 @@ public class WorldEditorErstellen extends GUI {
 			public void run(String text) {
 				try {
 					float hardness = Float.parseFloat(Hardness.getText());
-					if (hardness > 300) {
-						hardness = 300;
+					if (hardness > 20) {
+						hardness = 20;
 					}
 					if (hardness <= 0) {
 						hardness = 1.0f;
 					}
-					float value = hardness / 300f;
+					float value = hardness / 20f;
 					Hardness2.setValue(value);
 				} catch (NumberFormatException e) {
 					Hardness.setText("1.0");
@@ -393,7 +396,7 @@ public class WorldEditorErstellen extends GUI {
 
 			@Override
 			public void run(float value) {
-				float hardness = value * 300f;
+				float hardness = value * 20f;
 				float th = hardness * 100f;
 				hardness = Math.round(th);
 				hardness = hardness / 100f;
@@ -427,6 +430,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("PNG (*png)", root, "png");
 					int ret = fd.showToUser();
 					if (ret == 0) {
+						S1 = fd.getSelectedFile().getPath();
 						Source1.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
@@ -447,6 +451,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("OGG (*ogg)", root, "ogg");
 					int ret = fd.showToUser();
 					if (ret == 0) {
+						S2 = fd.getSelectedFile().getPath();
 						Source2.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
@@ -467,6 +472,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("OGG (*ogg)", root, "ogg");
 					int ret = fd.showToUser();
 					if (ret == 0) {
+						S3 = fd.getSelectedFile().getPath();
 						Source3.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
@@ -487,6 +493,7 @@ public class WorldEditorErstellen extends GUI {
 					FileDialog fd = new FileDialog("OGG (*ogg)", root, "ogg");
 					int ret = fd.showToUser();
 					if (ret == 0) {
+						S4 = fd.getSelectedFile().getPath();
 						Source4.setTextCut(fd.getSelectedFile().getPath(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 					}
 				}
@@ -498,9 +505,9 @@ public class WorldEditorErstellen extends GUI {
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-					String file = Source2.getLabelText();
+					String file = S2;
 					if(!file.isEmpty()) {
-						source.setPosition(Camera.getPosition());
+						source.setPosition(new Vector2f(0, 0));
 						source.playSound(AudioManager.loadSound(file, "block"));
 					}
 				}
@@ -512,9 +519,9 @@ public class WorldEditorErstellen extends GUI {
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-					String file = Source3.getLabelText();
+					String file = S3;
 					if(!file.isEmpty()) {
-						source.setPosition(Camera.getPosition());
+						source.setPosition(new Vector2f(0, 0));
 						source.playSound(AudioManager.loadSound(file, "block"));
 					}
 				}
@@ -526,7 +533,7 @@ public class WorldEditorErstellen extends GUI {
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-					String file = Source4.getLabelText();
+					String file = S4;
 					if(!file.isEmpty()) {
 						source.setPosition(Camera.getPosition());
 						source.playSound(AudioManager.loadSound(file, "block"));
@@ -543,7 +550,7 @@ public class WorldEditorErstellen extends GUI {
 					String name = Name.getText();
 					float value = Float.parseFloat(Value.getText());
 					float hardness = Float.parseFloat(Hardness.getText());
-					String texture = Source1.getLabelText();
+					String texture = S1;
 					if(name.isEmpty()) {
 						new PopUp("Du musst dem Block einen Namen geben", new Vector4f(1, 0, 0, 1));
 						return;
@@ -563,9 +570,9 @@ public class WorldEditorErstellen extends GUI {
 						}
 					}
 					
-					String breakSound = Source2.getLabelText();
-					String placeSound = Source3.getLabelText();
-					String walkSound = Source4.getLabelText();
+					String breakSound = S2;
+					String placeSound = S3;
+					String walkSound = S4;
 					if(breakSound.isEmpty()) {
 						breakSound = null;
 					}

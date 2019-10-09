@@ -19,9 +19,11 @@ public class Animation {
 	private String gif;
 	private long start;
 	private boolean loop;
+	private String title;
 
-	public Animation(String gif) {
+	public Animation(String gif, String title) {
 		running = false;
+		this.title = title;
 		start = 0;
 		this.gif = gif;
 		textures = new LinkedHashMap<Texture, Integer>();
@@ -33,16 +35,21 @@ public class Animation {
 		}
 	}
 	
-	public Animation(String gif, boolean running, long start, boolean loop, LinkedHashMap<Texture, Integer> textures) {
+	public String getTitle() {
+		return title;
+	}
+	
+	public Animation(String gif, boolean running, long start, boolean loop, LinkedHashMap<Texture, Integer> textures, String title) {
 		this.gif = gif;
 		this.running = running;
 		this.start = start;
 		this.loop = loop;
 		this.textures = textures;
+		this.title = title;
 	}
 	
 	public Animation copy() {
-		return new Animation(gif, running, start, loop, textures);
+		return new Animation(gif, running, start, loop, textures, title);
 	}
 
 	private void getTextures() throws IOException {

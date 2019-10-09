@@ -68,6 +68,8 @@ public abstract class Entity {
 		return null;
 	}
 	
+	public abstract void visibleUpdate();
+	
 	public boolean isPlaying(SoundData d) {
 		return audioSources.containsKey(d);
 	}
@@ -75,6 +77,7 @@ public abstract class Entity {
 	public void playSound(SoundData d, float maxAudibleDistance, boolean loop) {
 		Source source = AudioManager.genSource();
 		audioSources.put(d, source);
+		source.setPosition(worldPos);
 		source.setMaxAudibleDistanace(maxAudibleDistance);
 		source.setLoop(loop);
 		source.playSound(d);
@@ -122,6 +125,7 @@ public abstract class Entity {
 	
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+		visibleUpdate();
 	}
 	
 	public boolean isOnGround() {

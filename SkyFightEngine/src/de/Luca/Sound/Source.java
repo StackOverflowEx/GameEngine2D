@@ -9,11 +9,13 @@ public class Source {
 	private int id;
 	private float maxAudibleDistance;
 	private boolean loop;
+	private boolean isDeleted;
 	
 	public Source(int id) {
 		this.id = id;
 		maxAudibleDistance = 40;
 		loop = false;
+		isDeleted = false;
 		
 		AL10.alSourcef(id, AL10.AL_ROLLOFF_FACTOR, 1);
 		AL10.alSourcef(id, AL10.AL_REFERENCE_DISTANCE, 1);
@@ -58,8 +60,13 @@ public class Source {
 	    return (float) Math.sqrt(Math.pow(x[0] - vec.x, 2) + Math.pow(y[0] - vec.y, 2) + Math.pow(z[0] - vec.z, 2));
 	}
 	
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+	
 	public void delete() {
 		AL10.alDeleteSources(id);
+		isDeleted = true;
 	}
 	
 	public void setPosition(Vector2f openGLPos) {

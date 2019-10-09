@@ -20,6 +20,7 @@ public class ServerTicker {
 	private static Timer timer;
 	private static Connection con;
 	private static int counter;
+	private static boolean hit;
 	
 	public static final int gracePeriode = 30;
 
@@ -32,6 +33,10 @@ public class ServerTicker {
 			return;
 		}
 		dmgDelt += add;
+	}
+	
+	public static void addHit() {
+		hit = true;
 	}
 	
 	public static void addDmgTaken(float add) {
@@ -94,8 +99,8 @@ public class ServerTicker {
 		send.packetType = Packet.GAME_DATA;
 		send.setGamePacketType(GamePacket.POSITION);
 		send.b = SkyFightClient.p.getWorldPos().x;
-		send.c = SkyFightClient.p.getWorldPos().y;
-		send.d = SkyFightClient.p.isFacingRight();
+		send.c = SkyFightClient.p.getWorldPos().y + "/" + hit;
+		send.d = SkyFightClient.p.isFacingRight() + "/" + SkyFightClient.ingameOverlay.getSelectedSlot().toString();
 
 		JSONArray changes = new JSONArray();
 		if (GameManager.getBreaking() != null) {
@@ -120,6 +125,7 @@ public class ServerTicker {
 		counter++;
 		blockChanges.clear();
 		arrowChanges.clear();
+		hit = false;
 		dmgDelt = 0;
 		dmgTaken = 0;
 

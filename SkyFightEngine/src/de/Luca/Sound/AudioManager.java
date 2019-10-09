@@ -5,6 +5,7 @@ import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.joml.Vector2f;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
@@ -14,6 +15,7 @@ import org.lwjgl.stb.STBVorbis;
 import org.lwjgl.system.MemoryStack;
 
 import de.Luca.Calculation.Camera;
+import de.Luca.Utils.WorldPosition;
 
 public class AudioManager {
 	
@@ -22,6 +24,7 @@ public class AudioManager {
 	private static ALCCapabilities alcc;
 	private static ConcurrentHashMap<String, ArrayList<SoundData>> buffers;
 	private static ArrayList<Source> sources;
+	private static ArrayList<Source> deleteFinishd;
 	
 	public static void init() {
 		String defaultDeviceName = ALC10.alcGetString(0, ALC10.ALC_DEFAULT_DEVICE_SPECIFIER);
@@ -34,10 +37,15 @@ public class AudioManager {
 		
 		AL.createCapabilities(alcc);
 		buffers = new ConcurrentHashMap<String, ArrayList<SoundData>>();
+		deleteFinishd = new ArrayList<Source>();
 		sources = new ArrayList<Source>();
 		
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
 		
+	}
+	
+	public static void deleteWhenFinished(Source s) {
+		deleteFinishd.add(s);
 	}
 	
 	public static SoundData loadSound(String file, String soundType) {
@@ -97,9 +105,15 @@ public class AudioManager {
 	}
 	
 	public static void update() {
-		AL10.alListener3f(AL10.AL_POSITION, Camera.getPosition().x, Camera.getPosition().y, 0);
+		Vector2f real = WorldPosition.getExactWorldPos(Camera.getPosition());
+		AL10.alListener3f(AL10.AL_POSITION, real.x, real.y, 0);
 		AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
 		
+		for(Source s : deleteFinishd) {
+			if(!s.isPlaying()) {
+				s.delete();
+			}
+		}
 //		for(Source s : sources) {
 //			s.checkForDistance();
 //		}

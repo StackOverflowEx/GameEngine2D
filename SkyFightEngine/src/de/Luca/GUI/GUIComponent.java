@@ -2,10 +2,16 @@ package de.Luca.GUI;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.joml.Vector2f;
 import org.joml.Vector4f;
+import org.lwjgl.glfw.GLFW;
 
+import de.Luca.Calculation.Camera;
 import de.Luca.Models.RenderModel;
 import de.Luca.Models.Texture;
+import de.Luca.Sound.AudioManager;
+import de.Luca.Sound.Source;
+import de.Luca.Utils.WorldPosition;
 
 public abstract class GUIComponent {
 	
@@ -164,6 +170,16 @@ public abstract class GUIComponent {
 	
 	public void click(int key, int action, int mouseX, int mouseY) {
 		for(ClickCallback cc : clickCallbacks) {
+			if(GUIManager.getClickSound() != null && this.getClass().getSimpleName().equals("GButton")) {
+				if(key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+					Source s = AudioManager.genSource();
+					Vector2f pos = WorldPosition.getExactWorldPos(Camera.getPosition());
+					s.setPosition(pos);
+					s.setVolume(0.3f);
+					s.playSound(GUIManager.getClickSound());
+					AudioManager.deleteWhenFinished(s);
+				}
+			}
 			cc.run(this, key, action, mouseX, mouseY);
 		}
 	}

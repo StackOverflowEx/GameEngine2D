@@ -12,6 +12,7 @@ import de.Luca.Models.RenderModel;
 import de.Luca.Models.Texture;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Shader.GUIShader;
+import de.Luca.Sound.SoundData;
 import de.Luca.Utils.WorldPosition;
 import de.Luca.Window.Window;
 
@@ -20,6 +21,8 @@ public class GUIManager {
 	private static CopyOnWriteArrayList<GUI> guis = new CopyOnWriteArrayList<GUI>();
 	private static GUIShader shader;
 	private static Matrix4f projection;
+	
+	private static SoundData clickSound;
 	
 	public static void init() {
 		shader = new GUIShader();
@@ -41,6 +44,10 @@ public class GUIManager {
 		shader.cleanUP();
 	}
 	
+	public static SoundData getClickSound() {
+		return clickSound;
+	}
+	
 	public static void render() {
 		Vector2f windowSize = Window.getWindowSize();
 		shader.start();
@@ -53,6 +60,10 @@ public class GUIManager {
 		}
 		shader.stop();
 		
+	}
+	
+	public static void setClickSound(SoundData sd) {
+		clickSound = sd;
 	}
 	
 	private static void renderGUI(GUI gui, Vector2f windowSize, boolean b) {

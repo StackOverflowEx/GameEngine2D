@@ -76,4 +76,10 @@ public class Arrow extends Entity{
 
 	@Override
 	public void updateAnimation() {}
+
+	@Override
+	public void visibleUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
 }

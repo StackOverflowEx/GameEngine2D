@@ -27,8 +27,6 @@ public class SkyFightEngine {
 			
 			@Override
 			public void loop() {
-				// TODO Auto-generated method stub
-				
 			}
 			
 			@Override
