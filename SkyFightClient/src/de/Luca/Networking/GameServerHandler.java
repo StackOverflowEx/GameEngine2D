@@ -158,7 +158,6 @@ public class GameServerHandler {
 			int x = blockData.getInt("x");
 			int y = blockData.getInt("y");
 			float breakPercent = blockData.getFloat("breakPercent");
-			System.out.println("BREAK: " + breakPercent);
 			String name = blockData.getString("name");
 			Block b = BlockManager.getBlock(new Vector2f(x, y));
 			if(b == null || !name.equals(b.getBlockData().getName())) {
@@ -183,7 +182,7 @@ public class GameServerHandler {
 			}else {
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
-				b.playSound(SkyFightClient.footstep, ran, 1);
+				b.playSound(SkyFightClient.breakingSound, ran, 1);
 			}
 		}
 	}
@@ -198,9 +197,12 @@ public class GameServerHandler {
 			float yVel = arrowData.getFloat("yVel");
 			boolean added = arrowData.getBoolean("add");
 			String uuid = arrowData.getString("uuid");
+			boolean playerHit = arrowData.getBoolean("player");
 			
+			System.out.println(added);
 			if(added) {
 				Arrow a = new Arrow(new Vector2f(x, y), Loader.loadTexture("D:/Test.png", "arrow"), yVel, xVel, SkyFightClient.pother);
+				a.setUUID(uuid);
 				EntityManager.addEntity(a);
 			}else {
 				for(Entity e : EntityManager.getEntities()) {
@@ -209,7 +211,11 @@ public class GameServerHandler {
 						if(a.getUUID().toString().equals(uuid)) {
 							a.setVisible(false);
 							EntityManager.removeEntity(a);
-							a.playSound(SkyFightClient.arrowHit, 50, false);
+							if(playerHit) {
+								a.playSound(SkyFightClient.arrowHit, 50, false);
+							}else {
+								a.playSound(SkyFightClient.arrowHit, 50, false);
+							}
 						}
 					}
 				}

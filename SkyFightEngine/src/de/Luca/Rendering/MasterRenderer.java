@@ -165,6 +165,7 @@ public class MasterRenderer extends Thread {
 
 	public void draw() {
 		loadTextures();
+		Loader.deleteQueued();
 		swapFrames();
 		if (shader == null) {
 			shader = new BlockShader();

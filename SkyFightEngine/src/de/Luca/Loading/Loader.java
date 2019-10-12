@@ -36,6 +36,7 @@ public class Loader {
 
 	public static HashMap<String, ArrayList<Texture>> textures = new HashMap<String, ArrayList<Texture>>();
 	public static HashMap<Integer, int[]> vbos = new HashMap<Integer, int[]>();
+	public static ArrayList<Texture> deleteNext = new ArrayList<Texture>();
 	public static int QuadVAO = -1;
 
 	public static int getQuadVAO() {
@@ -277,9 +278,17 @@ public class Loader {
 	public static void deleteTextures(String type) {
 		if (textures.containsKey(type)) {
 			for (Texture texture : textures.get(type)) {
-				GL11.glDeleteTextures(texture.getTextureID());
+				deleteNext.add(texture);
 			}
+			textures.remove(type);
 		}
+	}
+	
+	public static void deleteQueued() {
+		for(Texture tex : deleteNext) {
+			GL11.glDeleteTextures(tex.getTextureID());
+		}
+		deleteNext.clear();
 	}
 
 	public static void cleanUP() {

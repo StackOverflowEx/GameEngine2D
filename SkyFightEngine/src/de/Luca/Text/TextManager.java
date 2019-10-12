@@ -94,12 +94,10 @@ public class TextManager {
 
 	public static void addText(Text text) {
 		texts.add(text);
-		System.out.println("ADD");
 		changed = true;
 	}
 	
 	public static void setChanged() {
-		System.out.println("SET");
 		changed = true;
 	}
 
@@ -111,7 +109,6 @@ public class TextManager {
 
 	public static void removeText(Text text) {
 		texts.remove(text);
-		System.out.println("REM");
 		changed = true;
 	}
 

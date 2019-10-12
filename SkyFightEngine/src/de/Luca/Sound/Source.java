@@ -69,8 +69,10 @@ public class Source {
 		isDeleted = true;
 	}
 	
-	public void setPosition(Vector2f openGLPos) {
-		AL10.alSource3f(id, AL10.AL_POSITION, openGLPos.x, openGLPos.y, -1);
+	public void setPosition(Vector2f worldPos) {
+		AL10.alSourcei(id, AL10.AL_SOURCE_RELATIVE, AL10.AL_FALSE);
+		AL10.alSourcei(id, AL10.AL_SOURCE_ABSOLUTE, AL10.AL_TRUE);
+		AL10.alSource3f(id, AL10.AL_POSITION, worldPos.x, worldPos.y, 0);
 	}
 	
 	public void setVolume(float volume) {

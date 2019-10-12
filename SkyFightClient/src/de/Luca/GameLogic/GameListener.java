@@ -81,7 +81,7 @@ public class GameListener implements Listener {
 		EntityManager.addEntity(a);
 		GameManager.setValue(GameManager.getValue() - 4);
 		a.playSound(SkyFightClient.bowShoot, 50, false);
-		ServerTicker.addArrowChange(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y, xVel, yVel, a.getUUID(), true);
+		ServerTicker.addArrowChange(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y, xVel, yVel, a.getUUID(), true, false);
 		startedBow = -1;
 	}
 

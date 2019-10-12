@@ -78,7 +78,7 @@ public class ArrowCalc {
 
 				if(collides(ahit, phit) || inside(ahit, phit)) {
 					a.setVisible(false);
-					ServerTicker.addArrowChange(0, 0, 0, 0, a.getUUID(), false);
+					ServerTicker.addArrowChange(0, 0, 0, 0, a.getUUID(), false, true);
 					EntityManager.removeEntity(a);
 					ServerTicker.addDmgDelt(8);
 					a.playSound(SkyFightClient.arrowHit, 50, false);
@@ -93,7 +93,7 @@ public class ArrowCalc {
 				BlockManager.removeBlock(b);
 				a.setVisible(false);
 				EntityManager.removeEntity(a);
-				ServerTicker.addArrowChange(0, 0, 0, 0, a.getUUID(), false);
+				ServerTicker.addArrowChange(0, 0, 0, 0, a.getUUID(), false, false);
 				GameManager.setValue(GameManager.getValue() + b.getBlockData().getValue());
 				ServerTicker.addBlockChange((int) b.getWorldPos().x, (int) b.getWorldPos().y,
 						b.getBlockData().getName(), 1f);

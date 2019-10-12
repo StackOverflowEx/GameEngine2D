@@ -55,7 +55,7 @@ public class ServerTicker {
 		blockChanges.add(blockData);
 	}
 	
-	public static void addArrowChange(float x, float y, float xVel, float yVel, UUID uuid, boolean added) {
+	public static void addArrowChange(float x, float y, float xVel, float yVel, UUID uuid, boolean added, boolean isPlayerHit) {
 		JSONObject blockData = new JSONObject();
 		blockData.put("x", x);
 		blockData.put("y", y);
@@ -63,6 +63,7 @@ public class ServerTicker {
 		blockData.put("yVel", yVel);
 		blockData.put("add", added);
 		blockData.put("uuid", uuid.toString());
+		blockData.put("player", isPlayerHit);
 		arrowChanges.add(blockData);
 	}
 

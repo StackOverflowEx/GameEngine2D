@@ -51,9 +51,11 @@ public class WeltenAuswahlGUI extends GUI {
 
 	public void calc() {
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
-		erstellenKnopf.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
-		erstellenText.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
-		back.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
+		erstellenKnopf.setBounds(Calc.getPixelWidth(0.0063f), Calc.getPixelHeight(0.089f),
+				Calc.getPixelWidth(0.113f), Calc.getPixelHeight(0.2f));
+		erstellenText.setBounds(Calc.getPixelWidth(0.014f), Calc.getPixelHeight(0.14f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		back.setBounds(0, 0, Calc.getPixelWidth(0.056f), Calc.getPixelHeight(0.047f));
 		panel.dispose();
 		setUpScrollpanel();
 	}

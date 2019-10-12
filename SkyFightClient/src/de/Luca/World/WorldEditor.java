@@ -139,6 +139,7 @@ public class WorldEditor {
 		SkyFightClient.worldEditorAuswahl.setVisible(false);
 		SkyFightClient.worldEditorSettings.setVisible(false);
 		SkyFightClient.worldEditorErstellen.setVisible(false);
+		SkyFightClient.mainGUI.setVisible(true);
 		MasterRenderer.setBackground(MasterRenderer.getDefaultBackgroundTexture());
 	}
 	

@@ -19,6 +19,7 @@ public class Player extends Entity{
 	private boolean fly;
 	private float yVel;
 	private Effect e;
+	private HOTBARSLOT selected;
 		
 	public Player(Texture up, Texture down, Vector2f worldPos) {
 		super(worldPos, 2, 1);
@@ -41,17 +42,20 @@ public class Player extends Entity{
 	
 	public void setSelected(HOTBARSLOT s) {
 		if(isVisible()) {
-			if(s.equals(HOTBARSLOT.SWORD)) {
-				e.changeTexture(SkyFightClient.IngameOverlayHotbarSword);
-			}else if(s.equals(HOTBARSLOT.BOW)) {
-				e.changeTexture(SkyFightClient.IngameOverlayHotbarBow);
-			}else if(s.equals(HOTBARSLOT.PICKAXE)) {
-				e.changeTexture(SkyFightClient.IngameOverlayHotbarPickaxe);
-			}else if(s.equals(HOTBARSLOT.BLOCK)) {
-				e.changeTexture(SkyFightClient.IngameOverlayHotbarBlockStone);
+			if(!s.equals(selected)) {
+				if(s.equals(HOTBARSLOT.SWORD)) {
+					e.changeTexture(SkyFightClient.IngameOverlayHotbarSword);
+				}else if(s.equals(HOTBARSLOT.BOW)) {
+					e.changeTexture(SkyFightClient.IngameOverlayHotbarBow);
+				}else if(s.equals(HOTBARSLOT.PICKAXE)) {
+					e.changeTexture(SkyFightClient.IngameOverlayHotbarPickaxe);
+				}else if(s.equals(HOTBARSLOT.BLOCK)) {
+					e.changeTexture(SkyFightClient.IngameOverlayHotbarBlockStone);
+				}
 			}
 			e.play();
 		}
+		selected = s;
 	}
 	
 	public void setyVel(float vel) {

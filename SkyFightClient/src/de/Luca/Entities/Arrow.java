@@ -28,6 +28,10 @@ public class Arrow extends Entity{
 		this.renderModel[0] = new RenderModel(new Vector2f(0, 0), new Model(tex, new Vector2f(BlockData.BLOCK_SCALE, BlockData.BLOCK_SCALE)), 0);
 		calcOpenGLPos();
 	}
+	
+	public void setUUID(String uuid) {
+		this.id = UUID.fromString(uuid);
+	}
 
 	public UUID getUUID() {
 		return id;

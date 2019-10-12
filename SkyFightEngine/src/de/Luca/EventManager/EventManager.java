@@ -1,6 +1,5 @@
 package de.Luca.EventManager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,17 +21,18 @@ public class EventManager {
 	private static void fireEvent(Event e, EventPriority p) {
 		final Class<? extends Event> eventClass = e.getClass().asSubclass(Event.class);
 		for(Listener l : listeners.keySet()) {
-			if(listeners.get(l).containsKey(eventClass)) {
-				for(Method m : listeners.get(l).get(eventClass)) {
-					if(m.getAnnotation(EventHandler.class).priority() == p) {
-						try {
+			if(listeners == null || l == null || eventClass == null) {
+				continue;
+			}
+			try {
+				if(listeners.get(l).containsKey(eventClass)) {
+					for(Method m : listeners.get(l).get(eventClass)) {
+						if(m.getAnnotation(EventHandler.class).priority() == p) {
 							m.invoke(l, e);
-						} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-							e1.printStackTrace();
 						}
 					}
 				}
-			}
+			}catch (Exception ex) {}
 		}
 	}
 	

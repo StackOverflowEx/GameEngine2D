@@ -25,6 +25,11 @@ public class AudioManager {
 	private static ConcurrentHashMap<String, ArrayList<SoundData>> buffers;
 	private static ArrayList<Source> sources;
 	private static ArrayList<Source> deleteFinishd;
+	private static Vector2f listenerPos;
+
+	public static Vector2f getListenerPos() {
+		return listenerPos;
+	}
 	
 	public static void init() {
 		String defaultDeviceName = ALC10.alcGetString(0, ALC10.ALC_DEFAULT_DEVICE_SPECIFIER);
@@ -105,10 +110,10 @@ public class AudioManager {
 	}
 	
 	public static void update() {
-		Vector2f real = WorldPosition.getExactWorldPos(Camera.getPosition());
-		AL10.alListener3f(AL10.AL_POSITION, real.x, real.y, 0);
+		listenerPos = WorldPosition.getExactWorldPos(Camera.getPosition());
+		AL10.alListener3f(AL10.AL_POSITION, listenerPos.x, listenerPos.y, -1f);
 		AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
-		
+				
 		for(Source s : deleteFinishd) {
 			if(!s.isPlaying()) {
 				s.delete();

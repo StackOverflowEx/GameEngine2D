@@ -77,6 +77,7 @@ public class PlayerCalc {
 		}
 		
 		if(addX != 0) {
+			SkyFightClient.walking.setPosition(SkyFightClient.p.getWorldPos());
 			if(!SkyFightClient.walking.isPlaying() && p.isOnGround()) {
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
@@ -159,6 +160,7 @@ public class PlayerCalc {
 		float addY = ySpeedOther * sec;
 		
 		if(addX != 0) {
+			SkyFightClient.walkingOther.setPosition(SkyFightClient.pother.getWorldPos());
 			if(!SkyFightClient.walkingOther.isPlaying() && SkyFightClient.pother.isOnGround()) {
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
@@ -180,8 +182,7 @@ public class PlayerCalc {
 				if(!SkyFightClient.pother.isAnimationRunning(1)) {
 					SkyFightClient.pother.startAnimation(1, SkyFightClient.upRun);
 				}
-			}
-			
+			}			
 		}
 		
 		SkyFightClient.pother.move(new Vector2f(addX, addY));
