@@ -26,7 +26,6 @@ import de.Luca.Models.Texture;
 import de.Luca.Sound.AudioManager;
 import de.Luca.Sound.SoundData;
 import de.Luca.Sound.Source;
-import de.Luca.Text.TextManager;
 
 public class SkyFightClient {
 

@@ -277,7 +277,11 @@ public class Window {
 			// bind the right buffer to read from
 			GL11.glReadBuffer(GL11.GL_FRONT);
 			// if the width is not multiple of 4, set unpackPixel = 1
-			GL11.glReadPixels(0, 0, (int) size.x, (int) size.y, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+			if(size.x > size.y) {
+				GL11.glReadPixels((int) ((size.x - size.y) / 2), 0, (int) size.y, (int) size.y, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+			}else {
+				GL11.glReadPixels(0, (int) (size.x + size.x / 2), (int) size.x, (int) size.x, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+			}
 
 			for (int x = 0; x < (int) size.x; x++) {
 				for (int y = 0; y < (int) size.y; y++) {

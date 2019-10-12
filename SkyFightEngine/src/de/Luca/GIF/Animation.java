@@ -53,11 +53,17 @@ public class Animation {
 	}
 
 	private void getTextures() throws IOException {
+		System.out.println("FRAME1 " + title);
 		ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();
+		System.out.println("FRAME2 " + title);
 		File input = new File(gif);
+		System.out.println("FRAME3 " + title);
 		ImageInputStream stream = ImageIO.createImageInputStream(input);
+		System.out.println("FRAME4 " + title);
 		reader.setInput(stream);
+		System.out.println("FRAME5 " + title);
 		ImageFrame[] frames = GIFReader.readGIF(reader);
+		System.out.println("FRAME6 " + title);
 
 		for (ImageFrame frame : frames) {
 			BufferedImage img = frame.getImage();

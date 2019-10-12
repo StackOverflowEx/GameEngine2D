@@ -56,7 +56,7 @@ public class WorldEditor {
 		p.destroy();
 		
 		SkyFightClient.p.setPosition(new Vector2f(0, 0));
-		SkyFightClient.p.setVisible(false);
+		SkyFightClient.p.setVisible(true);
 		SkyFightClient.p.setCollisionWithBlocks(false);
 		SkyFightClient.p.setFlying(true);
 		SkyFightClient.pother.setVisible(false);
@@ -81,7 +81,7 @@ public class WorldEditor {
 		names.clear();
 		
 		SkyFightClient.p.setPosition(new Vector2f(0, 0));
-		SkyFightClient.p.setVisible(false);
+		SkyFightClient.p.setVisible(true);
 		SkyFightClient.p.setCollisionWithBlocks(false);
 		SkyFightClient.p.setFlying(true);
 		SkyFightClient.pother.setVisible(false);
@@ -162,7 +162,7 @@ public class WorldEditor {
 	}
 		
 	public static void save(String mapName) {
-//		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
+		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
 		WorldLoader.mapName = mapName;
 		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		if(maps.exists() && isNewMap()) {
@@ -180,8 +180,7 @@ public class WorldEditor {
 		}
 		maps.mkdirs();
 		
-		saving = true;
-		
+		saving = true;		
 		
 		ArrayList<BlockData> saved = new ArrayList<BlockData>();
 		ArrayList<String> bs = new ArrayList<String>();
@@ -217,7 +216,7 @@ public class WorldEditor {
 			}
 		}
 		MasterRenderer.queueScreenshot(new File(screenshotFolder + "/preview.png"));
-//		p.destroy();
+		p.destroy();
 		new PopUp("Die Map wurde gespeichert.", new Vector4f(0, 1, 0, 1));
 		
 	}

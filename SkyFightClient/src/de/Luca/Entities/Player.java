@@ -86,22 +86,24 @@ public class Player extends Entity{
 
 	@Override
 	public void updateAnimation() {
-		if(down != null) {
-			if(down.isRunning()) {
-				this.renderModel[0].getModel().setTexture(down.getFrame());
-			}else {
-				stopAnimation(0);
-				down = null;
+		try {
+			if(down != null) {
+				if(down.isRunning()) {
+					this.renderModel[0].getModel().setTexture(down.getFrame());
+				}else {
+					stopAnimation(0);
+					down = null;
+				}
 			}
-		}
-		if(up != null) {
-			if(up.isRunning()) {
-				this.renderModel[1].getModel().setTexture(up.getFrame());
-			}else {
-				stopAnimation(1);
-				up = null;
+			if(up != null) {
+				if(up.isRunning()) {
+					this.renderModel[1].getModel().setTexture(up.getFrame());
+				}else {
+					stopAnimation(1);
+					up = null;
+				}
 			}
-		}
+		}catch (NullPointerException e) {}
 	}
 	
 	public boolean isAnimationRunning(int i) {

@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import de.Luca.Blocks.BlockData;
+import de.Luca.Calculation.Calc;
 import de.Luca.Calculation.Camera;
 import de.Luca.GUI.GUIListener;
 import de.Luca.Window.Window;
@@ -23,6 +24,7 @@ public class WorldPosition {
 	
 	public static Vector2f getMouseWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
+		openGL = openGL.mul(Calc.getZoom());
 		Vector2f worldFloat = new Vector2f(openGL.x / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f, openGL.y / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f);
 		Vector2f add = getExactWorldPos(Camera.getPosition());
 		worldFloat.x = worldFloat.x + add.x;
@@ -32,6 +34,7 @@ public class WorldPosition {
 	
 	public static Vector2f getMouseExactWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
+		openGL = openGL.mul(Calc.getZoom());
 		Vector2f worldFloat = new Vector2f(openGL.x / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f, openGL.y / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f);
 		Vector2f add = getExactWorldPos(Camera.getPosition());
 		worldFloat.x = worldFloat.x + add.x;
@@ -51,7 +54,8 @@ public class WorldPosition {
 		x = (2.0f * x) / windowSize.x - 1f;
 		y = (2.0f * y) / windowSize.y -1f;
 		float aspectRation = windowSize.x / windowSize.y;
-		return new Vector2f(x, y / aspectRation);
+		Vector2f ret = new Vector2f(x, y / aspectRation);
+		return ret;
 	}
 	
 //	public static Vector2f getWorldPos() {

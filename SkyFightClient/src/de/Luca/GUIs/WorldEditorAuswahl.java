@@ -54,7 +54,10 @@ public class WorldEditorAuswahl extends GUI {
 
 		int width = Calc.getPixelWidth(0.4328125f);
 		int spacing = Calc.getPixelWidth(0.0075f);
-		int rowAmount = (width + spacing) / Calc.getPixelWidth(0.05f);
+		int rowAmount = (width + 2*spacing) / Calc.getPixelWidth(0.05f);
+		if(rowAmount > 1) {
+			rowAmount -= 1;
+		}
 		
 		int added = 0;
 		GPanel row = new GPanel(0 ,0, 0, 0);

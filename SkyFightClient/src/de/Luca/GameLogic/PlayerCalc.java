@@ -50,6 +50,7 @@ public class PlayerCalc {
 				addY += sec * 5;
 			}
 			if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+				System.out.println("DOWN");
 				addY -= sec * 5;
 			}
 		}else {

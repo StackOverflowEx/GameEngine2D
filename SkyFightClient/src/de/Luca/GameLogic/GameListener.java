@@ -96,6 +96,11 @@ public class GameListener implements Listener {
 			return;
 		}
 		
+		if((System.currentTimeMillis() - lastHit) <= 200) {
+			return;
+		}
+		lastHit = System.currentTimeMillis();
+		
 		float distance = SkyFightClient.p.getWorldPos().distance(SkyFightClient.pother.getWorldPos());
 		if (distance < 3) {
 			if (Math.abs(SkyFightClient.pother.getWorldPos().y - SkyFightClient.p.getWorldPos().y) < 1) {
@@ -103,18 +108,15 @@ public class GameListener implements Listener {
 						&& SkyFightClient.pother.getWorldPos().x > SkyFightClient.p.getWorldPos().x)
 						|| (!SkyFightClient.p.isFacingRight()
 								&& SkyFightClient.pother.getWorldPos().x < SkyFightClient.p.getWorldPos().x)) {
-					if((System.currentTimeMillis() - lastHit) > 50) {
-						lastHit = System.currentTimeMillis();
-						float dmg = 5;
-						if(!SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.SWORD)) {
-							dmg = 1;
-						}
-						SkyFightClient.p.playSound(SkyFightClient.hit, 50, false);
-						SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
-						SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
-						ServerTicker.addDmgDelt(dmg);
-						return;
+					float dmg = 5;
+					if(!SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.SWORD)) {
+						dmg = 1;
 					}
+					SkyFightClient.p.playSound(SkyFightClient.hit, 50, false);
+					SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
+					SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
+					ServerTicker.addDmgDelt(dmg);
+					return;
 				}
 			}
 		}

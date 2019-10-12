@@ -105,6 +105,7 @@ public class ConnectionHandler implements Runnable {
 			os.close();
 			socket.close();
 		} catch (IOException e) {}
+		Searching.removeSearching(this);
 		ConnectionHandler p = Searching.getFoundPartner(this);
 		if(p != null) {
 			Searching.removeSearching(this);

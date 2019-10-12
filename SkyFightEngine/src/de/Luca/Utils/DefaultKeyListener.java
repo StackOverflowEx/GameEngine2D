@@ -4,6 +4,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.lwjgl.glfw.GLFW;
 
+import de.Luca.Calculation.Calc;
 import de.Luca.EventManager.EventHandler;
 import de.Luca.EventManager.Listener;
 import de.Luca.Events.KeyEvent;
@@ -45,13 +46,12 @@ public class DefaultKeyListener implements Listener{
 	@EventHandler
 	public void onScroll(ScrollEvent e) {
 		if(!e.isCancelled()) {
-//			float zoom = (float) (Calc.getZoom() + e.getyOffset() * -0.05f);
-//			if(zoom > 2)
-//				zoom = 2;
-//			if(zoom < 0.4)
-//				zoom = 0.4f;
-//			System.out.println(zoom);
-//			Calc.setZoom(zoom);
+			float zoom = (float) (Calc.getZoom() + e.getyOffset() * -0.05f);
+			if(zoom > 2)
+				zoom = 2;
+			if(zoom < 0.4)
+				zoom = 0.4f;
+			Calc.setZoom(zoom);
 		}
 	}
 	

@@ -47,8 +47,11 @@ public class BlockAuswahl extends GUI {
 		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));
 
 		int width = Calc.getPixelWidth(0.4328125f);
-		int spacing = Calc.getPixelWidth(0.01f);
-		int rowAmount = (width + spacing) / Calc.getPixelWidth(0.05f);
+		int spacing = Calc.getPixelWidth(0.0075f);
+		int rowAmount = (width + 2*spacing) / Calc.getPixelWidth(0.05f);
+		if(rowAmount > 1) {
+			rowAmount -= 1;
+		}
 		
 		int added = 0;
 		GPanel row = new GPanel(0 ,0, 0, 0);

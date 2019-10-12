@@ -71,9 +71,6 @@ public class HandelServerPacketHandler {
 				System.out.println("Unknown error recieved (ID: " + errorCode + ")");
 			}
 		} else if (packet.packetType == Packet.MATCH_FOUND) {
-			SkyFightClient.mainGUI.setIsSearching(false, false);
-			new PopUp("Es wurde ein Gegner gefunden... Bitte warte einen Moment",
-					new Vector4f(0, 1, 0, 1));
 			SkyFightClient.gameState = GameState.WAITING;
 			
 			String map = packet.a.toString();

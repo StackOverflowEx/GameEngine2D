@@ -45,6 +45,7 @@ public class GameServerHandler {
 		GamePacket gp = new GamePacket(packet.toJSONString());
 		
 		if(gp.getGamePacketType() == GamePacket.INFO) {
+			System.out.println("INFO RECIEVED");
 			
 			if(SkyFightClient.gameState == GameState.RUNNING) {
 				//END INFO

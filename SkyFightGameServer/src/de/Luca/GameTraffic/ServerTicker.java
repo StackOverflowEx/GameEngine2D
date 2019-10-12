@@ -54,6 +54,12 @@ public class ServerTicker{
 				}else if(health1 <= 0 && health2 <= 0){
 					sendEndInfo(null);
 				}
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.exit(0);
 			}
 		}
 		

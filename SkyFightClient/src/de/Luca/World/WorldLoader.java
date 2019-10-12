@@ -23,6 +23,7 @@ public class WorldLoader {
 	private static HashMap<String, BlockData> blockData = new HashMap<String, BlockData>();
 	public static String mapName = "Default";
 	public static Vector2f spawn1, spawn2;
+	private static boolean loading;
 	
 	public static void clearBlockData() {
 		Loader.deleteTextures("block");
@@ -35,6 +36,10 @@ public class WorldLoader {
 	}
 	
 	public static void loadMap(String mapFolder) {
+		if(loading) {
+			return;
+		}
+		loading = true;
 		File map = new File(mapFolder);
 		if(!map.exists()) {
 			new PopUp("Die Map wurde nicht gefunden und kann nicht geladen werden.", new Vector4f(1, 0, 0, 1));
@@ -48,6 +53,7 @@ public class WorldLoader {
 		SkyFightClient.worldEditorAuswahl.init();
 		SkyFightClient.blockSelect.init();
 		System.out.println("Map " + mapName + " has successfully been loaded.");
+		loading = false;
 	}
 	
 	public static HashMap<String, BlockData> getBlockData(){
@@ -56,6 +62,10 @@ public class WorldLoader {
 	
 	public static void addBlockData(BlockData bdp) {
 		blockData.put(bdp.getName(), bdp);
+	}
+	
+	public static void removeBlockData(BlockData bdp) {
+		blockData.remove(bdp.getName());
 	}
 	
 	private static void laodBackground(File map) {

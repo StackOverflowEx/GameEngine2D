@@ -324,8 +324,10 @@ public class WorldEditorErstellen extends GUI {
 		addCallbacks();
 	}
 
+	private BlockData old;
 	public void fill() {
 		if(WorldEditorListener.selectedBlock == null) {
+			old = null;
 			Name.setText("");
 			Value.setText("1.0");
 			Hardness.setText("1.0");
@@ -335,6 +337,7 @@ public class WorldEditorErstellen extends GUI {
 			Source4.setText("", SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 		}else {
 			BlockData bd = WorldEditorListener.selectedBlock;
+			old = bd;
 			Name.setText(bd.getName());
 			Value.setText(bd.getValue() + "");
 			Hardness.setText(bd.getHardness() + "");
@@ -583,14 +586,24 @@ public class WorldEditorErstellen extends GUI {
 						walkSound = null;
 					}
 					
-					BlockData bdp = new BlockData(value, hardness, name, Loader.loadTexture(texture, "block"), breakSound, placeSound, walkSound);
+					
+					if(old != null) {
+						WorldLoader.removeBlockData(old);
+					}
+					
+					BlockData bdp;
+					try {
+						bdp = new BlockData(value, hardness, name, Loader.loadTexture(texture, "block"), breakSound, placeSound, walkSound);
+					}catch (Exception e) {
+						new PopUp("Ungültige Datei", new Vector4f(1, 0, 0, 1));
+						return;
+					}
+					
 					WorldLoader.addBlockData(bdp);
 					SkyFightClient.worldEditorAuswahl.addBlock();
 					SkyFightClient.blockSelect.addBlock();
 					SkyFightClient.worldEditorAuswahl.setVisible(false);
 					SkyFightClient.worldEditorAuswahl.setVisible(true);
-					SkyFightClient.blockSelect.setVisible(false);
-					SkyFightClient.blockSelect.setVisible(true);
 					new PopUp("Der Block wurde erstellt", new Vector4f(0, 1, 0, 1));
 				}
 			}

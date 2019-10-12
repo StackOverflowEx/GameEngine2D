@@ -114,11 +114,20 @@ public class AudioManager {
 		AL10.alListener3f(AL10.AL_POSITION, listenerPos.x, listenerPos.y, -1f);
 		AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
 				
+		for(Source s : sources) {
+			if(s.isLoop() && !s.isPlaying()) {
+				s.continuePlaying();
+			}
+		}
+		
 		for(Source s : deleteFinishd) {
 			if(!s.isPlaying()) {
 				s.delete();
+				sources.remove(s);
 			}
 		}
+		deleteFinishd.clear();
+		
 //		for(Source s : sources) {
 //			s.checkForDistance();
 //		}
