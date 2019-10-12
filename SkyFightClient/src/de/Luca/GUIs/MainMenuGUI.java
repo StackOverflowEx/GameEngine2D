@@ -10,7 +10,6 @@ import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
 import de.Luca.GameLogic.GameState;
 import de.Luca.Main.SkyFightClient;
-import de.Luca.Main.SkyFightEngine;
 import de.Luca.Packets.Packet;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;

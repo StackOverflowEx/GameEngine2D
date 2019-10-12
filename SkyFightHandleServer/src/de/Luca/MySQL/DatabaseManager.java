@@ -37,6 +37,10 @@ public class DatabaseManager {
 		return "";
 	}
 	
+	public static void keepAlive() {
+		doseUserExist("KEEPALIVE");
+	}
+	
 	public static boolean setPassword(String email, String password) {
 		try {
 			PreparedStatement ps = MySQL.getConnection().prepareStatement("UPDATE Userdata SET PASSWORD=? WHERE EMAIL=?");
