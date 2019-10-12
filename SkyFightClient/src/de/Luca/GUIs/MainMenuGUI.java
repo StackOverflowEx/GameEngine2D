@@ -10,6 +10,7 @@ import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
 import de.Luca.GameLogic.GameState;
 import de.Luca.Main.SkyFightClient;
+import de.Luca.Main.SkyFightEngine;
 import de.Luca.Packets.Packet;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
@@ -77,7 +78,7 @@ public class MainMenuGUI extends GUI {
 		
 		einstellungen = new GLabel(Calc.getPixelWidth(0.725f), Calc.getPixelHeight(0.56f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
-		einstellungen.setText("Einstellungen", SkyFightClient.ConstantiaB56, new Vector4f(1f, 1f, 1f, 1f),
+		einstellungen.setText("Spiel beenden", SkyFightClient.ConstantiaB56, new Vector4f(1f, 1f, 1f, 1f),
 				TEXT_ALIGN.CENTER, 0);
 		this.addComponent(einstellungen);
 		
@@ -110,7 +111,7 @@ public class MainMenuGUI extends GUI {
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-					//EINSTELLUNGEN ÖFFNEN
+					System.exit(0);
 				}
 			}
 		});
