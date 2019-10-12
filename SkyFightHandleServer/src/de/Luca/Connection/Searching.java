@@ -9,7 +9,7 @@ import de.Luca.Packets.Packet;
 
 public class Searching {
 	
-	private static final String[] presetMaps = new String[]{"Test"};
+	private static final String[] presetMaps = new String[]{"Minecraft"};
 	
 	private static ArrayList<ConnectionHandler> searching = new ArrayList<ConnectionHandler>();
 	private static HashMap<String, ConnectionHandler[]> found = new HashMap<String, ConnectionHandler[]>();

@@ -50,7 +50,6 @@ public class PlayerCalc {
 				addY += sec * 5;
 			}
 			if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
-				System.out.println("DOWN");
 				addY -= sec * 5;
 			}
 		}else {
@@ -79,14 +78,14 @@ public class PlayerCalc {
 		
 		if(addX != 0) {
 			SkyFightClient.walking.setPosition(SkyFightClient.p.getWorldPos());
-			if(!SkyFightClient.walking.isPlaying() && p.isOnGround()) {
+			if(!SkyFightClient.walking.isPlaying() && p.isOnGround() && !p.isFlying()) {
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
 				SkyFightClient.walking.setPitch(1-ran);
 				SkyFightClient.walking.playSound(SkyFightClient.footstep);
 			}
 			
-			if(!p.isOnGround()) {
+			if(!p.isOnGround() && !p.isFlying()) {
 				try {
 					if(SkyFightClient.p.getAnimationTitle(0).equals("run")) {
 						SkyFightClient.p.stopAnimation(0);
