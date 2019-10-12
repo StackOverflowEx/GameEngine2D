@@ -52,7 +52,7 @@ public class GUIListener implements Listener {
 		String letter = new String(new int[] { e.getCodepoint() }, 0, 1);
 		for (GUIComponent component : components) {
 			if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-					|| component.getGUI() == null || !(component instanceof GTextBox)) {
+					|| component.getGUI() == null || !(component instanceof GTextBox) || !component.getGUI().isVisible()) {
 				continue;
 			}
 			GTextBox textBox = (GTextBox) component;
@@ -74,7 +74,7 @@ public class GUIListener implements Listener {
 				System.out.println(data);
 				for (GUIComponent component : components) {
 					if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-							|| component.getGUI() == null || !(component instanceof GTextBox)) {
+							|| component.getGUI() == null || !(component instanceof GTextBox) || !component.getGUI().isVisible()) {
 						continue;
 					}
 					GTextBox textBox = (GTextBox) component;
@@ -98,7 +98,7 @@ public class GUIListener implements Listener {
 				&& (e.getAction() == GLFW.GLFW_PRESS || e.getAction() == GLFW.GLFW_REPEAT)) {
 			for (GUIComponent component : components) {
 				if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-						|| component.getGUI() == null || !(component instanceof GTextBox)) {
+						|| component.getGUI() == null || !(component instanceof GTextBox) || !component.getGUI().isVisible()) {
 					continue;
 				}
 				GTextBox textBox = (GTextBox) component;
@@ -111,7 +111,7 @@ public class GUIListener implements Listener {
 		if (e.getKey() == GLFW.GLFW_KEY_ENTER && e.getAction() == GLFW.GLFW_PRESS) {
 			for (GUIComponent component : components) {
 				if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-						|| component.getGUI() == null || !(component instanceof GTextBox)) {
+						|| component.getGUI() == null || !(component instanceof GTextBox) || !component.getGUI().isVisible()) {
 					continue;
 				}
 				GTextBox textBox = (GTextBox) component;
@@ -137,7 +137,7 @@ public class GUIListener implements Listener {
 		for (GUIComponent component : components) {
 
 			if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-					|| component.getGUI() == null) {
+					|| component.getGUI() == null || !component.getGUI().isVisible()) {
 				continue;
 			}
 
@@ -171,7 +171,7 @@ public class GUIListener implements Listener {
 		for (GUIComponent component : components) {
 
 			if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-					|| component.getGUI() == null) {
+					|| component.getGUI() == null || !component.getGUI().isVisible()) {
 				continue;
 			}
 
@@ -201,7 +201,7 @@ public class GUIListener implements Listener {
 		for (GUIComponent component : components) {
 
 			if (!component.isVisible() || component.getWidth() == 0 || component.getHeight() == 0
-					|| component.getGUI() == null) {
+					|| component.getGUI() == null || !component.getGUI().isVisible()) {
 				continue;
 			}
 

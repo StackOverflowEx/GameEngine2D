@@ -586,6 +586,11 @@ public class WorldEditorErstellen extends GUI {
 					BlockData bdp = new BlockData(value, hardness, name, Loader.loadTexture(texture, "block"), breakSound, placeSound, walkSound);
 					WorldLoader.addBlockData(bdp);
 					SkyFightClient.worldEditorAuswahl.addBlock();
+					SkyFightClient.blockSelect.addBlock();
+					SkyFightClient.worldEditorAuswahl.setVisible(false);
+					SkyFightClient.worldEditorAuswahl.setVisible(true);
+					SkyFightClient.blockSelect.setVisible(false);
+					SkyFightClient.blockSelect.setVisible(true);
 					new PopUp("Der Block wurde erstellt", new Vector4f(0, 1, 0, 1));
 				}
 			}

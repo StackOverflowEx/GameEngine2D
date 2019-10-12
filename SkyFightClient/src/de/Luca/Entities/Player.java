@@ -26,7 +26,7 @@ public class Player extends Entity{
 		this.defaultUp = up;
 		this.yVel = 0;
 		this.fly = false;
-		e = new Effect(SkyFightClient.IngameOverlayHotbarSword, new Vector2f(worldPos).add(new Vector2f(0.5f, 1.5f)), new Vector2f(BlockData.BLOCK_SCALE, BlockData.BLOCK_SCALE));
+		e = new Effect(SkyFightClient.IngameOverlayHotbarSword, new Vector2f(worldPos).add(new Vector2f(0f, 1f)), new Vector2f(BlockData.BLOCK_SCALE, BlockData.BLOCK_SCALE));
 		if(!isVisible()) {
 			e.stop();
 		}
@@ -59,12 +59,12 @@ public class Player extends Entity{
 	}
 	
 	protected void calcOpenGLPos() {
-		e.setWorldPos(new Vector2f(worldPos).add(new Vector2f(0.5f, 1.5f)));
+		e.setWorldPos(new Vector2f(worldPos).add(new Vector2f(0f, 1f)));
 		float x = worldPos.x * BlockData.BLOCK_SCALE;
 		float y = worldPos.y * BlockData.BLOCK_SCALE;
 		Vector2f openGL = new Vector2f(x, y);
 		renderModel[0].setLocation(new Vector2f(openGL.x, openGL.y));
-		renderModel[1].setLocation(new Vector2f(openGL.x, openGL.y + BlockData.BLOCK_SCALE));
+		renderModel[1].setLocation(new Vector2f(openGL.x, openGL.y + BlockData.BLOCK_SCALE - 0.001f));
 	}
 	
 	public void setFlying(boolean flying) {

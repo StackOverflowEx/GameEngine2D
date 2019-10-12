@@ -11,6 +11,7 @@ import de.Luca.Entities.Player;
 import de.Luca.EventManager.EventManager;
 import de.Luca.GUI.GUIManager;
 import de.Luca.GUIs.PopUp;
+import de.Luca.GameLogic.GameManager.HOTBARSLOT;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Rendering.MasterRenderer;
 import de.Luca.Text.TextManager;
@@ -47,6 +48,7 @@ public class LoopHandler implements BeatHandler {
 		SkyFightClient.pother.setFlying(false);
 		SkyFightClient.pother.setCollisionWithBlocks(true);
 		SkyFightClient.pother.setVisible(true);
+		SkyFightClient.pother.setSelected(HOTBARSLOT.SWORD);
 
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);

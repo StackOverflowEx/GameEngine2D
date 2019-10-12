@@ -48,7 +48,8 @@ public class IngameOverlayGUI extends GUI {
 				Calc.getPixelHeight(0.08f));
 		statsHeart.setBounds(Calc.getPixelWidth(0.075f), Calc.getPixelHeight(0.055f), Calc.getPixelWidth(0.019f), Calc.getPixelHeight(0.028f));
 		statsCoin.setBounds(Calc.getPixelWidth(0.075f), Calc.getPixelHeight(0.095f), Calc.getPixelWidth(0.016f), Calc.getPixelHeight(0.033f));
-		statsHeartPoints.setBounds(Calc.getPixelWidth(0.075f), Calc.getPixelHeight(0.055f), Calc.getPixelWidth(0.019f), Calc.getPixelHeight(0.028f));
+		statsHeartPoints.setBounds(Calc.getPixelWidth(0.1f), Calc.getPixelHeight(0.035f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.08f));
 		statsCoinPoints.setBounds(Calc.getPixelWidth(0.1f), Calc.getPixelHeight(0.08f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.08f));
 		hotbarLinks.setBounds(Calc.getPixelWidth(0.398f), 0, Calc.getPixelWidth(0.008f), Calc.getPixelHeight(0.083f));
@@ -70,16 +71,20 @@ public class IngameOverlayGUI extends GUI {
 	public void setUsername(String username) {
 		statsName.setText(username, SkyFightClient.CalibriB20, new Vector4f(0.2f, 0.18f, 0.17f, 1f),
 				TEXT_ALIGN.LEFT, 0);
+		System.out.println("USER");
 	}
 	
 	public void setHealth(float hp) {
 		statsHeartPoints.setText(hp + " / 100", SkyFightClient.Alba18, new Vector4f(0, 0, 0, 1f),
 				TEXT_ALIGN.LEFT, 0);
+		System.out.println("HEALTH");
 	}
 	
 	public void setCoins(float coins) {
 		statsCoinPoints.setText(coins + "", SkyFightClient.Alba18, new Vector4f(0, 0, 0, 1f),
 				TEXT_ALIGN.LEFT, 0);
+		System.out.println("COINS");
+
 	}
 	
 	public void setSelectedSlot(HOTBARSLOT slot) {
@@ -227,13 +232,15 @@ public class IngameOverlayGUI extends GUI {
 		hotbarHover.setTexture(SkyFightClient.IngameOverlayHotbarHover);
 		this.addComponent(hotbarHover);
 		
-		
+		System.out.println("INIT");
+
 	}
 	
 	private BlockData selectedBlock;
 	public void setBlock(BlockData data) {
 		hotbarBlockStoneNumber.setText(data.getValue() + "", SkyFightClient.Alba18, new Vector4f(1f, 1f, 1f, 1f),
 				TEXT_ALIGN.LEFT, 0);
+		System.out.println("BLOCK");
 		hotbarBlockStone.setTexture(data.getBlockModel().getModel().getTexture());
 		selectedBlock = data;
 	}

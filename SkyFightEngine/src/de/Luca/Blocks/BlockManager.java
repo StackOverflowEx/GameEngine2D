@@ -119,7 +119,7 @@ public class BlockManager {
 						per = 0;
 					}
 					shader.loadAlpha(per);
-					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8, 4);
+					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 				}
 			}
 		}

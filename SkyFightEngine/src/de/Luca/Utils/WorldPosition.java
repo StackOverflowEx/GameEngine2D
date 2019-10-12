@@ -23,16 +23,16 @@ public class WorldPosition {
 	
 	public static Vector2f getMouseWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
-		Vector2f worldFloat = new Vector2f(openGL.x / (BlockData.BLOCK_SCALE), openGL.y / (BlockData.BLOCK_SCALE));
+		Vector2f worldFloat = new Vector2f(openGL.x / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f, openGL.y / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f);
 		Vector2f add = getExactWorldPos(Camera.getPosition());
 		worldFloat.x = worldFloat.x + add.x;
 		worldFloat.y = worldFloat.y + add.y;
-		return new Vector2f((float)Math.floor(worldFloat.x), (float)Math.floor(worldFloat.y));
+		return new Vector2f((float)Math.round(worldFloat.x), (float)Math.round(worldFloat.y));
 	}
 	
 	public static Vector2f getMouseExactWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
-		Vector2f worldFloat = new Vector2f(openGL.x / (BlockData.BLOCK_SCALE), openGL.y / (BlockData.BLOCK_SCALE));
+		Vector2f worldFloat = new Vector2f(openGL.x / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f, openGL.y / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f);
 		Vector2f add = getExactWorldPos(Camera.getPosition());
 		worldFloat.x = worldFloat.x + add.x;
 		worldFloat.y = worldFloat.y + add.y;
@@ -40,7 +40,7 @@ public class WorldPosition {
 	}
 	
 	public static Vector2f getExactWorldPos(Vector2f openGlPos) {
-		Vector2f worldFloat = new Vector2f(openGlPos.x / (BlockData.BLOCK_SCALE), openGlPos.y / (BlockData.BLOCK_SCALE));
+		Vector2f worldFloat = new Vector2f(openGlPos.x / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f, openGlPos.y / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f);
 		return new Vector2f(worldFloat.x, worldFloat.y);
 	}
 	

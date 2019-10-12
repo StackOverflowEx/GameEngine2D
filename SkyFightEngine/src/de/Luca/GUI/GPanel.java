@@ -25,6 +25,9 @@ public class GPanel extends GUIComponent{
 		c.setGUI(getGUI());
 		c.setParent(this);
 		c.setVisible(isVisible());
+		if(getGUI() != null) {
+			c.setVisible(getGUI().isVisible());
+		}
 		components.add(c);
 	}
 	

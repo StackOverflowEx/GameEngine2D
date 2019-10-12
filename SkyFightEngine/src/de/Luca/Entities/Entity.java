@@ -149,15 +149,13 @@ public abstract class Entity {
 		if(canCollideWithBlocks()) {
 			float y = nextPos.y;
 			y = (int)Math.ceil(y);
-//			if(y > -1) {
-//				y = (int)Math.ceil(y);
-//			}else {
-//				y = (int)Math.floor(y);
-//			}
 			colliding = BlockManager.isCollidingWithBlock(getHitBox(new Vector2f(worldPos.x, y - 0.000001f)));
 			if(colliding.size() > 0) {
 				onGround = true;
 				nextPos.y = (int) y;
+				if(addPos.y > 0) {
+					nextPos.y -= 1f;
+				}
 			}else {
 				onGround = false;
 			}

@@ -96,9 +96,6 @@ public class GameListener implements Listener {
 			return;
 		}
 		
-		SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
-		SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
-		
 		float distance = SkyFightClient.p.getWorldPos().distance(SkyFightClient.pother.getWorldPos());
 		if (distance < 3) {
 			if (Math.abs(SkyFightClient.pother.getWorldPos().y - SkyFightClient.p.getWorldPos().y) < 1) {
@@ -113,6 +110,8 @@ public class GameListener implements Listener {
 							dmg = 1;
 						}
 						SkyFightClient.p.playSound(SkyFightClient.hit, 50, false);
+						SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
+						SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
 						ServerTicker.addDmgDelt(dmg);
 						return;
 					}
@@ -120,6 +119,14 @@ public class GameListener implements Listener {
 			}
 		}
 		
+		if(SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.PICKAXE) && BlockManager.doseBlockExist(WorldPosition.getMouseWorldPos())) {
+			if(WorldPosition.getMouseWorldPos().distance(SkyFightClient.p.getWorldPos()) <= 3.5) {
+				return;
+			}
+		}
+		
+		SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
+		SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
 		SkyFightClient.p.playSound(SkyFightClient.missHit, 50, false);
 
 	}
@@ -138,7 +145,7 @@ public class GameListener implements Listener {
 				Vector2f pPos = new Vector2f(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y);
 				pPos.x += 0.5f;
 				pPos.y += 1;
-				if (mouse.distance(pPos) > 3) {
+				if (mouse.distance(pPos) > 3.5) {
 					return;
 				}
 				if (BlockManager.doseBlockExist(mouse)) {
@@ -157,7 +164,7 @@ public class GameListener implements Listener {
 				Vector2f pPos = new Vector2f(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y);
 				pPos.x += 0.5f;
 				pPos.y += 1;
-				if (mouse.distance(pPos) > 3) {
+				if (mouse.distance(pPos) > 3.5) {
 					return;
 				}
 				if (BlockManager.doseBlockExist(mouse)) {
@@ -193,6 +200,18 @@ public class GameListener implements Listener {
 		
 		if(SkyFightClient.ingameOverlay.getSelectedSlot().equals(HOTBARSLOT.BOW)) {
 			breaking = null;
+			return;
+		}
+		
+		Vector2f mouse = WorldPosition.getMouseWorldPos();
+		Vector2f pPos = new Vector2f(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y);
+		pPos.x += 0.5f;
+		pPos.y += 1;
+		if (mouse.distance(pPos) > 3.5f) {
+			if(breaking != null) {
+				ServerTicker.addBlockChange((int)breaking.getWorldPos().x, (int)breaking.getWorldPos().y, breaking.getBlockData().getName(), 0f);
+			}
+			reset();
 			return;
 		}
 		

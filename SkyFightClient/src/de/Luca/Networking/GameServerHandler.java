@@ -117,7 +117,9 @@ public class GameServerHandler {
 						SkyFightClient.p.playSound(SkyFightClient.hit, 50, false);
 					}
 				}
-				GameManager.setHealth(health);
+				if(GameManager.getHealth() != health) {
+					GameManager.setHealth(health);
+				}
 				
 				try {
 					boolean hit = Boolean.parseBoolean(gp.c.toString().split("/")[1]);

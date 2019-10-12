@@ -48,6 +48,9 @@ public class GameManager {
 	}
 	
 	public static void setHealth(float health) {
+		if(SkyFightClient.gameState != GameState.RUNNING) {
+			return;
+		}
 		GameManager.health = health;
 		SkyFightClient.ingameOverlay.setHealth(GameManager.health);
 	}

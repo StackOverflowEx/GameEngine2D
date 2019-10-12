@@ -26,6 +26,11 @@ public class PlayerCalc {
 	
 	public static void calc() {
 		
+		if(SkyFightClient.gameState != GameState.RUNNING && SkyFightClient.gameState != GameState.WORLDEDITOR) {
+			lastCalc = System.currentTimeMillis();
+			return;
+		}
+		
 		float addX = 0, addY = 0;
 		float sec = (System.currentTimeMillis() - lastCalc) / 1000f;
 		if(lastCalc == -1) {
@@ -38,8 +43,7 @@ public class PlayerCalc {
 		if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_D)) {
 			addX += sec * 5;
 		}
-		
-		
+				
 		if(p.isFlying()) {
 			upSpeed = 0;
 			if(DefaultKeyListener.isKeyPressed(GLFW.GLFW_KEY_SPACE)) {
@@ -60,6 +64,7 @@ public class PlayerCalc {
 				if(upSpeed < -20) {
 					float fallDmg = Math.abs(upSpeed) / 10 * 2;
 					fallDmg = Math.round(fallDmg * 10f) / 10f;
+					System.out.println("PCALC");
 					GameManager.setHealth(GameManager.getHealth() - fallDmg);
 					ServerTicker.addDmgTaken(Math.abs(upSpeed) / 10 * 2);
 				}
@@ -106,6 +111,7 @@ public class PlayerCalc {
 		p.move(new Vector2f(addX, addY));
 		
 		if(p.getWorldPos().y < -100) {
+			System.out.println("VOID");
 			GameManager.setHealth(0);
 			ServerTicker.addDmgTaken(100);		
 		}

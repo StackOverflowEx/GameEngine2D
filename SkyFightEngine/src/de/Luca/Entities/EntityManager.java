@@ -55,7 +55,7 @@ public class EntityManager {
 					Matrix4f transformation = Calc.getTransformationMatrix(model.getLocation(), model.getModel().getScale(), model.getRoll());
 					shader.loadTransformationMatrix(transformation);
 					shader.loadFacingRight(e.isFacingRight());
-					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 8, 4);
+					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 				}
 			}
 		}

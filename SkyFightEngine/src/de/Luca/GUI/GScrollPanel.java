@@ -157,7 +157,10 @@ public class GScrollPanel extends GUIComponent{
 			}
 			panel.addComponent(c);
 		}
-		panel.setVisible(true);
+		panel.setVisible(isVisible());
+		if(getGUI() != null) {
+			panel.setVisible(getGUI().isVisible());
+		}
 		
 	}
 	

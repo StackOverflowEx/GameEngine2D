@@ -57,7 +57,7 @@ public class GLabel extends GUIComponent{
 		
 		TextManager.addParagraph(p);
 	}
-	
+
 	public void setTextCut(String text, long font, Vector4f color, TEXT_ALIGN align, int margin, float scale) {
 		this.align = align;
 		this.margin = margin;
@@ -68,7 +68,6 @@ public class GLabel extends GUIComponent{
 		p.setVisible(isVisible());
 		
 		if(p.getBounds().x >= maxWith) {
-			System.out.println("TEXT TO BIG");
 			int delta = (int) (maxWith - p.getBounds().y);
 			int size = (int) Font.getFontSize(font);
 			int letters = 1;
@@ -98,7 +97,6 @@ public class GLabel extends GUIComponent{
 		p.setVisible(isVisible());
 		
 		if(p.getBounds().x >= maxWith) {
-			System.out.println("TEXT TO BIG");
 			int delta = (int) (maxWith - p.getBounds().y);
 			int size = (int) Font.getFontSize(font);
 			int letters = 1;
@@ -112,7 +110,6 @@ public class GLabel extends GUIComponent{
 				return;
 			}
 		}
-
 		calcText();
 		
 		TextManager.addParagraph(p);
@@ -151,11 +148,15 @@ public class GLabel extends GUIComponent{
 			float textWidth = bounds.x;
 			p.setX((int) (p.getX() + this.getWidth() - textWidth) - margin);
 		}
+		
+		p.setVisible(isVisible());
 
 		if(getGUI() != null) {
 			p.setX(p.getX() + getGUI().getX());
 			p.setY(p.getY() + getGUI().getY());
+			p.setVisible(getGUI().isVisible());
 		}
+		
 		
 	}
 	
@@ -228,6 +229,7 @@ public class GLabel extends GUIComponent{
 
 	@Override
 	protected void addedToGUI(GUI gui) {
+		setVisible(false);
 		if(p != null && gui != null) {
 			calcText();
 			p.setVisible(gui.isVisible());
