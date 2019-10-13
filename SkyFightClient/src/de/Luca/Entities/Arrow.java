@@ -12,10 +12,16 @@ import de.Luca.Models.RenderModel;
 import de.Luca.Models.Texture;
 
 public class Arrow extends Entity{
+	
+	//Repräsentiert einen Pfeil
 
+	//x- und y-Geschwindigkeit
 	private float yVel, xVel;
+	//Schütze
 	private Player shooter;
+	//Zeit in ms wann der Pfeil erstellt wurde
 	private long created;
+	//ID des Pfeils
 	private UUID id;
 	
 	public Arrow(Vector2f worldPos, Texture tex, float yVel, float xVel, Player shooter) {
@@ -37,6 +43,7 @@ public class Arrow extends Entity{
 		return id;
 	}
 	
+	//Berechnet die OpenGL-Position
 	@Override
 	protected void calcOpenGLPos() {
 		float x = worldPos.x * BlockData.BLOCK_SCALE;
@@ -69,6 +76,7 @@ public class Arrow extends Entity{
 		this.xVel = xVel;
 	}
 
+	//Hitbox für den Pfeil
 	@Override
 	public Vector4f getHitBox(Vector2f position) {
 		Vector4f hitbox = new Vector4f(position.x + 0.1f, position.y + 0.1f, position.x + 1f - 0.1f, position.y + 1f - 0.1f);		

@@ -18,8 +18,11 @@ import de.Luca.Window.Window;
 
 public class Connection {
 	
+	//Connection
+	
+	//port des Handle-Servers
 	public static final int HANDLE_SERVER_PORT = 33333;
-//	public static final String HANDLE_SERVER_IP = "127.0.0.1";
+	//Ip des Handle-Servers
 	public static final String HANDLE_SERVER_IP = "167.86.87.105";
 	
 	private Socket socket;
@@ -89,6 +92,7 @@ public class Connection {
 		return connected && !socket.isClosed();
 	}
 	
+	//Init
 	private void init() {
 		
 		AESKey = null;
@@ -101,6 +105,7 @@ public class Connection {
 			e.printStackTrace();
 		}
 		
+		//generiert das RSA-Schlüsselpaar
 		try {
 			RSAKeyPairGenerator keyGen = new RSAKeyPairGenerator();
 			clientPrivateKey = keyGen.getPrivateKey();
@@ -110,9 +115,11 @@ public class Connection {
 			disconnect();
 		}
 		
+		//löst ein event aus
 		EventManager.fireEvent(new ConnectionConnectedEvent(this));
 	}
 	
+	//Sendet einen Handshake und übergibt den eigenen Publickey
 	private void sendHandshake() {
 		Packet packet = new Packet();
 		packet.packetType = Packet.HANDSHAKE;
@@ -121,6 +128,7 @@ public class Connection {
 		sendUnencrypted(packet);
 	}
 	
+	//Trennt die Verbindung
 	public void disconnect() {
 		try {
 			is.close();
@@ -133,6 +141,7 @@ public class Connection {
 		System.out.println("Disconnected from server.");
 	}
 	
+	//Wartet auf Packetet vom Server
 	private void listen() {
 		th = new Thread(new Runnable() {
 			
@@ -145,6 +154,7 @@ public class Connection {
 							if(data == null) {
 								continue;
 							}
+							//Entschlüsselt das Packet falls nötig
 							String input = null;
 							if(serverPublicKey == null) {
 								input = new String(data);
@@ -153,6 +163,7 @@ public class Connection {
 							}else {
 								input = Encryption.decrypt(data, AESKey);
 							}
+							//handelt das Packet
 							Packet packet = new Packet(input);
 							handlePacket(packet);
 //						}
@@ -180,12 +191,14 @@ public class Connection {
 		}
 	}
 	
+	//liest Packete vom InputStream
 	private int nullCount = 0;
 	private byte[] getDataFromInputStream() throws IOException {
 		byte[] buffer = new byte[1024];
 		int t = is.read(buffer);
 		if(t == -1) {
 			nullCount++;
+			//Ist 10 mal eine -1 im Inputstream, wird die Verbindung abgebrochen (Inputstream wurde geschlossen)
 			if(nullCount == 10) {
 				disconnect();
 			}
@@ -202,6 +215,8 @@ public class Connection {
 		return ret;
 	}
 
+	
+	//Verarbeitet das Packaet
 	private void handlePacket(Packet packet) {
 		if (packet.packetType == Packet.HANDSHAKE) {
 			handleHandshake(packet);
@@ -217,11 +232,13 @@ public class Connection {
 		}
 	}
 	
+	//Speichert den AES Key für die weitere Verschlüsselung
 	private void handleKey(Packet packet) {
 		AESKey = (String) packet.a;
 		System.out.println("Key: " + AESKey);
 	}
 	
+	//Speichert den Publickey des Servers
 	private void handleHandshake(Packet packet) {
 		if (packet.packetType == Packet.HANDSHAKE) {
 			serverPublicKey = (String) packet.a;
@@ -232,6 +249,7 @@ public class Connection {
 		}
 	}
 	
+	//erstellt ein Fehlerpacket
 	public Packet genErrorPacket(int error) {
 		Packet p = new Packet();
 		p.packetType = Packet.ERROR;
@@ -239,6 +257,7 @@ public class Connection {
 		return p;
 	}
 	
+	//Sendet ein unverschlüsseltes Packet
 	public void sendUnencrypted(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
@@ -251,6 +270,7 @@ public class Connection {
 		}
 	}
 	
+	//Sendet ein Packet
 	public void send(Packet packet) {
 		try {
 			String msg = packet.toJSONString();
@@ -268,6 +288,7 @@ public class Connection {
 		}
 	}
 	
+	//seindet einen String
 	public void send(String msg) {
 		try {
 			byte[] enMSG = null;

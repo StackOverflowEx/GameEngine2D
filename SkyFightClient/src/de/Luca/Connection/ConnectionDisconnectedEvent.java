@@ -3,6 +3,8 @@ package de.Luca.Connection;
 import de.Luca.Events.Event;
 
 public class ConnectionDisconnectedEvent extends Event{
+	
+	//Event wird ausgelöst, wenn eine Verbindung zum Server getrennt wird
 
 	private Connection con;
 	

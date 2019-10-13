@@ -14,8 +14,11 @@ import de.Luca.Packets.Packet;
 
 public class ConnectionListener implements Listener{
 	
+	//Listener für die Funktion des Networking
+	
 	private PopUp notConnected;
 	
+	//event, wenn ein Packet erhalten wird
 	@EventHandler
 	public void onPacket(ConnectionRecieveEvent e) {
 		if(e.getConnection() == SkyFightClient.handleServerConnection) {
@@ -27,6 +30,7 @@ public class ConnectionListener implements Listener{
 		}
 	}
 	
+	//Reconnected, wenn keine Verbindung mit dem Handle_Server hergestellt werden konnte
 	@EventHandler
 	public void onErrrorConnectino(ConnectionErrorEvent e) {
 		if(e.getConnection().getPort() == Connection.HANDLE_SERVER_PORT && e.getConnection().getIP().equals(Connection.HANDLE_SERVER_IP)) {
@@ -39,6 +43,7 @@ public class ConnectionListener implements Listener{
 			e.getConnection().retry();
 		}
 	}
+	
 	
 	@EventHandler
 	public void onConnectConnection(ConnectionConnectedEvent e) {

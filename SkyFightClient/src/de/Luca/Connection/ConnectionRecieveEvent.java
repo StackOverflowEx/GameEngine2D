@@ -4,6 +4,8 @@ import de.Luca.Events.Event;
 import de.Luca.Packets.Packet;
 
 public class ConnectionRecieveEvent extends Event{
+	
+	//Event wird ausgelöst, wenn ein Packet erhalten wurde
 
 	private Packet packet;
 	private Connection con;

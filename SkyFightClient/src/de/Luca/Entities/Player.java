@@ -14,6 +14,8 @@ import de.Luca.Models.Texture;
 
 public class Player extends Entity{
 	
+	//repräsentiert den Spieler
+	
 	private Animation down, up;
 	private Texture defaultDown, defaultUp;
 	private boolean fly;

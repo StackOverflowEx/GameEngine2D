@@ -3,6 +3,8 @@ package de.Luca.Connection;
 import de.Luca.Events.Event;
 
 public class ConnectionConnectedEvent extends Event{
+	
+	//Event, das ausgelöst wird, wenn eine Verbindung mit einem Server aufgebaut wird
 
 	private Connection con;
 	
