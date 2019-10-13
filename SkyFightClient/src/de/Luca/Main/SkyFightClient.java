@@ -174,6 +174,9 @@ public class SkyFightClient {
 	public static Texture EndscreenOverlayWeitermachenA;
 	public static Texture EndscreenOverlayWeitermachenB;
 	public static Texture EndscreenOverlayWeitermachenC;
+	public static Texture IngameOverlayZeit;
+	
+	public static Texture arrow;
 
 	// Fonts
 	public static long Impact20;
@@ -188,6 +191,7 @@ public class SkyFightClient {
 	public static long CalibriB20;
 	public static long Alba18;
 	public static long Alba38;
+	public static long Alba50;
 	
 	// Sounds
 	public static SoundData backMusic;
@@ -209,6 +213,7 @@ public class SkyFightClient {
 	public static Animation downRun;
 	public static Animation punchUp;
 	public static Animation punchDown;
+	public static Animation gettingHit;
 
 	// Gamestate
 	public static GameState gameState = GameState.MENUE;
@@ -237,6 +242,7 @@ public class SkyFightClient {
 		downRun = new Animation(root + "/res/player/downRun.gif", "run");
 		punchUp = new Animation(root + "/res/player/punchUp.gif", "punch");
 		punchDown = new Animation(root + "/res/player/punchDown.gif", "punch");
+		gettingHit = new Animation(root + "/res/player/hit.gif", "hit");
 		
 		breakingSound = AudioManager.loadSound(root + "/res/sounds/ingame/breaking.ogg", "breaking");
 		backMusic = AudioManager.loadSound(root + "/res/sounds/background.ogg", "background");
@@ -259,6 +265,7 @@ public class SkyFightClient {
 		TextManager.generateFont(root + "/res/fonts/calibrib.ttf", 20 , "CalibriB1", false, false);
 		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 26 , "Alba1", false, false);
 		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 36 , "Alba2", false, false);
+		TextManager.generateFont(root + "/res/fonts/ALBAM___.ttf", 46 , "Alba3", false, false);
 		Impact20 = TextManager.getFont("Impact");
 		Constantia86 = TextManager.getFont("Constantia");
 		ConstantiaB40 = TextManager.getFont("ConstantiaB");
@@ -271,8 +278,10 @@ public class SkyFightClient {
 		CalibriB20 = TextManager.getFont("CalibriB1");
 		Alba18 = TextManager.getFont("Alba1");
 		Alba38 = TextManager.getFont("Alba2");
+		Alba50 = TextManager.getFont("Alba3");
 
 		String path = root + "/res/gui/worldeditor/";
+		arrow = Loader.loadTexture(root + "/res/ingame/arrow.png", "arrow");
 		playerUP = Loader.loadTexture(root + "/res/player/up.png", "player");
 		playerDown = Loader.loadTexture(root + "/res/player/down.png", "player");
 		background = Loader.loadTexture(root + "/res/background/background.png", "background");
@@ -395,6 +404,7 @@ public class SkyFightClient {
 		EndscreenOverlayWeitermachenA = Loader.loadTexture(path + "EndscreenOverlay_WeitermachenA.png", "gui");
 		EndscreenOverlayWeitermachenB = Loader.loadTexture(path + "EndscreenOverlay_WeitermachenB.png", "gui");
 		EndscreenOverlayWeitermachenC = Loader.loadTexture(path + "EndscreenOverlay_WeitermachenC.png", "gui");
+		IngameOverlayZeit = Loader.loadTexture(path + "IngameOverlay_Zeit.png", "gui");
 
 //		loginGUI = new LoginGUIOLD();
 //		registesrGUI = new RegisterGUIOLD();

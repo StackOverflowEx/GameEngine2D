@@ -73,6 +73,7 @@ public class WeltenAuswahlGUI extends GUI {
 		if(!customMaps.exists()) {
 			customMaps.mkdirs();
 		}
+		Loader.deleteTextures("preview");
 		int i = 0;
 		for (File map : customMaps.listFiles()) {
 			if (map.isDirectory()) {
@@ -104,7 +105,9 @@ public class WeltenAuswahlGUI extends GUI {
 				GLabel preview = new GLabel(Calc.getPixelWidth(0.015f), Calc.getPixelHeight(0.03f),
 						Calc.getPixelWidth(0.125f), Calc.getPixelHeight(0.22f));
 //				preview.setTexture(SkyFightClient.AuswahlPreview);
-				preview.setTexture(Loader.loadTexture(previewTexture.getPath(), "gui"));
+				try {
+					preview.setTexture(Loader.loadTexture(previewTexture.getPath(), "preview"));
+				}catch (Exception e) {}
 				worldPanel.addComponent(preview);
 
 				GLabel name = new GLabel(Calc.getPixelWidth(0.155f), Calc.getPixelHeight(0.02f),
@@ -182,7 +185,7 @@ public class WeltenAuswahlGUI extends GUI {
 		return size;
 	}
 
-	private void init() {
+	public void init() {
 		for (GUIComponent c : getComponents()) {
 			c.dispose();
 			removeComponent(c);

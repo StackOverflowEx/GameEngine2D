@@ -59,6 +59,8 @@ public class WorldEditorErstellen extends GUI {
 	private GLabel playSound;
 	private GLabel walkSound;
 	private GLabel save3;
+	private GButton loeschen;
+    private GLabel loeschenText;
 
 	private String S3 = "", S2 = "", S1 = "", S4 = "";
 	
@@ -134,6 +136,10 @@ public class WorldEditorErstellen extends GUI {
 				Calc.getPixelHeight(0.1f));
 		walkSound.setBounds(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.66f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
+		loeschen.setBounds(Calc.getPixelWidth(0.255f), Calc.getPixelHeight(0.0194f),
+                Calc.getPixelWidth(0.0594f), Calc.getPixelHeight(0.0556f));
+		loeschenText.setBounds(Calc.getPixelWidth(0.235f), Calc.getPixelHeight(0.004f), Calc.getPixelWidth(0.1f),
+                Calc.getPixelHeight(0.1f));
 		
 	}
 
@@ -145,6 +151,18 @@ public class WorldEditorErstellen extends GUI {
 			c.dispose();
 			removeComponent(c);
 		}
+		
+		loeschen = new GButton(Calc.getPixelWidth(0.255f), Calc.getPixelHeight(0.0194f),
+                Calc.getPixelWidth(0.0594f), Calc.getPixelHeight(0.0556f));
+		loeschen.setButtonTextures(SkyFightClient.weErstellenSave2A, SkyFightClient.weErstellenSave2B,
+                SkyFightClient.weErstellenSave2C);
+        this.addComponent(loeschen);
+
+        loeschenText = new GLabel(Calc.getPixelWidth(0.235f), Calc.getPixelHeight(0.004f), Calc.getPixelWidth(0.1f),
+                Calc.getPixelHeight(0.1f));
+        loeschenText.setText("Delete", SkyFightClient.ConstantiaB26, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+                0);
+        this.addComponent(loeschenText);
 
 		title = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
@@ -166,13 +184,13 @@ public class WorldEditorErstellen extends GUI {
 		
 		value2 = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.245f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
-		value2.setText("Value", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+		value2.setText("Wert", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
 				0);
 		this.addComponent(value2);
 
 		hardness3 = new GLabel(Calc.getPixelWidth(0.02f), Calc.getPixelHeight(0.31f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
-		hardness3.setText("Hardness", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
+		hardness3.setText("Härte", SkyFightClient.ConstantiaB40, new Vector4f(0.35f, 0.2f, 0.11f, 1f), TEXT_ALIGN.LEFT,
 				0);
 		this.addComponent(hardness3);
 		
@@ -327,6 +345,10 @@ public class WorldEditorErstellen extends GUI {
 	private BlockData old;
 	public void fill() {
 		if(WorldEditorListener.selectedBlock == null) {
+			S1 = "";
+			S2 = "";
+			S3 = "";
+			S4 = "";
 			old = null;
 			Name.setText("");
 			Value.setText("1.0");
@@ -341,16 +363,23 @@ public class WorldEditorErstellen extends GUI {
 			Name.setText(bd.getName());
 			Value.setText(bd.getValue() + "");
 			Hardness.setText(bd.getHardness() + "");
+			S1 = bd.getBlockModel().getModel().getTexture().getFile();
 			Source1.setTextCut(bd.getBlockModel().getModel().getTexture().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			if(bd.getBreakSound() != null) {
+				S2 = bd.getBreakSound().getFile();
 				Source2.setTextCut(bd.getBreakSound().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			}
 			if(bd.getPlaceSound() != null) {
+				S3 = bd.getPlaceSound().getFile();
 				Source3.setTextCut(bd.getPlaceSound().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			}
 			if(bd.getWalkSound() != null) {
+				S4 = bd.getWalkSound().getFile();
 				Source4.setTextCut(bd.getWalkSound().getFile(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.LEFT, 10);
 			}
+		}
+		if(old != null) {
+			Preview.setTexture(old.getBlockModel().getModel().getTexture());
 		}
 	}
 
@@ -545,6 +574,22 @@ public class WorldEditorErstellen extends GUI {
 			}
 		});
 		
+		loeschen.addClickCallback(new ClickCallback() {
+
+			@Override
+			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
+				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+					if(old != null) {
+						WorldLoader.removeBlockData(old);
+						if(SkyFightClient.worldEditorAuswahl.isVisible()) {
+							SkyFightClient.worldEditorAuswahl.setVisible(false);
+							SkyFightClient.worldEditorAuswahl.setVisible(true);
+						}
+					}
+				}
+			}
+		});
+		
 		Save2.addClickCallback(new ClickCallback() {
 			
 			@Override
@@ -602,8 +647,10 @@ public class WorldEditorErstellen extends GUI {
 					WorldLoader.addBlockData(bdp);
 					SkyFightClient.worldEditorAuswahl.addBlock();
 					SkyFightClient.blockSelect.addBlock();
-					SkyFightClient.worldEditorAuswahl.setVisible(false);
-					SkyFightClient.worldEditorAuswahl.setVisible(true);
+					if(SkyFightClient.worldEditorAuswahl.isVisible()) {
+						SkyFightClient.worldEditorAuswahl.setVisible(false);
+						SkyFightClient.worldEditorAuswahl.setVisible(true);
+					}
 					new PopUp("Der Block wurde erstellt", new Vector4f(0, 1, 0, 1));
 				}
 			}

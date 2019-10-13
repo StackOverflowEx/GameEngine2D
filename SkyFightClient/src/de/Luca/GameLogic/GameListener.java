@@ -11,9 +11,9 @@ import de.Luca.Entities.EntityManager;
 import de.Luca.EventManager.EventHandler;
 import de.Luca.EventManager.Listener;
 import de.Luca.Events.CursorPositionEvent;
+import de.Luca.Events.KeyEvent;
 import de.Luca.Events.MouseButtonEvent;
 import de.Luca.GameLogic.GameManager.HOTBARSLOT;
-import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Networking.ServerTicker;
 import de.Luca.Utils.DefaultKeyListener;
@@ -27,6 +27,21 @@ public class GameListener implements Listener {
 	
 	public boolean isShooting() {
 		return startedBow != -1;
+	}
+	
+	@EventHandler
+	public void onKey(KeyEvent e) {
+		if(e.getAction() == GLFW.GLFW_PRESS) {
+			if(e.getKey() == GLFW.GLFW_KEY_1) {
+				SkyFightClient.ingameOverlay.setSelectedSlot(HOTBARSLOT.SWORD);
+			}else if(e.getKey() == GLFW.GLFW_KEY_2) {
+				SkyFightClient.ingameOverlay.setSelectedSlot(HOTBARSLOT.BOW);
+			}else if(e.getKey() == GLFW.GLFW_KEY_3) {
+				SkyFightClient.ingameOverlay.setSelectedSlot(HOTBARSLOT.PICKAXE);
+			}else if(e.getKey() == GLFW.GLFW_KEY_4) {
+				SkyFightClient.ingameOverlay.setSelectedSlot(HOTBARSLOT.BLOCK);
+			}
+		}
 	}
 	
 	@EventHandler
@@ -51,7 +66,7 @@ public class GameListener implements Listener {
 			return;
 		}
 		
-		if(GameManager.getValue() < 4) {
+		if(GameManager.getValue() < 2) {
 			startedBow = -1;
 			return;
 		}
@@ -77,9 +92,9 @@ public class GameListener implements Listener {
 		xVel = tra.x * mul;
 		yVel = tra.y * mul;
 		
-		Arrow a = new Arrow(new Vector2f(SkyFightClient.p.getWorldPos()), Loader.loadTexture("D:\\Test.png", "bow"), yVel, xVel, SkyFightClient.p);
+		Arrow a = new Arrow(new Vector2f(SkyFightClient.p.getWorldPos()), SkyFightClient.arrow, yVel, xVel, SkyFightClient.p);
 		EntityManager.addEntity(a);
-		GameManager.setValue(GameManager.getValue() - 4);
+		GameManager.setValue(GameManager.getValue() - 2);
 		a.playSound(SkyFightClient.bowShoot, 50, false);
 		ServerTicker.addArrowChange(SkyFightClient.p.getWorldPos().x, SkyFightClient.p.getWorldPos().y, xVel, yVel, a.getUUID(), true, false);
 		startedBow = -1;
@@ -103,7 +118,7 @@ public class GameListener implements Listener {
 		
 		float distance = SkyFightClient.p.getWorldPos().distance(SkyFightClient.pother.getWorldPos());
 		if (distance < 3) {
-			if (Math.abs(SkyFightClient.pother.getWorldPos().y - SkyFightClient.p.getWorldPos().y) < 1) {
+			if (Math.abs(SkyFightClient.pother.getWorldPos().y - SkyFightClient.p.getWorldPos().y) <= 1) {
 				if ((SkyFightClient.p.isFacingRight()
 						&& SkyFightClient.pother.getWorldPos().x > SkyFightClient.p.getWorldPos().x)
 						|| (!SkyFightClient.p.isFacingRight()
@@ -183,8 +198,11 @@ public class GameListener implements Listener {
 						Block b = new Block(bd, mouse);
 						BlockManager.addBlock(b);
 						if(!BlockManager.isCollidingWithBlock(SkyFightClient.p.getHitBox(SkyFightClient.p.getWorldPos())).contains(b)){
-							if(!BlockManager.isCollidingWithBlock(SkyFightClient.pother.getHitBox(SkyFightClient.p.getWorldPos())).contains(b)){
-								GameManager.setValue(GameManager.getValue() - bd.getValue());
+							if(!BlockManager.isCollidingWithBlock(SkyFightClient.pother.getHitBox(SkyFightClient.pother.getWorldPos())).contains(b)){
+								GameManager.setValue(GameManager.getValue() - Math.abs(bd.getValue()));
+								if(bd.getValue() == 0) {
+									GameManager.setValue(GameManager.getValue() - 1f);
+								}
 								ServerTicker.addBlockChange((int)b.getWorldPos().x, (int)b.getWorldPos().y, b.getBlockData().getName(), 0f);
 								return;
 							}

@@ -162,7 +162,7 @@ public class WorldEditor {
 	}
 		
 	public static void save(String mapName) {
-		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
+//		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
 		WorldLoader.mapName = mapName;
 		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		if(maps.exists() && isNewMap()) {
@@ -216,8 +216,9 @@ public class WorldEditor {
 			}
 		}
 		MasterRenderer.queueScreenshot(new File(screenshotFolder + "/preview.png"));
-		p.destroy();
+//		p.destroy();
 		new PopUp("Die Map wurde gespeichert.", new Vector4f(0, 1, 0, 1));
+		SkyFightClient.worldSelctGUI.init();
 		
 	}
 	

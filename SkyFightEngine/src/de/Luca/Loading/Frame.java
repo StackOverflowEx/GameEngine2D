@@ -1,6 +1,5 @@
 package de.Luca.Loading;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,9 +13,7 @@ public class Frame {
 	private float[] textureCoords;
 	private int vaoID;
 	
-	public Frame(List<RenderModel> entities, float[] verticies, float[] textureCoords) {
-		this.entities = new ArrayList<RenderModel>();
-		this.entities.addAll(entities);
+	public Frame(float[] verticies, float[] textureCoords) {
 		this.frameID = UUID.randomUUID();
 		this.verticies = verticies;
 		this.textureCoords = textureCoords;

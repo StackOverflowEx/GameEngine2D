@@ -121,11 +121,11 @@ public class Player extends Entity{
 	
 	public String getAnimationTitle(int i) {
 		if(i == 0) {
-			if(down != null) {
+			if(down != null && down.isRunning()) {
 				return down.getTitle();
 			}
 		}else {
-			if(up != null) {
+			if(up != null && up.isRunning()) {
 				return up.getTitle();
 			}
 		}

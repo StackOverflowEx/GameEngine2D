@@ -204,6 +204,8 @@ public class WorldEditorOverlay extends GUI {
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
 					SkyFightClient.worldEditorSettings.setVisible(true);
+					SkyFightClient.worldEditorAuswahl.setVisible(false);
+					SkyFightClient.worldEditorErstellen.setVisible(false);
 				}
 			}
 		});
@@ -214,6 +216,7 @@ public class WorldEditorOverlay extends GUI {
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
 					SkyFightClient.worldEditorAuswahl.setVisible(true);
+					SkyFightClient.worldEditorSettings.setVisible(false);
 				}
 			}
 		});

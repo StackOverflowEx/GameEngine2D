@@ -82,7 +82,7 @@ public class MasterRenderer extends Thread {
 	
 	private static void loadTextures() {
 		for (Texture texture : masterRenderer.loadTextures) {
-			System.out.println("Loading texture...");
+			System.out.println("Loading texture \"" + texture.getFile() + "\"...");
 			int id = Loader.loadTexture(texture, texture.getTextureType());
 			System.out.println("Loaded texture: " + id);
 			texture.setTextureID(id);

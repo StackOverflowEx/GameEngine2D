@@ -108,19 +108,23 @@ public class BlockManager {
 		}
 		
 		for(int i : blocks.keySet()) {
-			for(Block b : blocks.get(i).values()) {
-				RenderModel model = b.getBlockData().getBlockModel();
-				if(model.getModel().getTexture().getTextureID() != -1) {
-					MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());
-					Matrix4f transformation = Calc.getTransformationMatrix(b.getOpenGLPos(), model.getModel().getScale(), model.getRoll());
-					shader.loadTransformationMatrix(transformation);
-					float per = 1f - b.getBreakPercentage();
-					if(per < 0) {
-						per = 0;
+			try {
+				for(Block b : blocks.get(i).values()) {
+					RenderModel model = b.getBlockData().getBlockModel();
+					if(model.getModel().getTexture().getTextureID() != -1) {
+						MasterRenderer.bindTexture(model.getModel().getTexture().getTextureID());
+						Matrix4f transformation = Calc.getTransformationMatrix(b.getOpenGLPos(), model.getModel().getScale(), model.getRoll());
+						shader.loadTransformationMatrix(transformation);
+						float per = 1f - b.getBreakPercentage();
+						if(per < 0) {
+							per = 0;
+						}
+						shader.loadAlpha(per);
+						GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 					}
-					shader.loadAlpha(per);
-					GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 0, 4);
 				}
+			}catch (NullPointerException e) {
+				continue;
 			}
 		}
 		

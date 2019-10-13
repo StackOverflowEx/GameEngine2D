@@ -89,7 +89,7 @@ public class ArrowCalc {
 
 	private static void calcHit(Arrow a) {
 		for (Block b : BlockManager.isCollidingWithBlock(a.getHitBox(a.getWorldPos()))) {
-			if (b.getBlockData().getHardness() <= 2 && a.getShooter().equals(SkyFightClient.p) && a.isVisible()) {
+			if (b.getBlockData().getHardness() <= 4 && a.getShooter().equals(SkyFightClient.p) && a.isVisible()) {
 				BlockManager.removeBlock(b);
 				a.setVisible(false);
 				EntityManager.removeEntity(a);

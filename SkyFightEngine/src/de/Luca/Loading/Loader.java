@@ -136,7 +136,6 @@ public class Loader {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Failed to load texture " + file);
-			System.exit(-1);
 		}
 
 		Texture texture = new Texture(buffer, width, height, textureType, file);

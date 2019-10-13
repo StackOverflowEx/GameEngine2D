@@ -17,7 +17,6 @@ import de.Luca.GameLogic.GameManager;
 import de.Luca.GameLogic.GameState;
 import de.Luca.GameLogic.PlayerCalc;
 import de.Luca.GameLogic.GameManager.HOTBARSLOT;
-import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.GamePacket;
 import de.Luca.Packets.Packet;
@@ -172,6 +171,12 @@ public class GameServerHandler {
 				b = new Block(bd, new Vector2f(x, y));
 				BlockManager.addBlock(b);
 			}
+			if(breakPercent != 0) {
+				if(!SkyFightClient.pother.isAnimationRunning(0) && !SkyFightClient.pother.getAnimationTitle(0).equals("hit")) {
+					SkyFightClient.pother.startAnimation(0, SkyFightClient.punchDown);
+					SkyFightClient.pother.startAnimation(1, SkyFightClient.punchUp);
+				}
+			}
 			b.setBreakPercentage(breakPercent);
 			if(breakPercent >= 1) {
 				BlockManager.removeBlock(b);
@@ -202,7 +207,7 @@ public class GameServerHandler {
 			
 			System.out.println(added);
 			if(added) {
-				Arrow a = new Arrow(new Vector2f(x, y), Loader.loadTexture("D:/Test.png", "arrow"), yVel, xVel, SkyFightClient.pother);
+				Arrow a = new Arrow(new Vector2f(x, y), SkyFightClient.arrow, yVel, xVel, SkyFightClient.pother);
 				a.setUUID(uuid);
 				EntityManager.addEntity(a);
 			}else {

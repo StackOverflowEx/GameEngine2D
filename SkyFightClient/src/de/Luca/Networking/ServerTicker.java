@@ -5,10 +5,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
+import org.joml.Vector2f;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import de.Luca.Blocks.BlockData;
 import de.Luca.Connection.Connection;
+import de.Luca.Effects.Effect;
 import de.Luca.GameLogic.GameManager;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Packets.GamePacket;
@@ -32,6 +35,9 @@ public class ServerTicker {
 		if(counter < gracePeriode) {
 			return;
 		}
+		Effect e = new Effect(SkyFightClient.gettingHit, new Vector2f(SkyFightClient.pother.getWorldPos()).add(0.5f, 1f), new Vector2f(BlockData.BLOCK_SCALE * 2.5f, BlockData.BLOCK_SCALE * 2.5f));
+		e.setWorldPos(new Vector2f(SkyFightClient.pother.getWorldPos()).add(-0.5f, -1f));
+		e.play();
 		dmgDelt += add;
 	}
 	

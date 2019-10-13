@@ -269,30 +269,28 @@ public class Window {
 
 	public static void takeScreenshot(File save) {
 		try {
-			BufferedImage screenshot = new BufferedImage((int) size.x, (int) size.y, BufferedImage.TYPE_INT_RGB);
-
-			ByteBuffer buffer = BufferUtils.createByteBuffer((int) (size.x * size.y * 4));
-			// be sure you are reading from the right fbo (here is supposed to be the
-			// default one)
-			// bind the right buffer to read from
-			GL11.glReadBuffer(GL11.GL_FRONT);
-			// if the width is not multiple of 4, set unpackPixel = 1
+			GL11.glReadBuffer(GL11.GL_BACK);
+			BufferedImage screenshot;
+			ByteBuffer buffer;
 			if(size.x > size.y) {
-				GL11.glReadPixels((int) ((size.x - size.y) / 2), 0, (int) size.y, (int) size.y, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+				screenshot = new BufferedImage((int) size.y, (int) size.y, BufferedImage.TYPE_INT_RGB);
+				buffer = BufferUtils.createByteBuffer((int) (size.y * size.y * 4));
+				GL11.glReadPixels((int) ((size.x - size.y) / 2f), 0, (int) size.y, (int) size.y, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 			}else {
-				GL11.glReadPixels(0, (int) (size.x + size.x / 2), (int) size.x, (int) size.x, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+				screenshot = new BufferedImage((int) size.x, (int) size.x, BufferedImage.TYPE_INT_RGB);
+				buffer = BufferUtils.createByteBuffer((int) (size.x * size.x * 4));
+				GL11.glReadPixels(0, (int) ((size.y - size.x) / 2f), (int) size.x, (int) size.x, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 			}
 
-			for (int x = 0; x < (int) size.x; x++) {
-				for (int y = 0; y < (int) size.y; y++) {
-					int i = (x + ((int) size.x * y)) * 4;
+			for (int x = 0; x < (int) screenshot.getWidth(); x++) {
+				for (int y = 0; y < (int) screenshot.getHeight(); y++) {
+					int i = (x + ((int) screenshot.getWidth() * y)) * 4;
 					int r = buffer.get(i) & 0xFF;
 					int g = buffer.get(i + 1) & 0xFF;
 					int b = buffer.get(i + 2) & 0xFF;
-					screenshot.setRGB(x, (int) size.y - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+					screenshot.setRGB(x, (int) screenshot.getHeight() - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
 				}
 			}
-			// This is one util of mine, it make sure you clean the direct buffer
 
 			ImageIO.write(screenshot, "png", save);
 		} catch (IOException ex) {
