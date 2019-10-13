@@ -31,7 +31,9 @@ public class RegistrierenGUI extends GUI {
 	private GTextBox passwdh;
 	private GLabel registrieren;
 	private GButton reg;
-	
+	private GLabel abbrechen;
+	private GButton abbr;
+
 	private long visible;
 
 	public RegistrierenGUI() {
@@ -44,8 +46,8 @@ public class RegistrierenGUI extends GUI {
 		setX(0);
 		setY(0);
 		setWidth((int) Window.getWindowSize().x);
-		setHeight((int) Window.getWindowSize().y);	
-		
+		setHeight((int) Window.getWindowSize().y);
+
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
 		rahmen.setBounds(Calc.getPixelWidth(0.63f), Calc.getPixelHeight(0.06f), Calc.getPixelWidth(0.31f),
 				Calc.getPixelHeight(0.84f));
@@ -70,6 +72,10 @@ public class RegistrierenGUI extends GUI {
 		reg.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.77f), Calc.getPixelWidth(0.27f),
 				Calc.getPixelHeight(0.08f));
 		registrieren.setBounds(Calc.getPixelWidth(0.735f), Calc.getPixelHeight(0.765f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		abbr.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.91f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		abbrechen.setBounds(Calc.getPixelWidth(0.73f), Calc.getPixelHeight(0.905f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
 	}
 
@@ -166,28 +172,53 @@ public class RegistrierenGUI extends GUI {
 				TEXT_ALIGN.CENTER, 0);
 		this.addComponent(registrieren);
 
-//		back.addClickCallback(new ClickCallback() {
-//
-//			@Override
-//			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
-//				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-//					username.setText("");
-//					password.setText("");
-//					passwordWDH.setText("");
-//					email.setText("");
-//					SkyFightClient.loginGUI.setVisible(true);
-//					SkyFightClient.registesrGUI.setVisible(false);
-//				}
-//			};
-//		});
+		abbr = new GButton(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.91f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		abbr.setButtonTextures(SkyFightClient.LoginVergessenA, SkyFightClient.LoginVergessenB,
+				SkyFightClient.LoginVergessenC);
+		this.addComponent(abbr);
+
+		abbrechen = new GLabel(Calc.getPixelWidth(0.73f), Calc.getPixelHeight(0.905f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		abbrechen.setText("Abbrechen", SkyFightClient.ConstantiaB32, new Vector4f(1f, 1f, 1f, 1f), TEXT_ALIGN.CENTER,
+				0);
+		this.addComponent(abbrechen);
+
+		// back.addClickCallback(new ClickCallback() {
+		//
+		// @Override
+		// public void run(GUIComponent component, int key, int action, int
+		// mouseX, int mouseY) {
+		// if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action ==
+		// GLFW.GLFW_RELEASE) {
+		// username.setText("");
+		// password.setText("");
+		// passwordWDH.setText("");
+		// email.setText("");
+		// SkyFightClient.loginGUI.setVisible(true);
+		// SkyFightClient.registesrGUI.setVisible(false);
+		// }
+		// };
+		// });
+
+		abbr.addClickCallback(new ClickCallback() {
+
+			@Override
+			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
+				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+					SkyFightClient.registerGUI.setVisible(false);
+					SkyFightClient.loginGUI.setVisible(true);
+				}
+			}
+		});
 
 		reg.addClickCallback(new ClickCallback() {
 
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
-					
-					if((System.currentTimeMillis() - visible) < 100) {
+
+					if ((System.currentTimeMillis() - visible) < 100) {
 						return;
 					}
 
