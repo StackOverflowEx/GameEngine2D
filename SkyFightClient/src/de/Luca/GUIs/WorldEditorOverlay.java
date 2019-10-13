@@ -43,6 +43,12 @@ public class WorldEditorOverlay extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(0);
+		setWidth((int) Window.getWindowSize().x);
+		setHeight((int) Window.getWindowSize().y);	
+		
+		
 		LinkerRahmen.setBounds(Calc.getPixelWidth(0.23125f), Calc.getPixelHeight(0.9084f),
 				Calc.getPixelWidth(0.0296875f), Calc.getPixelHeight(0.0917f));
 		ObererRahmen.setBounds(Calc.getPixelWidth(0.2609375f), Calc.getPixelHeight(0.9084f),

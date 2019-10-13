@@ -39,7 +39,37 @@ public class LoginGUI extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(0);
+		setWidth((int) Window.getWindowSize().x);
+		setHeight((int) Window.getWindowSize().y);	
+		
+		
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
+		rahmen.setBounds(Calc.getPixelWidth(0.63f), Calc.getPixelHeight(0.06f), Calc.getPixelWidth(0.31f),
+				Calc.getPixelHeight(0.84f));
+		text.setBounds(Calc.getPixelWidth(0.63f), Calc.getPixelHeight(0.09f), Calc.getPixelWidth(0.31f),
+				Calc.getPixelHeight(0.1f));
+		benutzername.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.19f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		benutzer.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.26f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		passwort.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.36f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		pass.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.43f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		log.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.54f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.11f));
+		login.setBounds(Calc.getPixelWidth(0.73f), Calc.getPixelHeight(0.555f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		verg.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.67f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		vergessen.setBounds(Calc.getPixelWidth(0.73f), Calc.getPixelHeight(0.665f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		reg.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.77f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		registrieren.setBounds(Calc.getPixelWidth(0.73f), Calc.getPixelHeight(0.765f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
 	}
 
 	private void init() {

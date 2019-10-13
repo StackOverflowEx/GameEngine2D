@@ -38,7 +38,36 @@ public class PasswortVergessenGUI extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(0);
+		setWidth((int) Window.getWindowSize().x);
+		setHeight((int) Window.getWindowSize().y);	
+		
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
+		rahmen.setBounds(Calc.getPixelWidth(0.63f), Calc.getPixelHeight(0.06f), Calc.getPixelWidth(0.31f),
+				Calc.getPixelHeight(0.84f));
+		text.setBounds(Calc.getPixelWidth(0.63f), Calc.getPixelHeight(0.09f), Calc.getPixelWidth(0.31f),
+				Calc.getPixelHeight(0.1f));
+		token.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.19f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		tok.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.26f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		passwort.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.35f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		pass.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.42f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		passwortwdh.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.51f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		passwdh.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.58f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		abbr.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.67f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		abbrechen.setBounds(Calc.getPixelWidth(0.73f), Calc.getPixelHeight(0.665f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		zurueck.setBounds(Calc.getPixelWidth(0.65f), Calc.getPixelHeight(0.77f), Calc.getPixelWidth(0.27f),
+				Calc.getPixelHeight(0.08f));
+		zuruecksetzen.setBounds(Calc.getPixelWidth(0.735f), Calc.getPixelHeight(0.765f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
 	}
 
 	private void init() {

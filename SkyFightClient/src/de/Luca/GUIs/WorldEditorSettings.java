@@ -15,6 +15,7 @@ import de.Luca.Loading.Loader;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
+import de.Luca.Window.Window;
 import de.Luca.World.WorldEditor;
 
 public class WorldEditorSettings extends GUI {
@@ -61,6 +62,13 @@ public class WorldEditorSettings extends GUI {
 	}
 	
 	public void calc() {
+		setX(Calc.getPixelWidth(0.28359375f));
+		setY(Calc.getPixelHeight(0.056f));
+		setWidth(Calc.getPixelWidth(0.4328125f));
+		setHeight(Calc.getPixelHeight(0.7728f));	
+		
+		
+		
 		Fenster.setBounds(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.7728f));
 		Mapname.setBounds(Calc.getPixelWidth(0.03740625f), Calc.getPixelHeight(0.181f), Calc.getPixelWidth(0.358f),
 				Calc.getPixelHeight(0.06389f));
