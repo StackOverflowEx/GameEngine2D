@@ -37,7 +37,6 @@ public class BlockAuswahl extends GUI {
 
 	@Override
 	public void visibleUpdaet(boolean arg0) {
-		
 	}
 
 	public GScrollPanel getScrollPanel() {

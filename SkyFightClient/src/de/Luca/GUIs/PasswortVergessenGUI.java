@@ -202,8 +202,6 @@ public class PasswortVergessenGUI extends GUI {
 
 	@Override
 	public void visibleUpdaet(boolean arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

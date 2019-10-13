@@ -272,6 +272,7 @@ public class GSlider extends GUIComponent{
 
 	@Override
 	public void dispose() {
+		setVisible(false);
 		slider.dispose();
 		label.dispose();
 	}

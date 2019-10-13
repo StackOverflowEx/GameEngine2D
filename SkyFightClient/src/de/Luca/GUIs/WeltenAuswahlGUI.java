@@ -63,9 +63,7 @@ public class WeltenAuswahlGUI extends GUI {
 				Calc.getPixelHeight(0.1f));
 		back.setBounds(0, 0, Calc.getPixelWidth(0.056f), Calc.getPixelHeight(0.047f));
 		panel.setBounds(Calc.getPixelWidth(0.125f), Calc.getPixelHeight(0.05f), Calc.getPixelWidth(0.842f),
-				Calc.getPixelHeight(0.9f));
-		//panel.dispose();
-		//setUpScrollpanel();
+				Calc.getPixelHeight(0.9f));;
 	}
 
 	private void setUpScrollpanel() {
@@ -180,7 +178,6 @@ public class WeltenAuswahlGUI extends GUI {
 		panel.getSliderLR().getSlider().setButtonTextures(SkyFightClient.AuswahlScrollingKnopfA,
 				SkyFightClient.AuswahlScrollingKnopfB, SkyFightClient.AuswahlScrollingKnopfC);
 		panel.getSliderLR().setSliderPercentage(32);
-		
 		this.addComponent(panel);
 	}
 
@@ -252,6 +249,7 @@ public class WeltenAuswahlGUI extends GUI {
 	@Override
 	public void visibleUpdaet(boolean arg0) {
 		last = System.currentTimeMillis();
+		calc();
 	}
 
 	@Override

@@ -102,7 +102,11 @@ public class GPanel extends GUIComponent{
 	protected GUIComponent[] getComponents() {
 		GUIComponent[] components = new GUIComponent[this.components.size()];
 		for(int i = 0; i < this.components.size(); i++) {
-			components[i] = this.components.get(i);
+			try {
+				components[i] = this.components.get(i);
+			}catch (ArrayIndexOutOfBoundsException e) {
+				return new GUIComponent[this.components.size()];
+			}
 		}
 		return components;
 	}

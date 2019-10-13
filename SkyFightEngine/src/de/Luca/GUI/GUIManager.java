@@ -124,11 +124,16 @@ public class GUIManager {
 	
 	
 	private static void renderComponents(GUIComponent c, boolean b, Vector2f offset, Vector2f pixelOffset) {
-		if(c.getComponents().length == 1 && c.getComponents()[0] == c) {
-			//hat der Komponent keine weiteren Komponenten, wird er gezeichnet
-			renderComponent(c, b, offset, pixelOffset);
+		if(c == null || c.getComponents() == null) {
 			return;
 		}
+		try {
+			if(c.getComponents().length == 1 && c.getComponents()[0] == c) {
+				//hat der Komponent keine weiteren Komponenten, wird er gezeichnet
+				renderComponent(c, b, offset, pixelOffset);
+				return;
+			}
+		}catch (ArrayIndexOutOfBoundsException e) {}
 		
 		//ist der Komponent ein Slider, der ausgewählt ist, wird der Wert des Sliders entsprechend zur Positon des Mauszeigers aktualisiert.
 		if(c instanceof GSlider) {

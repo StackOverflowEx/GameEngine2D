@@ -38,8 +38,7 @@ public class WorldEditorOverlay extends GUI {
 
 	@Override
 	public void visibleUpdaet(boolean arg0) {
-		// TODO Auto-generated method stub
-
+		calc();
 	}
 
 	public void calc() {
@@ -75,6 +74,12 @@ public class WorldEditorOverlay extends GUI {
 				Calc.getPixelHeight(0.1f));
 		save2.setBounds(Calc.getPixelWidth(0.89f), Calc.getPixelHeight(0.925f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
+		
+		SkyFightClient.worldEditorSettings.setVisible(!SkyFightClient.worldEditorSettings.isVisible());
+		SkyFightClient.worldEditorSettings.setVisible(!SkyFightClient.worldEditorSettings.isVisible());
+		SkyFightClient.worldEditorErstellen.setVisible(!SkyFightClient.worldEditorErstellen.isVisible());
+		SkyFightClient.worldEditorErstellen.setVisible(!SkyFightClient.worldEditorErstellen.isVisible());
+
 	}
 
 	private void init() {
@@ -212,6 +217,7 @@ public class WorldEditorOverlay extends GUI {
 					SkyFightClient.worldEditorSettings.setVisible(true);
 					SkyFightClient.worldEditorAuswahl.setVisible(false);
 					SkyFightClient.worldEditorErstellen.setVisible(false);
+
 				}
 			}
 		});

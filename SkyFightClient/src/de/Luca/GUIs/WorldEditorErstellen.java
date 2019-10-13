@@ -15,6 +15,7 @@ import de.Luca.GUI.GSlider;
 import de.Luca.GUI.GTextBox;
 import de.Luca.GUI.GUI;
 import de.Luca.GUI.GUIComponent;
+import de.Luca.GUI.GUIManager;
 import de.Luca.GUI.TextFinishCallback;
 import de.Luca.GUI.ValueChangeCallback;
 import de.Luca.Loading.Loader;
@@ -69,13 +70,14 @@ public class WorldEditorErstellen extends GUI {
 	public WorldEditorErstellen() {
 		super(Calc.getPixelWidth(0.5251875f), Calc.getPixelHeight(0.056f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.7728f));
+		if(!GUIManager.getGUIS().contains(this)) {
+			GUIManager.addGUI(this);
+		}
 		init();
 	}
 
 	@Override
 	public void visibleUpdaet(boolean arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void calc() {

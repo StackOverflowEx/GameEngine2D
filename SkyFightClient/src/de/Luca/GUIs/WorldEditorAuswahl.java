@@ -43,15 +43,13 @@ public class WorldEditorAuswahl extends GUI {
 
 	@Override
 	public void visibleUpdaet(boolean arg0) {
-		
 	}
 
-	public GScrollPanel getScrollPanel() {
-			
+	public void getScrollPanel() {
+					
 		scroll = new GScrollPanel(0, Calc.getPixelHeight(0.14167f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.44723f));
-		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));
-
+		
 		int width = Calc.getPixelWidth(0.4328125f);
 		int spacing = Calc.getPixelWidth(0.0075f);
 		int rowAmount = (width + 2*spacing) / Calc.getPixelWidth(0.05f);
@@ -71,7 +69,7 @@ public class WorldEditorAuswahl extends GUI {
 			int w = Calc.getPixelWidth(0.05f);
 			GButton block = new GButton(spacing*2, spacing, w, h);
 			GButton name = new GButton(spacing*2, h + spacing, w, Calc.getPixelHeight(0.05f));
-			name.setText(bdp.getName(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.CENTER, 0);
+			name.setTextCut(bdp.getName(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.CENTER, 0);
 			name.setColor(new Vector4f(0, 0, 0, 0));
 			System.out.println(bdp.getBlockModel().getModel().getTexture().getTextureID());
 			block.setTexture(bdp.getBlockModel().getModel().getTexture());
@@ -116,19 +114,20 @@ public class WorldEditorAuswahl extends GUI {
 		if(added != 0) {
 			scroll.addItem(row);
 		}
-		return scroll;
+		
+		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));
 	}
 	
 	public void addBlock() {
 		scroll.dispose();
-		this.addComponent(getScrollPanel());
+		getScrollPanel();
 	}
 
 	public void calc() {
-		setX(0);
-		setY(Calc.getPixelHeight(0.14167f));
+		setX(Calc.getPixelWidth(0.042f));
+		setY(Calc.getPixelHeight(0.056f));
 		setWidth(Calc.getPixelWidth(0.4328125f));
-		setHeight(Calc.getPixelHeight(0.44723f));
+		setHeight(Calc.getPixelHeight(0.7728f));
 		
 		
 		UmrahmungA.setBounds(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.09167f));
@@ -145,14 +144,17 @@ public class WorldEditorAuswahl extends GUI {
 		Exit.setBounds(Calc.getPixelWidth(0.4088125f), 0, Calc.getPixelWidth(0.024f),
 				Calc.getPixelHeight(0.043f));
 		
-		scroll.setBounds(0, Calc.getPixelHeight(0.14167f), Calc.getPixelWidth(0.4328125f),
-				Calc.getPixelHeight(0.44723f));
+//		scroll.setBounds(0, Calc.getPixelHeight(0.14167f), Calc.getPixelWidth(0.4328125f),
+//				Calc.getPixelHeight(0.44723f));
 		title.setBounds(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
 		bearbeiten.setBounds(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.58f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
 		erstellen.setBounds(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.66f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
+		
+		scroll.dispose();
+		getScrollPanel();
 
 	}
 	
@@ -219,7 +221,7 @@ public class WorldEditorAuswahl extends GUI {
 		Exit.setButtonTextures(SkyFightClient.weExitA, SkyFightClient.weExitA, SkyFightClient.weExitB);
 		this.addComponent(Exit);
 		
-		this.addComponent(getScrollPanel());
+		getScrollPanel();
 		
 		Exit.addClickCallback(new ClickCallback() {
 
