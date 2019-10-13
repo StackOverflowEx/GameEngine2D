@@ -203,6 +203,11 @@ public class GameListener implements Listener {
 								if(bd.getValue() == 0) {
 									GameManager.setValue(GameManager.getValue() - 1f);
 								}
+								if(b.getBlockData().getPlaceSound() != null) {
+									b.playSound(b.getBlockData().getPlaceSound(), 1, 1);
+								}else {
+									b.playSound(SkyFightClient.breakingSound, 1, 1);
+								}
 								ServerTicker.addBlockChange((int)b.getWorldPos().x, (int)b.getWorldPos().y, b.getBlockData().getName(), 0f);
 								return;
 							}
