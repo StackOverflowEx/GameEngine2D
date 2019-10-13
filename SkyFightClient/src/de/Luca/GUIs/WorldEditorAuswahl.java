@@ -45,7 +45,7 @@ public class WorldEditorAuswahl extends GUI {
 	public void visibleUpdaet(boolean arg0) {
 	}
 
-	public void getScrollPanel() {
+	public GScrollPanel getScrollPanel() {
 					
 		scroll = new GScrollPanel(0, Calc.getPixelHeight(0.14167f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.44723f));
@@ -116,11 +116,16 @@ public class WorldEditorAuswahl extends GUI {
 		}
 		
 		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));
+		scroll.getSliderLR().getLabel().setTexture(SkyFightClient.AuswahlScrollingRahmen);
+		scroll.getSliderLR().getSlider().setButtonTextures(SkyFightClient.AuswahlScrollingKnopfA,
+				SkyFightClient.AuswahlScrollingKnopfB, SkyFightClient.AuswahlScrollingKnopfC);
+		
+		return scroll;
 	}
 	
 	public void addBlock() {
 		scroll.dispose();
-		getScrollPanel();
+		this.addComponent(getScrollPanel());
 	}
 
 	public void calc() {
@@ -154,16 +159,17 @@ public class WorldEditorAuswahl extends GUI {
 				Calc.getPixelHeight(0.1f));
 		
 		scroll.dispose();
-		getScrollPanel();
+		this.addComponent(getScrollPanel());
 
 	}
 	
 	public void init() {
+		
 		for (GUIComponent c : getComponents()) {
 			c.dispose();
 			removeComponent(c);
 		}
-		
+				
 		title = new GLabel(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
 		title.setText("Block Auswählen", SkyFightClient.ConstantiaB40, new Vector4f(1f, 1f, 1f, 1f),
@@ -221,7 +227,7 @@ public class WorldEditorAuswahl extends GUI {
 		Exit.setButtonTextures(SkyFightClient.weExitA, SkyFightClient.weExitA, SkyFightClient.weExitB);
 		this.addComponent(Exit);
 		
-		getScrollPanel();
+		this.addComponent(getScrollPanel());
 		
 		Exit.addClickCallback(new ClickCallback() {
 
@@ -262,6 +268,8 @@ public class WorldEditorAuswahl extends GUI {
 			public void run(String arg0, INPUT_MODE arg1) {
 				if(arg1 == INPUT_MODE.TEXT || arg1 == INPUT_MODE.DELETE) {
 					addBlock();
+					setVisible(false);
+					setVisible(true);
 				}
 			}
 		});

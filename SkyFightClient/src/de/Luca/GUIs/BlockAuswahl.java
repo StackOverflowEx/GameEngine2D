@@ -106,6 +106,12 @@ public class BlockAuswahl extends GUI {
 		if(added != 0) {
 			scroll.addItem(row);
 		}
+		
+		scroll.setSlider(SLIDER_POSITION.RIGHT, Calc.getPixelWidth(0.02f));
+		scroll.getSliderLR().getLabel().setTexture(SkyFightClient.AuswahlScrollingRahmen);
+		scroll.getSliderLR().getSlider().setButtonTextures(SkyFightClient.AuswahlScrollingKnopfA,
+				SkyFightClient.AuswahlScrollingKnopfB, SkyFightClient.AuswahlScrollingKnopfC);
+		
 		return scroll;
 	}
 	
@@ -185,6 +191,8 @@ public class BlockAuswahl extends GUI {
 			public void run(String arg0, INPUT_MODE arg1) {
 				if(arg1 == INPUT_MODE.TEXT || arg1 == INPUT_MODE.DELETE) {
 					addBlock();
+					setVisible(false);
+					setVisible(true);
 				}
 			}
 		});

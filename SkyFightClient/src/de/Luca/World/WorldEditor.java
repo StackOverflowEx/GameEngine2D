@@ -83,7 +83,6 @@ public class WorldEditor {
 		
 		MasterRenderer.switchBackground(MasterRenderer.getDefaultBackgroundTexture(), 0);
 		WorldLoader.clearBlockData();
-		SkyFightClient.worldEditorAuswahl.init();
 
 		BlockManager.removeAllBlocks();
 		SkyFightClient.gameState = GameState.WORLDEDITOR;
@@ -106,6 +105,7 @@ public class WorldEditor {
 		SkyFightClient.p.setFlying(true);
 		SkyFightClient.pother.setVisible(false);
 		
+		SkyFightClient.worldEditorAuswahl.init();
 		SkyFightClient.worldEditorOverlay.setVisible(true);
 	}
 	
