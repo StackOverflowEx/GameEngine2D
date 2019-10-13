@@ -15,9 +15,15 @@ import de.Luca.Networking.ServerTicker;
 
 public class GameManager {
 	
+	//eine statische Klasse, die das Spiel managet
+	
+	//der Gamelistener
 	private static GameListener listener = null;
+	//letzte berechnung
 	private static long last;
+	//boolean ob das Spiel gestartet wurde
 	private static boolean started = false;
+	//Zeit zu der das Spiel gestartet wurde
 	private static long startTime;
 	
 	private static float health;
@@ -53,15 +59,18 @@ public class GameManager {
 		return false;
 	}
 	
+	//Set die Leben des Spielers
 	public static void setHealth(float health) {
 		if(SkyFightClient.gameState != GameState.RUNNING) {
 			return;
 		}
+		//Spielt einen schadenseffekt ab, wenn der Spieler Schaden erhält
 		if(GameManager.health != health) {
 			Effect e = new Effect(SkyFightClient.gettingHit, new Vector2f(SkyFightClient.p.getWorldPos()).add(0.5f, 1f), new Vector2f(BlockData.BLOCK_SCALE * 2.5f, BlockData.BLOCK_SCALE * 2.5f));
 			e.setWorldPos(new Vector2f(SkyFightClient.p.getWorldPos()).add(-0.5f, -1f));
 			e.play();
 		}
+		//Setzt die Leben im Ingameoverlay
 		GameManager.health = health;
 		SkyFightClient.ingameOverlay.setHealth(GameManager.health);
 	}
@@ -70,12 +79,15 @@ public class GameManager {
 		return health;
 	}
 	
+	//Berechnet Gamedaten
 	public static void calcGameData() {
 		if(SkyFightClient.gameState == GameState.RUNNING) {
+			//Wurde das Spiel noch nicht gestartet, wird es gestartet
 			if(!started) {
 				start();
 			}
 			
+			//Berechnet die verbleibende Zeit und setzt diese auf das IngameOverlay
 			String time = "";
 			float delta = System.currentTimeMillis() - startTime;
 			delta = 1000*60*15 - delta;
@@ -102,18 +114,21 @@ public class GameManager {
 			
 			float sec = (System.currentTimeMillis() - last) / 1000f;
 			
-			
+			//Wird gerade ein Block abgebaut, wird dieser weiter abgbaut
 			if(listener.getBreaking() != null) {
+				//hat der Spieler eine Spitzhacke, wird der Block normal abgebaut, sonst dauert es doppelt so lange
 				float multiplyer = 1;
 				if(SkyFightClient.ingameOverlay.getSelectedSlot() != HOTBARSLOT.PICKAXE) {
 					multiplyer = 0.5f;
 				}
+				//Der Block wird weiter abgebaut und eine Animation wird gespielt
 				listener.getBreaking().setBreakPercentage(listener.getBreaking().getBreakPercentage() + multiplyer * (sec / listener.getBreaking().getBlockData().getHardness()));
 				if(!SkyFightClient.p.isAnimationRunning(0) && !SkyFightClient.p.getAnimationTitle(0).equals("hit")) {
 					SkyFightClient.p.startAnimation(0, SkyFightClient.punchDown);
 					SkyFightClient.p.startAnimation(1, SkyFightClient.punchUp);
 				}
 				
+				//Der Sound wird abgespielt
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
 				if(listener.getBreaking().getBlockData().getBreakSound() != null) {
@@ -122,6 +137,8 @@ public class GameManager {
 					listener.getBreaking().playSound(SkyFightClient.breakingSound, 1 + ran, 1);
 				}
 				
+				
+				//wurde ein Block abgebaut, erhält der Spieler coins und das Blockupdate wird an den Gegner übermittelt
 				if(listener.getBreaking().getBreakPercentage() >= 1) {
 					BlockManager.removeBlock(listener.getBreaking());
 					setValue(getValue() + listener.getBreaking().getBlockData().getValue());

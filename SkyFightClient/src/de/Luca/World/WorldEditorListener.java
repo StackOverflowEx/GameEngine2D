@@ -24,7 +24,9 @@ public class WorldEditorListener implements Listener{
 	public void onClick(MouseButtonEvent e) {
 		if(!e.isCancelled()) {
 			if(e.getAction() == GLFW.GLFW_RELEASE && e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
+				//Schaut, ob der Spawn-Setz-Modus aktiv ist
 				if(WorldEditor.getSettingSpawn() != -1) {
+					//Setzt den entsprechenden Spawn
 					if(WorldEditor.getSettingSpawn() == 1) {
 						WorldEditor.setSpawn1(WorldPosition.getMouseWorldPos());
 					}
@@ -33,7 +35,9 @@ public class WorldEditorListener implements Listener{
 					}
 					WorldEditor.setSettingSpawn(-1);
 					return;
+				//Schaut ob der Spiegelmodus aktiv ist
 				}else if(WorldEditor.isMirroring()) {
+					//Spiegelt alle Blöcke an der y-Koordinate der Maus
 					int mouseX = (int) WorldPosition.getMouseWorldPos().x;
 					ArrayList<Block> add = new ArrayList<Block>();
 					for(int x : BlockManager.getBlocks().keySet()) {
@@ -60,6 +64,7 @@ public class WorldEditorListener implements Listener{
 				return;
 			}
 			
+			//Ist der Spiegelmodus und der Spawn-Setz-Modus nicht aktiv wird bei einem Linksklick ein Block gesetzt
 			if((e.getAction() == GLFW.GLFW_PRESS || e.getAction() == GLFW.GLFW_REPEAT) && e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 				Block block = BlockManager.getBlock(WorldPosition.getMouseWorldPos());
 				if(block != null) {
@@ -76,6 +81,7 @@ public class WorldEditorListener implements Listener{
 					}
 				}
 				return;
+			//und bei einem Rechtsklick ein Block entfernt
 			}else if((e.getAction() == GLFW.GLFW_PRESS || e.getAction() == GLFW.GLFW_REPEAT) && e.getButton() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
 				Block b = BlockManager.getBlock(WorldPosition.getMouseWorldPos());
 				if(b != null) {

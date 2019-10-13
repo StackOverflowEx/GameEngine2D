@@ -30,21 +30,22 @@ public class GameServerHandler {
 	private static Connection con;
 	private static int highest;
 	
+	//setzt die Connection zum Gameserver
 	public static void setConnection(Connection con) {
 		GameServerHandler.con = con;
 		highest = -1;
 		SkyFightClient.mainGUI.setIsSearching(false, false);
 	}
 	
+	
+	//Verarbeitet Gamepackets
 	public static void handlePacket(Packet packet) {
 		
-		if(packet.i != null && (int) packet.i < highest) {
-			return;
-		}
-		highest = (int) packet.i;
+		//es werden immer nur die neuesten Packete akzeptiert
 		
 		GamePacket gp = new GamePacket(packet.toJSONString());
 		
+		//Läuft das Spiel und ein Info-Pakcet wird erhalten ist dies das End-Packet
 		if(gp.getGamePacketType() == GamePacket.INFO) {
 			System.out.println("INFO RECIEVED");
 			
@@ -70,6 +71,8 @@ public class GameServerHandler {
 				SkyFightClient.gameState = GameState.MENUE;
 				return;
 			}
+			
+			//Verarbeitung des Start-Packets
 			
 			float x = Float.parseFloat(gp.b.toString()); //x
 			float y = Float.parseFloat(gp.c.toString()); //x
@@ -100,7 +103,21 @@ public class GameServerHandler {
 			SkyFightClient.gameState = GameState.RUNNING;
 			ServerTicker.startTicking(TPS, con);
 			
+		//Verarbeitung eines Positon-Packets (enthält position des Gegners, eigene Leben, Blockupdates, Pfeilupdates, Hotbarslot des Gegners)
 		}else if(gp.getGamePacketType() == GamePacket.POSITION){
+			
+			if(gp.e != null) {
+				processBlockChanges(gp.e.toString());
+			}
+			if(gp.h != null) {
+				processArrowChanges(gp.h.toString());
+			}
+			
+			if(packet.i != null && (int) packet.i < highest) {
+				return;
+			}
+			highest = (int) packet.i;
+			
 			if(SkyFightClient.gameState == GameState.RUNNING) {
 				float x = Float.parseFloat(gp.b.toString()); //x
 				float y = Float.parseFloat(gp.c.toString().split("/")[0]); //x
@@ -134,13 +151,6 @@ public class GameServerHandler {
 					}
 				}catch (ArrayIndexOutOfBoundsException e) {}
 				
-				if(gp.e != null) {
-					processBlockChanges(gp.e.toString());
-				}
-				if(gp.h != null) {
-					processArrowChanges(gp.h.toString());
-				}
-				
 				SkyFightClient.pother.setPosition(PlayerCalc.getSetPosOther());
 								
 				float xSpeed = ((x - SkyFightClient.pother.getWorldPos().x) * 1000f / (float)(1000 / TPS)) * 1;
@@ -155,6 +165,7 @@ public class GameServerHandler {
 	
 	private static HashMap<Integer, ArrayList<String>> set = new HashMap<Integer, ArrayList<String>>();
 	
+	//verarbeitet Blockudpates
 	private static void processBlockChanges(String blocks) {
 		JSONArray changes = new JSONArray(blocks);
 		set.clear();
@@ -162,8 +173,9 @@ public class GameServerHandler {
 			JSONObject blockData = changes.getJSONObject(i);
 			int x = blockData.getInt("x");
 			int y = blockData.getInt("y");
+			float breakPercent = blockData.getFloat("breakPercent");
 			
-			if(set.containsKey(x)) {
+			if(set.containsKey(x) && breakPercent != 0 && breakPercent != 1) {
 				if(set.get(x).contains(y + "")) {
 					continue;
 				}
@@ -175,7 +187,6 @@ public class GameServerHandler {
 			}
 			set.get(x).add(y + "");
 			
-			float breakPercent = blockData.getFloat("breakPercent");
 			String name = blockData.getString("name");
 			Block b = BlockManager.getBlock(new Vector2f(x, y));
 			if(b == null || !name.equals(b.getBlockData().getName())) {
@@ -211,6 +222,7 @@ public class GameServerHandler {
 		}
 	}
 	
+	//verarbeitet Pfeilupdates
 	private static void processArrowChanges(String arrows) {
 		JSONArray changes = new JSONArray(arrows);
 		for(int i = 0; i < changes.length(); i++) {

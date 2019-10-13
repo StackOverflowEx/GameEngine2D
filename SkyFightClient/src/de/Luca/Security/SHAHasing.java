@@ -6,6 +6,8 @@ import java.security.SecureRandom;
 
 public class SHAHasing {
 
+	//Hasht einen String
+	
 	public static String getHash(String plainText) {
 		try {
 			return get_SHA_512_SecurePassword(plainText, getSalt());

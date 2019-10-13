@@ -10,6 +10,8 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 
 public class RSAKeyPairGenerator {
+	
+	//ERSTELLT EIN SCHLUESSELPAAR FÜR DIE RSA VERSCHLUESSELUNG
 
 	private PrivateKey privateKey;
 	private PublicKey publicKey;

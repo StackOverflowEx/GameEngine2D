@@ -18,23 +18,31 @@ import de.Luca.Packets.GamePacket;
 import de.Luca.Packets.Packet;
 
 public class ServerTicker {
-
+	
+	
+	//Ticks pro Sekunde
 	private static int TPS;
 	private static Timer timer;
+	//Connection zum GameServer
 	private static Connection con;
+	//cointer
 	private static int counter;
+	//boolean, ob der Spieler geschlagen hat
 	private static boolean hit;
 	
+	//wie viele Packets Friedensphase
 	public static final int gracePeriode = 30;
 
 	private static float dmgDelt, dmgTaken;
 	private static ArrayList<JSONObject> blockChanges = new ArrayList<JSONObject>();
 	private static ArrayList<JSONObject> arrowChanges = new ArrayList<JSONObject>();
 
+	//Es wird gespeichert, ob dem Gegner Schaden zugefügt wurde
 	public static void addDmgDelt(float add) {
 		if(counter < gracePeriode) {
 			return;
 		}
+		//ein Bluteffekt wird abgespielt
 		Effect e = new Effect(SkyFightClient.gettingHit, new Vector2f(SkyFightClient.pother.getWorldPos()).add(0.5f, 1f), new Vector2f(BlockData.BLOCK_SCALE * 2.5f, BlockData.BLOCK_SCALE * 2.5f));
 		e.setWorldPos(new Vector2f(SkyFightClient.pother.getWorldPos()).add(-0.5f, -1f));
 		e.play();
@@ -45,6 +53,7 @@ public class ServerTicker {
 		hit = true;
 	}
 	
+	//es wird gespeichert, ob der Spieler schaden erhalten hat
 	public static void addDmgTaken(float add) {
 		if(counter < gracePeriode) {
 			return;
@@ -73,6 +82,7 @@ public class ServerTicker {
 		arrowChanges.add(blockData);
 	}
 
+	//der Ticker wird gestartet und es wird TPS-mal in der Sekunde ein Packet an den Server gesendet
 	public static void startTicking(int tps, Connection connection) {
 		System.out.println("Running with " + tps + " ticks per second");
 		TPS = tps;
@@ -93,6 +103,7 @@ public class ServerTicker {
 		}
 	}
 
+	//der Ticker wird beendet
 	public static void stopTicking() {
 		if (timer != null) {
 			timer.cancel();
@@ -100,6 +111,7 @@ public class ServerTicker {
 		}
 	}
 
+	//es wird ein Gamepacket erstellt und an den Server gesendet.
 	private static void executeTick() {
 
 		GamePacket send = new GamePacket();

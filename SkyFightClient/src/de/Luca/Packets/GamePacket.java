@@ -2,6 +2,9 @@ package de.Luca.Packets;
 
 public class GamePacket extends Packet{
 	
+	//GamePacket wird vom Gameserver erhalten und an diesen Gesendet
+	
+	//entweder Info-Packet oder Position-Packet
 	public static final int INFO = 0;
 	public static final int POSITION = 1;
 	

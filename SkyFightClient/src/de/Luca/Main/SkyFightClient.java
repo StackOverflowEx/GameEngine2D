@@ -29,6 +29,8 @@ import de.Luca.Sound.Source;
 import de.Luca.Text.TextManager;
 
 public class SkyFightClient {
+	
+	//eine statische Klasse, die alle Ressourcen verwaltet
 
 	// Connection
 	public static Connection handleServerConnection;

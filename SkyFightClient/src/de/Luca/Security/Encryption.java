@@ -9,6 +9,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Encryption {
+	
+	//CODE ZUR VERSCHLÜSSELUNG MIT AES
 
 	public static byte[] encrypt(String strClearText, String strKey) throws Exception {
 		byte[] encrypted = null;;

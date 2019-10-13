@@ -20,11 +20,16 @@ import de.Luca.Sound.AudioManager;
 
 public class WorldLoader {
 	
+	//LÄDT EINE WELT
+	
+	//Blockdatas
 	private static HashMap<String, BlockData> blockData = new HashMap<String, BlockData>();
 	public static String mapName = "Default";
 	public static Vector2f spawn1, spawn2;
+	//boolean ob Ladevorgang läuft
 	private static boolean loading;
 	
+	//alte Daten werden gelöscht
 	public static void clearBlockData() {
 		Loader.deleteTextures("block");
 		AudioManager.deleteSounds("block");
@@ -35,6 +40,7 @@ public class WorldLoader {
 		return mapName;
 	}
 	
+	//Die Map wird geladen
 	public static void loadMap(String mapFolder) {
 		if(loading) {
 			return;
@@ -45,11 +51,17 @@ public class WorldLoader {
 			new PopUp("Die Map wurde nicht gefunden und kann nicht geladen werden.", new Vector4f(1, 0, 0, 1));
 			return;
 		}
+		//Alle alten Blöcke werden entfernt
 		BlockManager.removeAllBlocks();
+		//Alle alten Daten werden gelöscht
 		clearBlockData();
+		//Die Blockdaten werden geladen
 		loadBlockData(map);
+		//Die Blöcke werden geladen
 		loadBlocks(map);
+		//Der Hintergrund wird geladen
 		laodBackground(map);
+		//DIe Blockauswahl menüs werden aktualisiert
 		SkyFightClient.worldEditorAuswahl.init();
 		SkyFightClient.blockSelect.init();
 		System.out.println("Map " + mapName + " has successfully been loaded.");
@@ -75,6 +87,7 @@ public class WorldLoader {
 		}
 	}
 	
+	//Die Blöcke werden geladen
 	private static void loadBlocks(File map) {
 		File mapdata = new File(map.getPath() + "/mapdata");
 		File blocks = new File(mapdata.getPath() + "/blocks.txt");
@@ -122,6 +135,7 @@ public class WorldLoader {
 		}
 	}
 	
+	//Die Blockdaten werden geladen
 	private static void loadBlockData(File map) {
 		File blockdata = new File(map.getPath() + "/blockdata");
 		for(File block : blockdata.listFiles()) {

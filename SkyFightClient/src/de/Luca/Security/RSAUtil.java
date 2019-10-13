@@ -17,6 +17,8 @@ import javax.crypto.NoSuchPaddingException;
 
 public class RSAUtil {
 	
+	//Verschlüsselt eine Nachricht mit der RSA-Verschlüsselung
+	
 
 	public static PublicKey getPublicKey(String base64PublicKey) {
 		PublicKey publicKey = null;

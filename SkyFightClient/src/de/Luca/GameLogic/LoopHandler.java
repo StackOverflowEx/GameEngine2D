@@ -18,9 +18,12 @@ import de.Luca.Text.TextManager;
 
 public class LoopHandler implements BeatHandler {
 
+	//Handlet den Client
+	
 	@Override
 	public void init() {
 		
+		//Fügt einen Librarypfad hinzu und lädt die freetype.dll
 		System.setProperty("java.library.path",
 				SkyFightClient.root + "\\res\\dlls;" + System.getProperty("java.library.path"));
 		Field fieldSysPath;
@@ -34,12 +37,15 @@ public class LoopHandler implements BeatHandler {
 		}
 		System.loadLibrary("freetype");
 		
-		
+		//lädt eine standard Schriftart
 		loadFonts();
+		//Lädt alle Variablen in der Klasse SkyFightClient
 		SkyFightClient.load();
 		
+		//Setzt den Clicksound für GButtons
 		GUIManager.setClickSound(SkyFightClient.click);
 
+		//initalisiert die Spieler
 		SkyFightClient.p = new Player(SkyFightClient.playerUP, SkyFightClient.playerDown, new Vector2f(0, 2));
 		SkyFightClient.p.setVisible(true);
 		SkyFightClient.p.setFlying(false);
@@ -53,25 +59,33 @@ public class LoopHandler implements BeatHandler {
 		EntityManager.addEntity(SkyFightClient.p);
 		PlayerCalc.init(SkyFightClient.p);
 		ArrowCalc.init();
+		//Zeigt das Logingui an
 		SkyFightClient.loginGUI.setVisible(true);
 
+		//registriert den ConnectionListener
 		EventManager.registerEvent(new ConnectionListener());
+		//Setzt den Hintergrund fest
 		MasterRenderer.setBackground(SkyFightClient.background);
 
-		SkyFightClient.backgroundMusic.setVolume(0.1f);
+		//started die Hintergrundmusik
+		SkyFightClient.backgroundMusic.setVolume(0.5f);
 		SkyFightClient.backgroundMusic.playSound(SkyFightClient.backMusic);
 		SkyFightClient.backgroundMusic.setLoop(true);
 
 	}
 
+	//wird jeden Frame ausgeführt
 	@Override
 	public void loop() {
+		//Brechnet die Spielerposition und updated die Animation
 		PlayerCalc.calc();
 		
 		SkyFightClient.p.updateAnimation();
 		SkyFightClient.pother.updateAnimation();
 		
+		//Brechnet die Pefile
 		ArrowCalc.calc();
+		//Berechnet die Popups und die Gamedaten
 		PopUp.update();
 		GameManager.calcGameData();
 	}

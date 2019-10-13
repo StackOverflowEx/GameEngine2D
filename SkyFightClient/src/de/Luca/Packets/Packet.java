@@ -5,9 +5,13 @@ import org.json.JSONObject;
 
 public class Packet {
 	
+	//packet wird vom Server erhalten oder gesendet
+	
+	//Felder und type
 	public int packetType;	
 	public Object a, b, c, d, e, f, g, h, i;
 	
+	//möglcihe Packettypes
 	public static final int HANDSHAKE = 0;
 	public static final int ERROR = 1;
 	public static final int SUCCESS = 2;
@@ -32,6 +36,8 @@ public class Packet {
 	public static final int DEMON_SERVER_CREATED = 6;
 	public static final int DEMON_STOP_SERVER = 7;
 	
+	
+	//mögliche Fehlercodes
 	public static final int ERROR_MISSING_HANDSHAKE = 1;
 	public static final int ERROR_SERVER = 2;
 	public static final int ERROR_USERNAME_EXISTS = 3;

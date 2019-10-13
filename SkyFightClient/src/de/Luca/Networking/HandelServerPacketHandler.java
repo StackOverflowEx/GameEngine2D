@@ -11,6 +11,8 @@ import de.Luca.World.WorldLoader;
 
 public class HandelServerPacketHandler {
 	
+	//verarbeitet die Packete, die vom Handle-Server empfangen werden
+	
 	public static String username = "UNKNOWN";
 
 	public static void handlePacket(Packet packet) {
@@ -21,8 +23,6 @@ public class HandelServerPacketHandler {
 		} else if (packet.packetType == Packet.SUCCESS) {
 			if ((int) packet.a == Packet.LOGIN) {
 				SkyFightClient.loginGUI.transitionToMain();
-//				SkyFightClient.loginGUI.setVisible(false);
-//				SkyFightClient.mainGUI.setVisible(true);
 			} else if ((int) packet.a == Packet.REGISTRATION) {
 				SkyFightClient.registerGUI.setVisible(false);
 				SkyFightClient.loginGUI.setVisible(true);

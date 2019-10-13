@@ -24,6 +24,7 @@ public class PlayerCalc {
 		lastCalc = -1;
 	}
 	
+	//berechnet die Position des Spielers und des Gegners, falls vorhanden
 	public static void calc() {
 		
 		if(SkyFightClient.gameState != GameState.RUNNING && SkyFightClient.gameState != GameState.WORLDEDITOR) {
@@ -61,10 +62,10 @@ public class PlayerCalc {
 			if(!p.isOnGround() || upSpeed > 0) {
 				upSpeed -= sec * GRAVITY;
 			}else if(upSpeed < 0){
-				if(upSpeed < -20) {
+				//Der Spieler erhält Fallschaden, wenn die y-Geschwindigkeit mehr als 10 Blöcke nach Unten pro Sekunde beträgt.
+				if(upSpeed < -10) {
 					float fallDmg = Math.abs(upSpeed) / 10 * 2;
 					fallDmg = Math.round(fallDmg * 10f) / 10f;
-					System.out.println("PCALC");
 					GameManager.setHealth(GameManager.getHealth() - fallDmg);
 					ServerTicker.addDmgTaken(Math.abs(upSpeed) / 10 * 2);
 				}
@@ -72,10 +73,12 @@ public class PlayerCalc {
 			}
 			addY += sec * upSpeed;
 		}
+		//schießt der Spieler, kann er sich nur halbso schnell bewegen
 		if(GameManager.isShooting()) {
-			addX = 0;
+			addX = addX/2f;
 		}
 		
+		//Bewegt sich der Spieler, wird ein Sound abgespielt und eine Laufanimation abgespielt
 		if(addX != 0) {
 			SkyFightClient.walking.setPosition(SkyFightClient.p.getWorldPos());
 			if(!SkyFightClient.walking.isPlaying() && p.isOnGround() && !p.isFlying()) {
@@ -101,6 +104,7 @@ public class PlayerCalc {
 				}
 			}
 		}else {
+			//Steht der Spieler, wird die Laufanimation abgebrochen
 			try {
 				if(sec > 0 && SkyFightClient.p.getAnimationTitle(0).equals("run")) {
 					SkyFightClient.p.stopAnimation(0);
@@ -111,8 +115,8 @@ public class PlayerCalc {
 		
 		p.move(new Vector2f(addX, addY));
 		
+		//ist der Spieler unter der y-Koordinate -100 stirbt dieser sofort
 		if(p.getWorldPos().y < -100) {
-			System.out.println("VOID");
 			GameManager.setHealth(0);
 			ServerTicker.addDmgTaken(100);		
 		}
@@ -137,6 +141,7 @@ public class PlayerCalc {
 		return setPos;
 	}
 	
+	//Daten, wie der andere Spieler bewegt werden soll und wo hin er soll
 	public static void setOtherData(float xSpeedPerSec, float ySpeedPerSec, long finishedMove, Vector2f set) {
 		xSpeedOther = xSpeedPerSec;
 		ySpeedOther = ySpeedPerSec;
@@ -144,6 +149,7 @@ public class PlayerCalc {
 		setPos = set;
 	}
 	
+	//teleportiert den Gegner zu der exakten Position
 	public static void tpOtherToExact() {
 		if(setPos == null) {
 			return;
@@ -152,6 +158,7 @@ public class PlayerCalc {
 		SkyFightClient.pother.move(move);
 	}
 	
+	//Die Position für den Gegner wird berechnet
 	private static void calcOther(float sec) {
 		if(finishedOtherMove > System.currentTimeMillis()) {
 			return;
@@ -159,6 +166,7 @@ public class PlayerCalc {
 		float addX = xSpeedOther * sec;
 		float addY = ySpeedOther * sec;
 		
+		//siehe oben (Abspielen einer Animation/Sound beim Bewegen)
 		if(addX != 0) {
 			SkyFightClient.walkingOther.setPosition(SkyFightClient.pother.getWorldPos());
 			if(!SkyFightClient.walkingOther.isPlaying() && SkyFightClient.pother.isOnGround()) {

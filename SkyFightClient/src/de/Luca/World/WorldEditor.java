@@ -23,15 +23,26 @@ import de.Luca.Rendering.MasterRenderer;
 
 public class WorldEditor {
 	
+	//eine statische Klasse, die das Bearbeiten der Welt verwaltet
+	
+	//Listener
 	private static WorldEditorListener listener;
+	//enthält blocknamen
 	private static ArrayList<String> names;
+	//Boolean ob die WElt gerade gespeichert wird
 	private static boolean saving;
+	//Hingergrund datei
 	private static String background;
+	//Spawnpunkte
 	private static Vector2f spawn1, spawn2;
+	//boolean, ob neue map
 	private static boolean newMap;
+	//boolean ob Spiegel-Modus aktiviert
 	private static boolean mirroring;
+	//Spawn, der gesetzt werden soll
 	private static int settingSpawn;
 	
+	//startet den Worldeditor, mit einer schon vorhandenen Karte
 	public static void start(String mapFolder) {
 		SkyFightClient.gameState = GameState.WORLDEDITOR;
 		listener = new WorldEditorListener();
@@ -65,6 +76,8 @@ public class WorldEditor {
 		SkyFightClient.worldEditorOverlay.setVisible(true);
 	}
 	
+	
+	//startet den WOrldeditor mit einer leeren Welt
 	public static void start() {
 		
 		
@@ -136,6 +149,7 @@ public class WorldEditor {
 		return spawn2;
 	}
 	
+	//beendet den Welteditor
 	public static void stop() {
 		SkyFightClient.gameState = GameState.MENUE;
 		EventManager.removeListener(listener);
@@ -168,19 +182,24 @@ public class WorldEditor {
 		background = texture;
 	}
 		
+	
+	//Speichert die Map
 	public static void save(String mapName) {
 //		PopUp p = new PopUp("Die Map wird gespeichert...", new Vector4f(1, 0.7f, 0, 1), true);
 		WorldLoader.mapName = mapName;
+		//es wird geprüft ob der Name schon existiert
 		File maps = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 		if(maps.exists() && isNewMap()) {
 			new PopUp("Dieser Name ist bereits besetzt", new Vector4f(1, 0, 0, 1));
 			return;
 		}
+		//es wird geprüft ob der Speichervorgang läuft
 		if(saving) {
 			new PopUp("Bitte warte bis der Speichervorgang abgeschlossen ist.", new Vector4f(1, 0, 0, 1));
 			return;
 		}
 		
+		//Wird eine alte Map bearbeitet wird die Map im TMP-Ordner gespeichert
 		String screenshotFolder = maps.getPath();
 		if(!isNewMap()) {
 			maps = new File(SkyFightClient.root + "/maps/tmp/" + WorldLoader.mapName);
@@ -191,10 +210,12 @@ public class WorldEditor {
 		
 		ArrayList<BlockData> saved = new ArrayList<BlockData>();
 		ArrayList<String> bs = new ArrayList<String>();
+		//es werden alle Blöcke gespeichert
 		for(int x : BlockManager.getBlocks().keySet()) {
 			for(int y : BlockManager.getBlocks().get(x).keySet()) {
 				Block b = BlockManager.getBlock(new Vector2f(x, y));
 				BlockData data = b.getBlockData();
+				//Wurde die Blockdata noch nicht gespeichert, wird diese gespeichert
 				if(!saved.contains(data)) {
 					if(!saveBlockData(data, maps.getPath())) {
 						return;
@@ -211,6 +232,7 @@ public class WorldEditor {
 			return;
 		}
 		
+		//wurde eine alte Map bearbeitet, wird die gespeicherte Map aus dem TMP-Ordner in den richtigen verschoben
 		if(!newMap) {
 			File old = new File(SkyFightClient.root + "/maps/own/" + WorldLoader.mapName);
 			try {
@@ -229,7 +251,7 @@ public class WorldEditor {
 		
 	}
 	
-	
+	//es wird der Hintergrund gespeichert
 	private static boolean saveBackground(String map) {
 		if(background == null) {
 			return true;
@@ -249,6 +271,7 @@ public class WorldEditor {
 		return true;
 	}
 	
+	//Es werden die Blöcke und weitere Mapdaten gespeicehrt
 	private static boolean saveBlocksAndMapName(ArrayList<String> blocks, String mapName, String map) {
 		File maps = new File(map);
 		File mapdata = new File(maps.getPath() + "/mapdata");
@@ -275,6 +298,7 @@ public class WorldEditor {
 		return true;
 	}
 	
+	//Die Blockdata wird gespeichert
 	private static boolean saveBlockData(BlockData data, String map) {
 		File maps = new File(map);
 		File blockdata = new File(maps.getPath() + "/blockdata/" + data.getName());

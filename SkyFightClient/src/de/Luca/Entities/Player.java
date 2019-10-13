@@ -16,11 +16,17 @@ public class Player extends Entity{
 	
 	//repräsentiert den Spieler
 	
+	//Animaiton des oberen und unteren Teil des Spielers
 	private Animation down, up;
+	//Textur des oberen und unteren Teil des Spielers
 	private Texture defaultDown, defaultUp;
+	//Boolean, ob der SPieler fliegt
 	private boolean fly;
+	//y-Velocity
 	private float yVel;
+	//Effekt bzw. Anzeige, welches Item der Spieler in der Hand hält
 	private Effect e;
+	//ausgewählte Hotbarslot
 	private HOTBARSLOT selected;
 		
 	public Player(Texture up, Texture down, Vector2f worldPos) {
@@ -42,6 +48,7 @@ public class Player extends Entity{
 		return yVel;
 	}
 	
+	//Setzt den Hotbarslot
 	public void setSelected(HOTBARSLOT s) {
 		if(isVisible()) {
 			if(!s.equals(selected)) {
@@ -64,6 +71,7 @@ public class Player extends Entity{
 		this.yVel = vel;
 	}
 	
+	//Berechnet die OpenGL-Koordinaten
 	protected void calcOpenGLPos() {
 		e.setWorldPos(new Vector2f(worldPos).add(new Vector2f(0f, 1f)));
 		float x = worldPos.x * BlockData.BLOCK_SCALE;
@@ -86,6 +94,10 @@ public class Player extends Entity{
 	}
 
 
+	// 0 = UNTEN
+	//1 = OBEN
+	
+	//updatet die Animation
 	@Override
 	public void updateAnimation() {
 		try {
@@ -108,6 +120,7 @@ public class Player extends Entity{
 		}catch (NullPointerException e) {}
 	}
 	
+	//gibt einen Boolean zurück, ob eine Animation läuft
 	public boolean isAnimationRunning(int i) {
 		if(i == 0) {
 			if(down != null) {
@@ -134,6 +147,7 @@ public class Player extends Entity{
 		return "";
 	}
 	
+	//Stopt die Animaiton
 	public void stopAnimation(int i) {
 		try {
 			if(i == 0) {
@@ -150,7 +164,7 @@ public class Player extends Entity{
 		}catch (NullPointerException e) {}
 	}
 
-
+	//started eine Animaiton
 	@Override
 	public void startAnimation(int i, Animation a) {
 		Animation copy = a.copy();
