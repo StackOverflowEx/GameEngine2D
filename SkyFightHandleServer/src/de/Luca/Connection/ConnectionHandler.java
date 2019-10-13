@@ -93,6 +93,7 @@ public class ConnectionHandler implements Runnable {
 					handlePacket(packet);
 //				}
 			}catch (Exception e) {
+				e.printStackTrace();
 				disconnect();
 			}
 
@@ -263,6 +264,7 @@ public class ConnectionHandler implements Runnable {
 	}
 	
 	private void handleKey(Packet packet) {
+		System.out.println("Key requested");
 		String key = "";
 		try {
 			key = Encryption.genKey();

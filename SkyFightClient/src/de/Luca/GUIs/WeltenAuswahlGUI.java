@@ -154,6 +154,9 @@ public class WeltenAuswahlGUI extends GUI {
 					@Override
 					public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 						if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+							if((System.currentTimeMillis() - last) < 100) {
+								return;
+							}
 							WorldEditor.start(map.getPath());
 							SkyFightClient.worldSelctGUI.setVisible(false);
 						}
@@ -237,10 +240,10 @@ public class WeltenAuswahlGUI extends GUI {
 
 	}
 
+	private long last = System.currentTimeMillis();
 	@Override
 	public void visibleUpdaet(boolean arg0) {
-		// TODO Auto-generated method stub
-
+		last = System.currentTimeMillis();
 	}
 
 	@Override
