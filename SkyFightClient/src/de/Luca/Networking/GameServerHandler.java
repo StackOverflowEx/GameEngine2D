@@ -157,6 +157,7 @@ public class GameServerHandler {
 	
 	private static void processBlockChanges(String blocks) {
 		JSONArray changes = new JSONArray(blocks);
+		set.clear();
 		for(int i = 0; i < changes.length(); i++) {
 			JSONObject blockData = changes.getJSONObject(i);
 			int x = blockData.getInt("x");

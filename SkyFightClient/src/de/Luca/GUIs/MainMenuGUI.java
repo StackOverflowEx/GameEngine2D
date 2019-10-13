@@ -21,7 +21,7 @@ public class MainMenuGUI extends GUI {
 	private GButton spiel;
 	private GLabel spielSuchen;
 	private GButton world;
-	private GLabel  worldEditor;
+	private GLabel worldEditor;
 	private GButton einst;
 	private GLabel einstellungen;
 
@@ -87,6 +87,7 @@ public class MainMenuGUI extends GUI {
 			@Override
 			public void run(GUIComponent component, int key, int action, int mouseX, int mouseY) {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
+					isSearching = !isSearching;
 					Packet send = new Packet();
 					send.packetType = Packet.SEARCHING;
 					SkyFightClient.handleServerConnection.send(send);
@@ -101,6 +102,12 @@ public class MainMenuGUI extends GUI {
 				if (key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
 					SkyFightClient.worldSelctGUI.setVisible(true);
 					SkyFightClient.mainGUI.setVisible(false);
+					if(isSearching) {
+						Packet send = new Packet();
+						send.packetType = Packet.SEARCHING;
+						SkyFightClient.handleServerConnection.send(send);
+						setIsSearching(false, false);
+					}
 				}
 			}
 		});
@@ -119,26 +126,27 @@ public class MainMenuGUI extends GUI {
 
 
 	}
-	
-	
-	
+
+	private boolean isSearching = false;;
 	private PopUp info;
+
 	public void setIsSearching(boolean b, boolean msg) {
-		if(b) {
+		isSearching = b;
+		if (b) {
 			spielSuchen.setText("Suche abbrechen", SkyFightClient.ConstantiaB56, new Vector4f(1f, 1f, 1f, 1f),
 					TEXT_ALIGN.CENTER, 0);
 			SkyFightClient.gameState = GameState.SEARCHING;
-			if(msg) {
+			if (msg) {
 				info = new PopUp("Es wird nach einem Gegner gesucht...", new Vector4f(0.26f, 0.96f, 0.63f, 1f), true);
 			}
-		}else {
+		} else {
 			spielSuchen.setText("Spiel Suchen", SkyFightClient.ConstantiaB56, new Vector4f(1f, 1f, 1f, 1f),
 					TEXT_ALIGN.CENTER, 0);
-			if(info != null) {
+			if (info != null) {
 				info.destroy();
 			}
 			info = null;
-			if(msg) {
+			if (msg) {
 				new PopUp("Die Gegnersuche wurde abgebrochen.", new Vector4f(0.5f, 0.96f, 0.63f, 1f));
 			}
 			SkyFightClient.gameState = GameState.MENUE;
