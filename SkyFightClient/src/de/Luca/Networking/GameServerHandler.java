@@ -106,6 +106,9 @@ public class GameServerHandler {
 		//Verarbeitung eines Positon-Packets (enthält position des Gegners, eigene Leben, Blockupdates, Pfeilupdates, Hotbarslot des Gegners)
 		}else if(gp.getGamePacketType() == GamePacket.POSITION){
 			
+			System.out.println("RECIEVED");
+			
+			
 			if(gp.e != null) {
 				processBlockChanges(gp.e.toString());
 			}

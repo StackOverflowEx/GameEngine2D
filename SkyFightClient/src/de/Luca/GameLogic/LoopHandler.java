@@ -68,7 +68,7 @@ public class LoopHandler implements BeatHandler {
 		MasterRenderer.setBackground(SkyFightClient.background);
 
 		//started die Hintergrundmusik
-		SkyFightClient.backgroundMusic.setVolume(0.5f);
+		SkyFightClient.backgroundMusic.setVolume(0.05f);
 		SkyFightClient.backgroundMusic.playSound(SkyFightClient.backMusic);
 		SkyFightClient.backgroundMusic.setLoop(true);
 

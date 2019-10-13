@@ -18,7 +18,6 @@ import de.Luca.GUI.GTextBox.INPUT_MODE;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
-import de.Luca.Window.Window;
 import de.Luca.World.WorldEditorListener;
 import de.Luca.World.WorldLoader;
 
