@@ -18,6 +18,8 @@ import de.Luca.Window.Window;
 
 public class GUIManager {
 	
+	//statische Klasse, die alle GUIs verwaltet
+	
 	private static CopyOnWriteArrayList<GUI> guis = new CopyOnWriteArrayList<GUI>();
 	private static GUIShader shader;
 	private static Matrix4f projection;
@@ -48,14 +50,17 @@ public class GUIManager {
 		return clickSound;
 	}
 	
+	//rendert die GUIS
 	public static void render() {
 		Vector2f windowSize = Window.getWindowSize();
+		//startet den Shader und verarbeitet die Matritzen
 		shader.start();
 		boolean b = processMatrix();
 		for(GUI gui : guis) {
 			if(!gui.isVisible()) {
 				continue;
 			}
+			//ist das GUI sichtbar, wird es gezeichnet
 			renderGUI(gui, windowSize, b);
 		}
 		shader.stop();
@@ -73,11 +78,13 @@ public class GUIManager {
 		Vector2f offset = WorldPosition.toOpenGLCoords(new Vector2f(xOffset + windowSize.x / 2f, yOffset + windowSize.y / 2f));
 		Vector2f pixelOffset = new Vector2f(xOffset, yOffset);
 		
+		//es werden alle Componenten gezeichnet und ein Offset übergegben, damit die Position vom GUI abhängig ist.
 		for(GUIComponent c : gui.getComponents()) {				
 			renderComponents(c, b, offset, pixelOffset);
 		}
 	}
 	
+	//eigentliche Code zum rendern eines GUI-Komponenten
 	private static void renderComponent(GUIComponent component, boolean b, Vector2f offset, Vector2f pixelOffset) {
 		
 		if(!component.isVisible()) {
@@ -92,7 +99,10 @@ public class GUIManager {
 			component.setRenderModel();
 		}
 		
+		//Wird nur gerendet, wenn der Komponent sichtbar ist und eine Weite und Höhe von mehr als 0 hat
+		
 
+		//Ähnlich dem Rendering im Blockmanager (siehe de.Luca.Blocks.BlockManager.java)
 		RenderModel model = component.getRenderModel();
 		Texture tex = model.getModel().getTexture();
 		if(tex != null) {
@@ -112,12 +122,15 @@ public class GUIManager {
 		MasterRenderer.bindTexture(0);
 	}
 	
+	
 	private static void renderComponents(GUIComponent c, boolean b, Vector2f offset, Vector2f pixelOffset) {
 		if(c.getComponents().length == 1 && c.getComponents()[0] == c) {
+			//hat der Komponent keine weiteren Komponenten, wird er gezeichnet
 			renderComponent(c, b, offset, pixelOffset);
 			return;
 		}
 		
+		//ist der Komponent ein Slider, der ausgewählt ist, wird der Wert des Sliders entsprechend zur Positon des Mauszeigers aktualisiert.
 		if(c instanceof GSlider) {
 			GSlider slider = (GSlider) c;
 			if(slider.isSelected()) {
@@ -130,6 +143,7 @@ public class GUIManager {
 			}
 		}
 		
+		//Hat ein Komponent Unterkomponenten, wird die Methode für diese Unterkomponenten ausgeführt
 		for(GUIComponent component : c.getComponents()) {
 			renderComponents(component, b, offset, pixelOffset);
 		}

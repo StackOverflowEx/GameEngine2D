@@ -2,6 +2,8 @@ package de.Luca.Events;
 
 public class MouseButtonEvent extends Event{
 	
+	//Wird ausgelöst, wenn die Maus betätigt wird
+	
 	private int button, action, mods;
 	
 	public MouseButtonEvent(int button, int action, int mods) {

@@ -9,11 +9,18 @@ import de.t0b1.freetype_wrapper.classes.Vector2D;
 
 public class Text {
 	
+	//eine Zeiel
+	
+	
+	//Pointer der Font für den FreeTypeWrapper
 	private long font;
+	//Position
 	private int x, y;
+	//Open-GL Position
 	private float openGLx, openGLy;
 	private String text;
 	private Vector4f color;
+	//size
 	private Vector2D bounds;
 	private boolean visible;
 	private float scale;

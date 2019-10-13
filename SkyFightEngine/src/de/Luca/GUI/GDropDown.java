@@ -9,10 +9,16 @@ import de.Luca.Text.Paragraph.TEXT_ALIGN;
 
 public class GDropDown extends GUIComponent{
 	
+	//Dropdown menü
+	
+	//Besteht aus Elementen
 	private HashMap<String, GButton> elements;
+	//Text des ausgewählten Elements
 	private String selected;
+	//Button (unausgeklapptes Menü)
 	private GButton button;
 	private int height;
+	//boolean ob das Menü geöffnet ist.
 	private boolean open;
 
 	public GDropDown(int x, int y, int width, int height) {
@@ -38,6 +44,7 @@ public class GDropDown extends GUIComponent{
 		return height;
 	}
 	
+	//Hovercallback, nötig um das Dropdownmenü zu schließen, wenn der Cursor dieses verlässt
 	private void hoverCallback() {
 		addHoverCallback(new HoverCallback() {
 			
@@ -50,6 +57,7 @@ public class GDropDown extends GUIComponent{
 		});
 	}
 	
+	//Zum Öffnen oder auswählen des Dropdown-menüs
 	protected void clicked(GButton button) {
 		if(button == this.button) {
 			setOpen(!open);
@@ -76,19 +84,23 @@ public class GDropDown extends GUIComponent{
 		return open;
 	}
 	
+	//fügt ein Element hinzu
 	public void addElement(String e, long font, Vector4f textColor) {
 		if(elements.containsKey(e)) {
 			throw new IllegalArgumentException("Element already added");
 		}
+		//jedes Element ist ein Button
 		GButton element = new GButton(getX(), getY() + button.getHeight() * (elements.size() + 1), getWidth(), button.getHeight());
 		element.setText(e, font, textColor, TEXT_ALIGN.CENTER, 0);
 		element.setParent(this);
 		element.setVisible(isVisible() && open);
 		element.setGUI(getGUI());
+		//zählt die Höhe hoch, damit weitere Elemente richtig angeordnet werden.
 		height += button.getHeight();
 		elements.put(e, element);
 	}
 	
+	//Fügt ein schon erstellten Button dem Dropdown hinzu
 	public void addElement(String e, GButton element) {
 		if(elements.containsKey(e)) {
 			throw new IllegalArgumentException("Element already added");

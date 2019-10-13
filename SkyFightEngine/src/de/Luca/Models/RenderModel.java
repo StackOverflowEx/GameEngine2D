@@ -5,9 +5,9 @@ import org.joml.Vector4f;
 
 public class RenderModel {
 	
-	//Die Weltkoordinaten des Entity
+	//Die OpenGL-Koordinaten
 	private Vector2f location;
-	//Die Entitydaten (Texture, ...)
+	//Die Daten (Texture, Scale)
 	private Model model;
 	//Entity roll
 	private float roll;

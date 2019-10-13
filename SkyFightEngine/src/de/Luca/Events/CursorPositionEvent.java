@@ -1,6 +1,8 @@
 package de.Luca.Events;
 
 public class CursorPositionEvent extends Event{
+	
+	//Wird ausgeführt, wenn der Mauszeiger die Position ändert
 
 	private double xpos, ypos;
 	

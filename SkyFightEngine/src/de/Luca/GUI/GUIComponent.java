@@ -15,15 +15,21 @@ import de.Luca.Utils.WorldPosition;
 
 public abstract class GUIComponent {
 	
+	//Oberklasse für alle Komponenten (Button, Label, CheckBox, ...)
+	
+	//Bounds
 	private int x, y, width, height;
+	//Sichbarkeit
 	private boolean visible = true;
 	private RenderModel model;
+	//Frabe
 	private Vector4f color;
 	private Vector4f currentColor;
 	private GUI gui;
 	private boolean mouseOn;
 	private GUIComponent parent;
 	
+	//Callbacks
 	private CopyOnWriteArrayList<ClickCallback> clickCallbacks;
 	private CopyOnWriteArrayList<HoverCallback> hoverHollbacks;
 	private CopyOnWriteArrayList<ScrollCallback> scrollHollbacks;
@@ -168,8 +174,10 @@ public abstract class GUIComponent {
 		clickCallbacks.remove(cc);
 	}
 	
+	//Clickcallbacks werden ausgeführt
 	public void click(int key, int action, int mouseX, int mouseY) {
 		for(ClickCallback cc : clickCallbacks) {
+			//Ist der Komponent ein Button, wird ein Soundeffekt abgespielt
 			if(GUIManager.getClickSound() != null && this.getClass().getSimpleName().equals("GButton")) {
 				if(key == GLFW.GLFW_MOUSE_BUTTON_LEFT && action == GLFW.GLFW_RELEASE) {
 					Source s = AudioManager.genSource();

@@ -7,6 +7,8 @@ import de.Luca.Main.SkyFightEngine;
 
 
 public class GUIShader extends ShaderProgramm{
+	
+	//Shader für die GUIs
 
 	private int location_projectionMatrix;
 	private int location_transformationMatrix;

@@ -16,6 +16,8 @@ import org.w3c.dom.NodeList;
 
 public class GIFReader {
 
+	//größtenteils von Stackoverflow kopiert
+	//Gibt ImageFrames mit den entsprchenden Attributen zurück
 	public static ImageFrame[] readGIF(ImageReader reader) throws IOException {
 		ArrayList<ImageFrame> frames = new ArrayList<ImageFrame>(2);
 

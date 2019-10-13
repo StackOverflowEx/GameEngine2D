@@ -23,15 +23,22 @@ import de.Luca.Text.TextManager;
 import de.Luca.Window.Window;
 
 public class MasterRenderer extends Thread {
+	
+	//Der Renderthread
+	//die Warteschlange sind dafür da, um Methoden im Render-Thread auszuführen, die nur in diesem ausgeführt werden können
 
 	private static MasterRenderer masterRenderer;
+	//Der Blockshader
 	private BlockShader shader;
 	private Frame frame;
 	private Frame queuedFrame;
+	//warteschlange für die Texturen, die zu laden sind.
 	private CopyOnWriteArrayList<Texture> loadTextures;
+	//Die Matrizen
 	private Matrix4f projection, view, zoomProjection;
 	private Background background;
 	private Texture backgroundTex;
+	//Booleans, ob die Matritzen sich verändert haben.
 	private boolean ProjectionChanged;
 	private boolean viewChanged;
 	private boolean projectionZoomChanged;
@@ -80,6 +87,7 @@ public class MasterRenderer extends Thread {
 		MasterRenderer.masterRenderer.shader.cleanUP();
 	}
 	
+	//lädt Texturen
 	private static void loadTextures() {
 		for (Texture texture : masterRenderer.loadTextures) {
 			System.out.println("Loading texture \"" + texture.getFile() + "\"...");
@@ -114,6 +122,7 @@ public class MasterRenderer extends Thread {
 		return masterRenderer.zoomProjection;
 	}
 
+	//Updated die Matritzen
 	private void processMatricies() {
 
 		boolean loadProjection = true;
@@ -163,28 +172,32 @@ public class MasterRenderer extends Thread {
 		masterRenderer.draw();
 	}
 
+	//rendert die Szene
 	public void draw() {
+		//zuerst werden Texturen geladen und gelöscht und die Frames getauscht
 		loadTextures();
 		Loader.deleteQueued();
 		swapFrames();
 		if (shader == null) {
 			shader = new BlockShader();
 		}
+		//Attribute um den Frame vorzubereiten
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GL11.glClearColor(0, 0, 0, 1);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
 		processMatricies();
 		
+		//rendern der einzelnen Komponenten
 		if (frame != null) {
 			bindModel();
 
 			drawBackground();
-//			drawEntities();
 			BlockManager.render();
 			EntityManager.render();
 			EffectManager.render();
 			
+			//Ist ein Auftrag ein Screenshot zu erstellen in der Warteschlange, wird dies getan
 			if(masterRenderer.screenShot != null) {
 				Window.takeScreenshot(masterRenderer.screenShot);
 				masterRenderer.screenShot = null;
@@ -198,10 +211,12 @@ public class MasterRenderer extends Thread {
 
 	}
 	
+	//wechselt den Hintergrund
 	public static void switchBackground(Texture switchTex, long durationMillis) {
 		MasterRenderer.masterRenderer.background.switchTexture(switchTex, durationMillis);
 	}
 	
+	//Rendert den Hintergrund
 	private void drawBackground() {
 		if(background == null) {
 			if(backgroundTex == null) {
@@ -242,6 +257,7 @@ public class MasterRenderer extends Thread {
 		masterRenderer.nswapFrames();
 	}
 
+	//Tauscht die Frames
 	public void nswapFrames() {
 		if (queuedFrame != null) {
 			if (frame != queuedFrame) {
@@ -256,10 +272,7 @@ public class MasterRenderer extends Thread {
 		}
 	}
 
-//	private void drawVAO() {
-//		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 4, 4);
-//	}
-
+	//Bindet ein VAO
 	private void bindModel() {
 		if (frame.getVaoID() == -1) {
 			frame.setVaoID(Loader.loadToVAO(frame.getVerticies(), frame.getTextureCoords()));
@@ -269,11 +282,13 @@ public class MasterRenderer extends Thread {
 		GL30.glEnableVertexAttribArray(1);
 	}
 
+	//Bindet eine Textur
 	public static void bindTexture(int id) {
 		GL20.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 	}
 
+	//unbindet ein VAO
 	private void unbind() {
 		GL30.glDisableVertexAttribArray(0);
 		GL30.glDisableVertexAttribArray(1);

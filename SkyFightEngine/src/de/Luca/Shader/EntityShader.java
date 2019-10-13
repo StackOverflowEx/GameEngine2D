@@ -5,6 +5,8 @@ import org.joml.Matrix4f;
 import de.Luca.Main.SkyFightEngine;
 
 public class EntityShader extends ShaderProgramm{
+	
+	//Shader für die Entities
 
 	private int location_projectionMatrix;
 	private int location_viewMatrix;

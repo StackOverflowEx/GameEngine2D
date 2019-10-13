@@ -11,6 +11,7 @@ import de.Luca.Window.Window;
 
 public class WorldPosition {
 
+	//Gibt die Position des Cursors zurück (in Pixel)
 	public static Vector2f getAbsCursorPos() {
 		if(GUIListener.getMousePosition() == null) {
 			double[] xb = new double[1];
@@ -22,6 +23,7 @@ public class WorldPosition {
 		}
 	}
 	
+	//Gibt die Weltposition im Blockgrid des Cursors zurück (gerundet)
 	public static Vector2f getMouseWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
 		openGL = openGL.mul(Calc.getZoom());
@@ -32,6 +34,7 @@ public class WorldPosition {
 		return new Vector2f((float)Math.round(worldFloat.x), (float)Math.round(worldFloat.y));
 	}
 	
+	//Gibt die genaue Weltposition des cursors zurück
 	public static Vector2f getMouseExactWorldPos() {
 		Vector2f openGL = toOpenGLCoords(getAbsCursorPos());
 		openGL = openGL.mul(Calc.getZoom());
@@ -42,11 +45,13 @@ public class WorldPosition {
 		return worldFloat;
 	}
 	
+	//Gibt die exakte Weltposition einer openGL-Position zurück
 	public static Vector2f getExactWorldPos(Vector2f openGlPos) {
 		Vector2f worldFloat = new Vector2f(openGlPos.x / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f, openGlPos.y / (BlockData.BLOCK_SCALE) - BlockData.BLOCK_SCALE / 2f);
 		return new Vector2f(worldFloat.x, worldFloat.y);
 	}
 	
+	//Konvertiert Pixelkoordinaten in OpenGL-Koordinaten
 	public static Vector2f toOpenGLCoords(Vector2f pixel) {
 		Vector2f windowSize = Window.getWindowSize();
 		float x = pixel.x;
@@ -57,75 +62,6 @@ public class WorldPosition {
 		Vector2f ret = new Vector2f(x, y / aspectRation);
 		return ret;
 	}
-	
-//	public static Vector2f getWorldPos() {
-//		return getWorldPos(getAbsCursorPos());
-//	}
-//	
-//	public static Vector2f getWorldPosWithoutCamera() {
-//		return getWorldPosWithoutCamera(getAbsCursorPos());
-//	}
-//	
-//	public static Vector2f getWorldPos(Vector2f pos) {
-//		Vector2f absPos = pos;
-//		Vector2f windowSize = Window.window.getWindowSize();
-//		
-//		float x = (float) absPos.x;
-//		float y = windowSize.y - (float) absPos.y;
-//		
-//		//normalise
-//		x = (2.0f * x) / windowSize.x - 1f;
-//		y = (2.0f * y) / windowSize.y -1f;
-//				
-//		//clipspace
-//		Vector4f clipCoords = new Vector4f(x, y, 0f, 1f);
-//		
-//		//eyespace
-//		Matrix4f invertedProjection = Calc.getProjectionMatrix();
-//		invertedProjection = invertedProjection.invert();
-//		Vector4f eyeCoords = invertedProjection.transform(clipCoords);
-//		
-//		Matrix4f invertedView = Calc.getViewMatrix();
-//		invertedView = invertedView.invert();
-//		Vector4f world = invertedView.transform(eyeCoords);
-//				
-//		Vector2f worldPos = new Vector2f(world.x, world.y);
-//		return worldPos;
-//	}
-//	
-//	public static Vector2f getWorldPosWithoutCamera(Vector2f pos) {
-//		Vector2f absPos = pos;
-//		Vector2f windowSize = Window.window.getWindowSize();
-//		
-//		float x = (float) absPos.x;
-//		float y = windowSize.y - (float) absPos.y;
-//		
-//		//normalise
-//		x = (2.0f * x) / windowSize.x - 1f;
-//		y = (2.0f * y) / windowSize.y -1f;
-//				
-//		//clipspace
-//		Vector4f clipCoords = new Vector4f(x, y, 0f, 1f);
-//		
-//		//eyespace
-//		Matrix4f invertedProjection = Calc.getProjectionMatrix();
-//		invertedProjection = invertedProjection.invert();
-//		Vector4f eyeCoords = invertedProjection.transform(clipCoords);
-//				
-//		Vector2f worldPos = new Vector2f(eyeCoords.x, eyeCoords.y);
-//		return worldPos;
-//	}
-//	
-//	public static Vector2f getGridPosMouse(float GRID_SCALE) {
-//		Vector2f worldPos = WorldPosition.getWorldPos();
-////		System.out.println(worldPos);
-//		Vector2f gridPos = new Vector2f(worldPos.x / GRID_SCALE, worldPos.y / GRID_SCALE);
-//				
-//		gridPos.x = (int)(gridPos.x);
-//		gridPos.y = (int)(gridPos.y);
-//				
-//		return gridPos;
-//	}
 
 	
 }

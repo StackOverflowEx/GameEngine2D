@@ -7,12 +7,19 @@ import org.joml.Vector4f;
 
 public class Paragraph {
 	
+	//ein Paragraph, besteht aus mehreren Zeilen
+	
+	//Zeilen
 	private ArrayList<Text> texts;
+	//Position
 	private int x, y;
+	//Size
 	private Vector2f bounds;
 	private boolean visible = true;
 	private TEXT_ALIGN align;
 		
+	//Verschiedene Konstruktor für verschiedene Attribute
+	
 	public Paragraph(int x, int y, String[] lines, long font, Vector4f color) {
 		texts = new ArrayList<Text>();
 		this.x = x;
@@ -82,9 +89,12 @@ public class Paragraph {
 		bounds = new Vector2f(xLargest, y);
 	}
 	
+	//verarbeitet die Zeilen eines Paragraphen und erstellt die Zeilen (Text)
 	private void processLines(String[] lines, long font, Vector4f color, TEXT_ALIGN align, float scale) {
 		int yOffset = 0;
 		float longest = 0;
+		
+		//Linksbündig
 		for(String line : lines) {
 			Text t = new Text(font, x, y + yOffset, line, color, scale);
 			texts.add(t);
@@ -96,6 +106,7 @@ public class Paragraph {
 		
 		bounds = new Vector2f(longest, yOffset);
 		
+		//Zentriert
 		if(align.equals(TEXT_ALIGN.CENTER)) {
 			for(Text t : texts) {
 				float width = t.getBounds().x;
@@ -104,6 +115,7 @@ public class Paragraph {
 			}
 		}
 		
+		//Rechtsbündig
 		if(align.equals(TEXT_ALIGN.RIGHT)) {
 			for(Text t : texts) {
 				float width = t.getBounds().x;
@@ -151,6 +163,7 @@ public class Paragraph {
 		processTexts();
 	}
 	
+//	Berechnet die Position der Zeilen erneut
 	private void processTexts() {
 		int yOffset = 0;
 		float longest = 0;

@@ -12,10 +12,13 @@ import de.Luca.Shader.EntityShader;
 
 public class EffectManager {
 	
+	//eine statische Klasse, die alle Effekte verwaltet.
+	
 	private static CopyOnWriteArrayList<Effect> effects;
 	private static EntityShader shader;
 	private static boolean firstRun;
 	
+	//Initalisiert den EffektManager
 	public static void init() {
 		effects = new CopyOnWriteArrayList<Effect>();
 		shader = new EntityShader();
@@ -30,7 +33,10 @@ public class EffectManager {
 		effects.remove(e);
 	}
 
+	
+	//Rendert die Effekte
 	public static void render() {
+		//Der Shader wird gestartet und die Matrizen geladen, wenn diese sich geändert haben oder die Blöcke das erste mal gerendert werden.
 		shader.start();
 		
 		if(MasterRenderer.hasZoomProjectionChanged() || firstRun) {
@@ -41,6 +47,7 @@ public class EffectManager {
 			firstRun = false;
 		}
 		
+		//Rendering für jeden Effekt (ähnlich wie im BlockManager)
 		for(Effect e : effects) {
 			if(!e.isPlaying()) {
 				removeEffect(e);

@@ -5,6 +5,8 @@ import org.joml.Matrix4f;
 import de.Luca.Main.SkyFightEngine;
 
 public class BackgroundShader extends ShaderProgramm{
+	
+	//Shader für den Hintergrund
 
 	private int location_projectionMatrix;
 	private int location_blendFactor;

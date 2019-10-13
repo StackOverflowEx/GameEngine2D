@@ -6,6 +6,9 @@ import org.lwjgl.openal.AL10;
 
 public class Source {
 	
+	//Sound source
+	
+	//openAL -ID
 	private int id;
 	private float maxAudibleDistance;
 	private boolean loop;

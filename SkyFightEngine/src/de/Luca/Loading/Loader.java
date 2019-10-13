@@ -8,17 +8,9 @@ import static org.lwjgl.opengl.GL11.glTexImage2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.SeekableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -33,6 +25,8 @@ import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class Loader {
+	
+	//eine statische Klasse, die für das Laden von Texturen und Buffern verantwortlich ist
 
 	public static HashMap<String, ArrayList<Texture>> textures = new HashMap<String, ArrayList<Texture>>();
 	public static HashMap<Integer, int[]> vbos = new HashMap<Integer, int[]>();
@@ -46,18 +40,15 @@ public class Loader {
 		return QuadVAO;
 	}
 
+	//laden einer Textur
 	public static int loadTexture(Texture tex, String textureType) {
 
 		if(tex.getTextureID() != -1) {
 			return tex.getTextureID();
 		}
 		
+		//textur wird erstellt.
 		int textureID = GL11.glGenTextures();
-//		if(!textures.containsKey(textureType)) {
-//			ArrayList<Integer> a = new ArrayList<Integer>();
-//			textures.put(textureType, a);
-//		}
-//		textures.get(textureType).add(textureID);
 
 		if (tex.getBuffer() == null) {
 			return textureID;
@@ -73,10 +64,9 @@ public class Loader {
 
 	}
 
-	// LB, LT, RB, RT
+	//Lädt zwei Buffer in ein VBO und bindet diese VBOs an ein VAO
 	public static int loadToVAO(float[] verticies, float[] textureCoords) {
 		int vaoID = createVAO();
-//		System.out.println("VAO " + vaoID);
 		int vboID1 = storeDataInAttributeList(0, verticies);
 		int vboID2 = storeDataInAttributeList(1, textureCoords);
 		vbos.put(vaoID, new int[] { vboID1, vboID2 });
@@ -84,6 +74,7 @@ public class Loader {
 		return vaoID;
 	}
 
+	//speichert übergebene Indicies
 	public static int storeIndicies(int[] indices) {
 		int vboID = GL30.glGenBuffers();
 		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, vboID);
@@ -92,6 +83,7 @@ public class Loader {
 		return vboID;
 	}
 
+	//speichert einen Array in einem Buffer
 	private static IntBuffer storeDataInIntBuffer(int[] data) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data);
@@ -99,6 +91,7 @@ public class Loader {
 		return buffer;
 	}
 
+	//löscht ein bestimmtes VAO
 	public static void cleanVAO(int vaoID) {
 		for (int i : vbos.get(vaoID)) {
 			GL30.glDeleteBuffers(i);
@@ -107,6 +100,7 @@ public class Loader {
 		vbos.remove(vaoID);
 	}
 
+	//Lädt ein Bild in einen ByteBuffer und übergibt die Textur dem Render-Thread zur Erstellung
 	public static Texture loadTexture(String file, String textureType) {
 		int width = 0;
 		int height = 0;
@@ -151,6 +145,7 @@ public class Loader {
 		return texture;
 	}
 
+	//Lädt ein BufferedImage in einen Bytebuffer und übergibt die Textur dem Render-Thread zur Erstellung
 	public static Texture loadTexture(BufferedImage image, String textureType) {
 		
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
@@ -183,6 +178,7 @@ public class Loader {
 		return texture;
 	}
 
+	//lädt ein Quadrat
 	public static int loadQuadVAO() {
 		int vaoID = createVAO();
 		int vboID = storeDataInAttributeList(0, new float[] { 0, 0, 0, 1, 1, 0, 1, 1 });
@@ -191,45 +187,46 @@ public class Loader {
 		return vaoID;
 	}
 
-	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
-		ByteBuffer buffer;
+//	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
+//		ByteBuffer buffer;
+//
+//		Path path = Paths.get(resource);
+//		if (Files.isReadable(path)) {
+//			try (SeekableByteChannel fc = Files.newByteChannel(path)) {
+//				buffer = BufferUtils.createByteBuffer((int) fc.size() + 1);
+//				while (fc.read(buffer) != -1) {
+//					;
+//				}
+//			}
+//		} else {
+//			try (InputStream source = Loader.class.getClassLoader().getResourceAsStream(resource);
+//					ReadableByteChannel rbc = Channels.newChannel(source)) {
+//				buffer = ByteBuffer.allocate(bufferSize);
+//
+//				while (true) {
+//					int bytes = rbc.read(buffer);
+//					if (bytes == -1) {
+//						break;
+//					}
+//					if (buffer.remaining() == 0) {
+//						buffer = resizeBuffer(buffer, buffer.capacity() * 3 / 2); // 50%
+//					}
+//				}
+//			}
+//		}
+//
+//		buffer.flip();
+//		return buffer;
+//	}
 
-		Path path = Paths.get(resource);
-		if (Files.isReadable(path)) {
-			try (SeekableByteChannel fc = Files.newByteChannel(path)) {
-				buffer = BufferUtils.createByteBuffer((int) fc.size() + 1);
-				while (fc.read(buffer) != -1) {
-					;
-				}
-			}
-		} else {
-			try (InputStream source = Loader.class.getClassLoader().getResourceAsStream(resource);
-					ReadableByteChannel rbc = Channels.newChannel(source)) {
-				buffer = ByteBuffer.allocate(bufferSize);
+//	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
+//		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+//		buffer.flip();
+//		newBuffer.put(buffer);
+//		return newBuffer;
+//	}
 
-				while (true) {
-					int bytes = rbc.read(buffer);
-					if (bytes == -1) {
-						break;
-					}
-					if (buffer.remaining() == 0) {
-						buffer = resizeBuffer(buffer, buffer.capacity() * 3 / 2); // 50%
-					}
-				}
-			}
-		}
-
-		buffer.flip();
-		return buffer;
-	}
-
-	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) {
-		ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
-		buffer.flip();
-		newBuffer.put(buffer);
-		return newBuffer;
-	}
-
+	//Speichert einen Floatarray in einem VBO und bindet das VBO an eine entsprechende Stelle im VAO
 	public static int storeDataInAttributeList(int attributeNumber, float[] data) {
 		int vboID = GL30.glGenBuffers();
 		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, vboID);
@@ -240,6 +237,7 @@ public class Loader {
 		return vboID;
 	}
 
+	//Speichert einen Array in einem Buffer
 	private static FloatBuffer storeDataInFloatBuffer(float[] data) {
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);
@@ -247,22 +245,26 @@ public class Loader {
 		return buffer;
 	}
 
+	//unbindet ein VAO
 	public static void unbindVAO() {
 		GL30.glBindVertexArray(0);
 	}
 
+	//erstellt ein VAO
 	public static int createVAO() {
 		int vaoID = GL30.glGenVertexArrays();
 		GL30.glBindVertexArray(vaoID);
 		return vaoID;
 	}
 
+	//zerstört eine Textur, falls diese nicht mehr gebraucht wird.
 	public static void destroyTexture(Texture texture) {
 		GL11.glDeleteTextures(texture.getTextureID());
 		textures.get(texture.getTextureType()).remove(texture.getTextureID());
 		texture.setTextureID(-1);
 	}
 
+	//Schaut, ob ein PNG schon geladen wurde und gibt gegebenenfalls die Textur zurück um das Mehrfachladen zu verhindern
 	private static Texture getLoaded(String file, String textureType) {
 		if(textures.containsKey(textureType)) {
 			for(Texture tex : textures.get(textureType)) {
@@ -274,6 +276,7 @@ public class Loader {
 		return null;
 	}
 	
+	//Löscht alle Texturen eines bestimmten Typens
 	public static void deleteTextures(String type) {
 		if (textures.containsKey(type)) {
 			for (Texture texture : textures.get(type)) {
@@ -283,6 +286,7 @@ public class Loader {
 		}
 	}
 	
+	//Löscht alle Texturen, die zum Löschen markiert sind (wird vom Render-Thread ausgeführt)
 	public static void deleteQueued() {
 		for(Texture tex : deleteNext) {
 			GL11.glDeleteTextures(tex.getTextureID());
@@ -290,6 +294,7 @@ public class Loader {
 		deleteNext.clear();
 	}
 
+	//Bereinigt den Loader
 	public static void cleanUP() {
 		for (String type : textures.keySet()) {
 			for (Texture texture : textures.get(type)) {

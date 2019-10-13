@@ -22,6 +22,8 @@ import de.Luca.Window.Window;
 
 public class SkyFightEngine {
 	
+	//WIRD NICHT BENÖTIGT UND EXISITIERT NUR ZU TEST-ZWECKEN
+	
 	public static void main(String[] args) {
 		init(new BeatHandler() {
 			

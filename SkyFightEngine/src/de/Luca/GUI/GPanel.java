@@ -7,6 +7,9 @@ import de.Luca.Models.RenderModel;
 
 public class GPanel extends GUIComponent{
 	
+	//ähnlich einem JPanel
+	
+	//Komponenten des Panels
 	private CopyOnWriteArrayList<GUIComponent> components;
 	private int defaultWidht, defaultHeight;
 	private int oldX, oldY;
@@ -20,6 +23,7 @@ public class GPanel extends GUIComponent{
 		components = new CopyOnWriteArrayList<GUIComponent>();
 	}
 	
+	//Fügt ein Komponent hinzu
 	public void addComponent(GUIComponent c) {
 		calc(c);
 		c.setGUI(getGUI());
@@ -37,6 +41,8 @@ public class GPanel extends GUIComponent{
 		}
 	}
 	
+	
+	//Ein Komponent wird entfernt und die Größe des Panels angepasst
 	public void removeComponent(GUIComponent c) {
 		if(components.contains(c)) {
 			
@@ -73,6 +79,7 @@ public class GPanel extends GUIComponent{
 		return width;
 	}
 	
+	//position eines Elements wird neu berechnet, damit die Position vom GPanel abhängig ist.
 	private void calc(GUIComponent c) {
 		if(c.getWidth() + getX() > getWidth()) {
 			setWidth(c.getWidth());

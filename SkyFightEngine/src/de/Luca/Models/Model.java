@@ -3,6 +3,8 @@ package de.Luca.Models;
 import org.joml.Vector2f;
 
 public class Model {
+	
+	//ein Model mit der Textur und der Scalierung
 
 	private Texture texture;
 	private Vector2f scale;

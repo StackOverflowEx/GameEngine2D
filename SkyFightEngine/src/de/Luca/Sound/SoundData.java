@@ -2,7 +2,11 @@ package de.Luca.Sound;
 
 public class SoundData {
 	
+	//Soundata
+	
+	//File
 	private String file;
+	//OpenAL- BufferID
 	private int id;
 	
 	public SoundData(int id, String file) {

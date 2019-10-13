@@ -22,6 +22,8 @@ import de.Luca.GUI.GTextBox.INPUT_MODE;
 import de.Luca.Utils.WorldPosition;
 
 public class GUIListener implements Listener {
+	
+	//Eventlistener für alle Events, damit die GUIs auch funktionieren
 
 	private static CopyOnWriteArrayList<GUIComponent> components = new CopyOnWriteArrayList<GUIComponent>();
 	private static Vector2f mousePosition;
@@ -40,6 +42,7 @@ public class GUIListener implements Listener {
 
 	private static boolean mouseDown = false;
 
+	//Windowresize
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onWindowResize(WindowResizeEvent e) {
 		for (GUI g : GUIManager.getGUIS()) {
@@ -47,6 +50,7 @@ public class GUIListener implements Listener {
 		}
 	}
 
+	//eingabe eines Buchstabens (für TextBox)
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onChar(CharInputEvent e) {
 		String letter = new String(new int[] { e.getCodepoint() }, 0, 1);
@@ -63,6 +67,7 @@ public class GUIListener implements Listener {
 		}
 	}
 
+	//Drücken einer Taste (für Textbox (Strg + V, Delete, Enter)
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onKey(KeyEvent e) {
 		if (e.getKey() == GLFW.GLFW_KEY_V && e.getAction() == GLFW.GLFW_PRESS && e.getMods() == GLFW.GLFW_MOD_CONTROL) {
@@ -131,6 +136,7 @@ public class GUIListener implements Listener {
 		}
 	}
 
+	//Scrollevent
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onScroll(ScrollEvent e) {
 		Vector2f mousePixel = WorldPosition.getAbsCursorPos();
@@ -164,6 +170,7 @@ public class GUIListener implements Listener {
 		}
 	}
 
+	//Event für die Bewegung des Mauszeigers
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onMove(CursorPositionEvent e) {
 		Vector2f mousePixel = new Vector2f((float) e.getXpos(), (float) e.getYpos());
@@ -195,6 +202,7 @@ public class GUIListener implements Listener {
 		}
 	}
 
+	//Event für ein Mausklick
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onClick(MouseButtonEvent e) {
 		Vector2f mousePixel = WorldPosition.getAbsCursorPos();
@@ -239,6 +247,7 @@ public class GUIListener implements Listener {
 		return mouseDown;
 	}
 
+	//es wird überprüft, ob in ein Rechteck geklickt wurde.
 	public static boolean isMouseInside(Vector2f mousePixel, Vector2f corner1, Vector2f corner2) {
 		if ((mousePixel.x > corner1.x && mousePixel.x < corner2.x)
 				|| (mousePixel.x < corner1.x && mousePixel.x > corner2.x)) {

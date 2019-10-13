@@ -10,9 +10,15 @@ import de.Luca.Text.Paragraph.TEXT_ALIGN;
 
 public class GTextBox extends GButton{
 	
+	//wie JTextField
+	
+	//Der Text, der eigentlich in der TextBox ist (bei PW z.B. "Hallo1")
 	private String text;
+	//Der Text, der angezeigt wird (Bei PW z.B. "******")
 	private String showText;
+	//Ob die Textbox ausgewählt sit
 	private boolean selected;
+	//Ob der Text angezeigt werden soll oder für jeden Charaker ein "*" angezeigt werden soll.
 	private boolean passwordBox;
 	private ArrayList<CharInputCallback> callbacks;
 	private ArrayList<TextFinishCallback> finishCallbacks;
@@ -24,6 +30,7 @@ public class GTextBox extends GButton{
 	private Texture[] storeOld;
 	private Vector4f oldColor;
 	
+	//Schrift für das Textfeld
 	private long font;
 	private Vector4f color;
 	private TEXT_ALIGN align;
@@ -51,6 +58,7 @@ public class GTextBox extends GButton{
 		callbacks.remove(cic);
 	}
 	
+	//Set den Text
 	public void setText(String text) {
 		this.text = text;
 		if(passwordBox) {
@@ -79,6 +87,7 @@ public class GTextBox extends GButton{
 		this.selectedPressed = selectedPressed;
 	}
 	
+	//aktualisiert die Texturen wie bei der GCheckBox
 	private void updateTexture(boolean selected) {
 		if(selected) {
 			storeOld = new Texture[] {getDefaultTexture(), getHoverTexture(), getPressTexture()};
@@ -133,15 +142,16 @@ public class GTextBox extends GButton{
 	}
 	
 	public enum INPUT_MODE{
-		TEXT,
-		DELETE,
-		SEND
+		TEXT, //Buchstabe wurde hinzugefügt
+		DELETE, //Buchstabe gelöscht
+		SEND //der Text wurde "abgesendet" (Enter)
 	}
 	
 	public String getText() {
 		return text;
 	}
 	
+	//callback für die Funktion der Textbox
 	private void callback() {
 		callbacks.add(new CharInputCallback() {
 			

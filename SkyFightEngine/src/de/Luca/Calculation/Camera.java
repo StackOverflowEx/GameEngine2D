@@ -4,9 +4,14 @@ import org.joml.Vector2f;
 
 public class Camera {
 	
+	//Eine statische Klasse, die eine simulierte Kamera darstellt
+	
+	//Position der Kamera in OpenGL-Koordinaten
 	private static Vector2f position = new Vector2f(0, 0);
+	//Rotation der Kammera
 	private static float roll = 0;
-	private static boolean moved = false;;
+	//Boolean ob sich die Kamera bewegt hat, um unnötige Berechnungen der Viewmatrix zu verhindern
+	private static boolean moved = false;
 	
 	public static void move(float dx, float dy) {
 		position.x += dx;

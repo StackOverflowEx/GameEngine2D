@@ -6,7 +6,10 @@ import org.lwjgl.glfw.GLFW;
 import de.Luca.Models.Texture;
 
 public class GCheckBox extends GButton{
+	
+	//Stellt eine Checkbox dar.
 		
+	//Verschiedene Texturen für die Zustände
 	private Texture checkedDefault;
 	private Texture checkedHover;
 	private Texture checkedPressed;
@@ -20,6 +23,7 @@ public class GCheckBox extends GButton{
 		super(x, y, width, height);
 		checked = false;
 		
+		//default ClickCallback. Wird benötigt, um eine Checkbox anklickbar zu machen.
 		addClickCallback(new ClickCallback() {
 			
 			@Override
@@ -45,6 +49,7 @@ public class GCheckBox extends GButton{
 		return new GUIComponent[] {this};
 	}
 	
+	//Updated die Texturen, je nachdem ob die Checkbox ausgewählt wird.
 	private void updateTexture(boolean checked) {
 		if(checked) {
 			storeOld = new Texture[] {getDefaultTexture(), getHoverTexture(), getPressTexture()};
