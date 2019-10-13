@@ -39,16 +39,13 @@ public class LoginGUI extends GUI {
 	}
 
 	public void calc() {
-<<<<<<< HEAD
 		setX(0);
 		setY(0);
 		setWidth((int) Window.getWindowSize().x);
 		setHeight((int) Window.getWindowSize().y);	
 		
 		
-=======
 				
->>>>>>> branch 'master' of https://github.com/StackOverflowEx/GameEngine2D.git
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
 		rahmen.setBounds(Calc.getPixelWidth(0.63f), Calc.getPixelHeight(0.06f), Calc.getPixelWidth(0.31f),
 				Calc.getPixelHeight(0.84f));
