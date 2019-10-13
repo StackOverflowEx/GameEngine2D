@@ -65,6 +65,11 @@ public class WorldEditor {
 	}
 	
 	public static void start() {
+		
+		
+		MasterRenderer.switchBackground(MasterRenderer.getDefaultBackgroundTexture(), 0);
+		WorldLoader.clearBlockData();
+
 		BlockManager.removeAllBlocks();
 		SkyFightClient.gameState = GameState.WORLDEDITOR;
 		listener = new WorldEditorListener();
