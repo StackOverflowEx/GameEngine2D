@@ -216,11 +216,11 @@ public class GameServerHandler {
 			if(b.getBlockData().getBreakSound() != null) {
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
-				b.playSound(b.getBlockData().getBreakSound(), ran, 1);
+				b.playSound(b.getBlockData().getBreakSound(), 1 + ran, 1);
 			}else {
 				Random r = new Random();
 				float ran = r.nextFloat() - 0.5f;
-				b.playSound(SkyFightClient.breakingSound, ran, 1);
+				b.playSound(SkyFightClient.breakingSound, 1 + ran, 1);
 			}
 		}
 	}
