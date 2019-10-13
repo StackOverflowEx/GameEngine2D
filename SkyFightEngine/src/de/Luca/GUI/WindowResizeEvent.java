@@ -2,6 +2,8 @@ package de.Luca.GUI;
 
 import de.Luca.Events.Event;
 
+//Event, wenn die Größe des Fensters geändert wird.
+
 public class WindowResizeEvent extends Event{
 
 	private int width, height;

@@ -8,9 +8,15 @@ import de.Luca.Sound.Source;
 
 public class Block {
 	
+	//Objekte dieser Klasse repräsentieren einen Block
+	
+	//Blockdaten (z.B.: Härte, Wert, ...)
 	private BlockData blockData;
+	//Position
 	private Vector2f worldPos;
+	//Prozent, wie weit der Block abgebaut ist (0-1)
 	private float breakPercentage;
+	//Soundsource
 	private Source source;
 	
 	public Block(BlockData blockData, Vector2f worldPos) {
@@ -19,6 +25,7 @@ public class Block {
 		setPosition(worldPos);
 	}
 	
+	//Der Block spielt einen Sound ab, wenn kein andere Sound abgespielt wird
 	public void playSound(SoundData d, float pitch, float volume) {
 		if((source != null && source.isDeleted()) || (source != null && source.isPlaying())) {
 			return;
@@ -44,6 +51,7 @@ public class Block {
 		this.getOpenGLPos();
 	}
 	
+	//Rechnet die Weltposition in OpenGL Koordinaten um, die zum Rendern benötigt werden.
 	public Vector2f getOpenGLPos() {
 		float x = worldPos.x * BlockData.BLOCK_SCALE;
 		float y = worldPos.y * BlockData.BLOCK_SCALE;

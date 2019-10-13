@@ -31,22 +31,33 @@ import de.Luca.Events.ScrollEvent;
 import de.Luca.GUI.WindowResizeEvent;
 
 public class Window {
+	
+	//eine statische Klasse, die das Fenster verwaltet;
 
 	public static final int MIN_WIDTH = 480;
 	public static final int MIN_HEIGHT = 360;
 
+	//boolean ob das Fenster resized wurde
 	private static boolean resized;
+	//Zeit, wann das letzte mal die FPS ausgegeben wurden
 	private static long frameCountTime;
+	//Gerenderte frames
 	private static long frameCount;
 	private static boolean fullscreen = false;
+	//speichert x, y, width und height, wenn Vollbild aktiviert wird, um das Fenster beim Verlassen des Vollbildes an die alte Position zu setzen
 	private static int lastX, lastY, lastWidth, lastHeight;
 
+	//Zeigt an eine Stellt im Array frametimes
 	private static int frametimePointer;
+	//Speichert die letzten 100 Frametimes um einen Durchschnitt zu berechnet
 	private static float[] frametimes;
+	//Zur berechnung der Frametime
 	private static long last;
 
+	//Zeit in ms, wann der letzte Frame gerendert wurde
 	private static long lastFrame;
 
+	//Größe des Fensters
 	private static Vector2f size;
 
 	private static long WINDOW_ID;
@@ -112,6 +123,7 @@ public class Window {
 		return resized;
 	}
 
+	//setzt die Callbacks um die entsprechenden Events auszulösen
 	private static void setupCallbacks() {
 		GLFW.glfwSetKeyCallback(WINDOW_ID, new GLFWKeyCallbackI() {
 
@@ -201,6 +213,7 @@ public class Window {
 		lastFrame = System.currentTimeMillis();
 	}
 
+	//gibt die Zeit zurück, wie lange ein Frame schon angezeigt wird
 	public static long getFrameTime() {
 		if (lastFrame == -1) {
 			return lastFrame;
@@ -267,11 +280,15 @@ public class Window {
 		return closed || GLFW.glfwWindowShouldClose(WINDOW_ID);
 	}
 
+	
+	//Nimmt einen Screenshot auf (wird vom Render-Thread ausgeführt)
 	public static void takeScreenshot(File save) {
 		try {
+			//Ließt den hinteren Buffer, also den Buffer, der gerade erstellt wird
 			GL11.glReadBuffer(GL11.GL_BACK);
 			BufferedImage screenshot;
 			ByteBuffer buffer;
+			//erstellt ein Quadratisches BufferedImage und einen dazu passenden Buffer;
 			if(size.x > size.y) {
 				screenshot = new BufferedImage((int) size.y, (int) size.y, BufferedImage.TYPE_INT_RGB);
 				buffer = BufferUtils.createByteBuffer((int) (size.y * size.y * 4));
@@ -282,6 +299,7 @@ public class Window {
 				GL11.glReadPixels(0, (int) ((size.y - size.x) / 2f), (int) size.x, (int) size.x, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 			}
 
+			//setzt die Wert im Buffer in das BufferedImage
 			for (int x = 0; x < (int) screenshot.getWidth(); x++) {
 				for (int y = 0; y < (int) screenshot.getHeight(); y++) {
 					int i = (x + ((int) screenshot.getWidth() * y)) * 4;
@@ -292,6 +310,7 @@ public class Window {
 				}
 			}
 
+			//Speichert den Screenshot als PNG
 			ImageIO.write(screenshot, "png", save);
 		} catch (IOException ex) {
 			ex.printStackTrace();

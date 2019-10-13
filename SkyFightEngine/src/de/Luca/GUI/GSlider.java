@@ -9,6 +9,8 @@ import org.lwjgl.glfw.GLFW;
 import de.Luca.Models.RenderModel;
 
 public class GSlider extends GUIComponent{
+	
+	//ein Slider
 
 	private GButton slider;
 	private GLabel label;
@@ -146,6 +148,7 @@ public class GSlider extends GUIComponent{
 		calc();
 	}
 	
+	//Berechnet den Schieber und das Label
 	private void calc() {
 		int x = getX();
 		int y = getY();
@@ -168,6 +171,7 @@ public class GSlider extends GUIComponent{
 		setValue(value);
 	}
 	
+	//berechnet, wo der Schieber für einen Wert stehen muss
 	public void setValue(float f) {
 		float value = f;
 		if(value > 1)
@@ -205,6 +209,8 @@ public class GSlider extends GUIComponent{
 		return value;
 	}
 	
+	
+	//Gibt zurück, welchen Wert der Slider an einer bestimmten Position hat.
 	protected float getValue(int x, int y) {
 		
 		if(sliderScale == 1) {

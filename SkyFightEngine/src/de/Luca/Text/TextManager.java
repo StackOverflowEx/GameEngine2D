@@ -23,7 +23,8 @@ import de.t0b1.freetype_wrapper.classes.FontGlyph;
 
 public class TextManager {
 
-//	public static TextManager manager;
+	//eine statische Klasse, die den Text verwaltet
+	
 
 	private static ConcurrentHashMap<String, Long> fonts;
 	private static CopyOnWriteArrayList<Text> texts;
@@ -48,16 +49,20 @@ public class TextManager {
 		bufferTextAmount = 0;
 	}
 
+	//lädt eine Schriftart mit Hilfe des FreeTypeWrappers
 	public static void generateFont(String file, float fontSize, String name, boolean italic, boolean bold) {
 		if(fonts.containsKey(name))
 			return;
 		long font = FontAtlas.addFont(file, fontSize, italic, bold);
 		FontAtlas.hasUpdated();
 		FontAtlas.build(0);
+		//lädt die Textur in einen ByteBuffer
 		ByteBuffer buffer = BufferUtils.createByteBuffer(FontAtlas.getTexDataAsRGBA32().data.length);
 		buffer.put(FontAtlas.getTexDataAsRGBA32().data);
 		buffer.flip();
+		//löscht alle alten Text-Textureatlases
 		Loader.deleteTextures("text");
+		//erstellt einen Texturatlas mit allen Schriftareten
 		tex = new Texture(buffer, FontAtlas.getTexDataAsRGBA32().width, FontAtlas.getTexDataAsRGBA32().height, "text", "text");
 		MasterRenderer.queueTexture(tex);
 
@@ -74,6 +79,7 @@ public class TextManager {
 		return t;
 	}
 
+	//Aktualisiert die einzelnen Glyphs der Fonts
 	private static void udpateFontGlyphs() {
 		for (long font : glyphs.keySet()) {
 			glyphs.put(font, sortFontGlyphs(Font.getAllGlyphs(font)));
@@ -122,6 +128,7 @@ public class TextManager {
 		return tex;
 	}
 
+	//gibt den Vertex und den Texturbuffer für den Text zurück
 	public static float[][] getBuffer() {
 		if (!changed && buffer != null && bufferTextAmount == texts.size()) {
 			return buffer;
@@ -141,20 +148,24 @@ public class TextManager {
 		return glyphs.get(font).get(c);
 	}
 
+	//erstellt den TexturBuffer für den Text
 	private static float[] genTextureBuffer() {
 		int size = 0;
+		//Berechnet die Größe des Arrays
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
 			}
 			size += t.getText().toCharArray().length * 8;
 		}
+		//erstellt ein Array
 		float[] textureCoords = new float[size];
 		int pointer = 0;
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
 			}
+			//für jeden Text (Zeile), der sichtbar ist, werden die Texturkoordinaten berechnet
 			for (char c : t.getText().toCharArray()) {
 				if(pointer == size) {
 					break;
@@ -175,16 +186,20 @@ public class TextManager {
 		return textureCoords;
 	}
 
+	//Berechnet den Vertexbuffer für den Text
 	private static float[] genVertexBuffer() {
 		int size = 0;
+		//Berechnet die Größe des Arrays
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
 			}
 			size += t.getText().toCharArray().length * 8;
 		}
+		//erstellt ein Array
 		float[] verticies = new float[size];
 		int pointer = 0;
+		//für jeden Text (Zeile), der sichtbar ist, werden die Vertexkoordinaten berechnet
 		for (Text t : texts) {
 			if (!t.isVisible()) {
 				continue;
@@ -229,8 +244,10 @@ public class TextManager {
 		return load;
 	}
 
+	//rendert den Text
 	public static void render() {
 		Vector2f windowSize = Window.getWindowSize();
+		//Es wird überprüft, ob ein Texturatlas existiert && der Buffer zur Anzahl der Zeilen passt.
 		if (tex == null) {
 			return;
 		}
@@ -240,6 +257,7 @@ public class TextManager {
 		if(bufferTextAmount != texts.size()) {
 			return;
 		}
+		//der Shader wird gestartet und der Texturatlas gebunden
 		shader.start();
 		boolean b = processProjectionMatrix();
 		MasterRenderer.bindTexture(tex.getTextureID());
@@ -248,17 +266,22 @@ public class TextManager {
 			if (!t.isVisible()) {
 				continue;
 			}
+			//haben sich die Matritzen geändert, wird die OpenGl- Position neu berechnet
 			if(b) {
 				t.reCalcOpenGL();
 			}
+			//es wird die Farbe der Schrift gesetzt
 			if (t.getColor().x != 1 || t.getColor().y != 1 || t.getColor().z != 1 || t.getColor().w != 1) {
 				shader.loadColor(t.getColor());
 			}
 			Vector2f wc = t.getOpenGLPos();
 			float x = wc.x();
+			//Jeder Glyph (Charakter) der Zeilen wird einzeln gerendert
 			for (char c : t.getText().toCharArray()) {
+				//Der Glyph wird gesucht
 				FontGlyph glyph = getGlyph(t.getFont(), c);
 
+				//Die Position und die Scale wird berechnet
 				float width = glyph.x1 - glyph.x0;
 				width = width * t.getScale();
 				float height = glyph.y1 - glyph.y0;
@@ -270,7 +293,9 @@ public class TextManager {
 				Vector2f quadScale = WorldPosition
 						.toOpenGLCoords(new Vector2f(width + (windowSize.x() / 2f), (windowSize.y() / 2f) - height));
 				
+				//Der Glyph wird gezeichnet
 				renderGlyph(glyph, x, y, quadScale, offset * 4);
+				//x und offset werden erhöt, damit der nächste Glyph an der entsprechenden Position gerendert wird
 				offset += 1;
 				x += (glyph.advanceX * t.getScale()) / (windowSize.x / 2f);
 			}
@@ -279,9 +304,13 @@ public class TextManager {
 		shader.stop();
 	}
 
-	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {		
+	
+	//eigentlicher Code, zum rendern eines Glyphs
+	private static void renderGlyph(FontGlyph glyph, float x, float y, Vector2f quadScale, int offset) {	
+		//laden der transformation
 		Matrix4f transformation = Calc.getTransformationMatrix(new Vector2f(x, y), quadScale, 0);
 		shader.loadTransformationMatrix(transformation);
+		//Zeichnen des Glyphs
 		GL11.glDrawArrays(GL11.GL_TRIANGLE_STRIP, 12 + offset, 4);
 
 	}

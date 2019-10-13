@@ -2,6 +2,8 @@ package de.Luca.Events;
 
 public class Event {
 	
+	//Oberklasse für alle Events
+	
 	private long timeStamp;
 	private boolean cancelled;
 	

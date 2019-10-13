@@ -2,6 +2,8 @@ package de.Luca.Events;
 
 public class KeyEvent extends Event{
 	
+	//wird ausgelöst, wen eine Taste auf der Tastatur gedrückt wird.
+	
 	private int key;
 	private int scanCode;
 	private int action;

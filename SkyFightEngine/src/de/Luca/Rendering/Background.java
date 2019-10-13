@@ -10,10 +10,17 @@ import de.Luca.Shader.BackgroundShader;
 
 public class Background {
 	
+	//Der Hintergrund der Spielewelt
+	
+	//aktuelle Textur
 	private Texture tex;
+	//Textur, die angezeigt werden soll
 	private Texture afterTex;
+	//Factor, der benötigt wird, um die beiden Texturen im Shader zu mischen
 	private float blendFactor;
+	//Wann ein wechsel in Auftrag gegeben wurde und wie lange der Übergang dauern soll
 	private long initiate, duration;
+	//Der Shader für das Mischen der Texturen
 	private BackgroundShader shader;
 	private Texture defaultTexture;
 	
@@ -35,6 +42,7 @@ public class Background {
 		return shader;
 	}
 	
+	//Die richtige Textur wird gebunden und der Blendfactor in den Shader geladen
 	public void bindTexture() {
 		
 		if(tex != afterTex) {
@@ -61,6 +69,7 @@ public class Background {
 		
 	}
 	
+	//ein Wechsel wird in Auftrag gegeben
 	public void switchTexture(Texture tex, long durationMillis) {
 		initiate = System.currentTimeMillis();
 		duration = durationMillis;

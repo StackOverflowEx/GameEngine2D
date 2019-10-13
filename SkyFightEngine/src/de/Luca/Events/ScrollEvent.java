@@ -1,6 +1,8 @@
 package de.Luca.Events;
 
 public class ScrollEvent extends Event{
+	
+	//Wird ausgelöst wenn mit der Maus gescrollt wird.
 
 	private double xOffset, yOffset;
 	

@@ -14,6 +14,10 @@ import de.Luca.Window.Window;
 
 public class DefaultKeyListener implements Listener {
 
+	//default KeyListener
+	//Wird für die Gundlegenden Funktionen der Engine benötigt.
+	
+	//enthält alle gedrückten Tasten
 	private static CopyOnWriteArrayList<String> keysPressed = new CopyOnWriteArrayList<String>();
 	private static float enterZoom = 1.0f;
 
@@ -42,9 +46,6 @@ public class DefaultKeyListener implements Listener {
 
 	@EventHandler
 	public void onMouse(MouseButtonEvent e) {
-		if (e.isCancelled()) {
-			return;
-		}
 		if (e.getAction() == GLFW.GLFW_PRESS) {
 			if (e.isCancelled()) {
 				return;
@@ -55,6 +56,7 @@ public class DefaultKeyListener implements Listener {
 		}
 	}
 
+	//Berechnet den Zoom
 	@EventHandler
 	public void onScroll(ScrollEvent e) {
 		if (!e.isCancelled()) {

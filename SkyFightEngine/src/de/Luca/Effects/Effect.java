@@ -10,24 +10,33 @@ import de.Luca.Models.Texture;
 
 public class Effect {
 	
+	//Ein Objekt der Klasse Effekt repräsentiert einen Effekt. Ein Effekt kann entweder statisch aus einer Textur bestehen oder aus einer Animation aus einem GIF
+	
+	//Animation, wenn animierter Effekt
 	private Animation a;
 	private RenderModel model;
 	private Vector2f worldPos;
+	//Textur, wenn statischer Effekt
 	private Texture tex;
+	//boolean ob der Effekt abgespielt wird oder beendet ist
+	
 	private boolean stopped = false;
 	
+	//Konstruktor für einen animierten Effekt
 	public Effect(Animation effect, Vector2f worldPos, Vector2f size) {
 		a = effect.copy();
 		this.worldPos = worldPos;
 		model = new RenderModel(new Vector2f(0, 0), new Model(size), 0);
 	}
 	
+	//Konstruktor für einen statischen Effekt
 	public Effect(Texture effect, Vector2f worldPos, Vector2f size) {
 		tex = effect;
 		this.worldPos = worldPos;
 		model = new RenderModel(new Vector2f(0, 0), new Model(size), 0);
 	}
 	
+	//Berechnung der OpenGL-Koordinaten
 	protected void calcOpenGLPos() {
 		float x = worldPos.x * BlockData.BLOCK_SCALE;
 		float y = worldPos.y * BlockData.BLOCK_SCALE;
@@ -50,8 +59,10 @@ public class Effect {
 		return model;
 	}
 	
+	//Der Effekt wird aktualisiert.
 	public void update() {
 		if(a != null) {
+			//Ist der Effekt animiert, wird die Animation aktualisiert, indem ein neuer Frame gesetzt wird.
 			Texture tex = a.getFrame();
 			model.getModel().setTexture(tex);
 		}else {
@@ -59,6 +70,7 @@ public class Effect {
 		}
 	}
 	
+	//Gibt an, ob ein animierter Effekt abgespielt wird oder nicht
 	public boolean isPlaying() {
 		if(a != null) {
 			return a.isRunning();
@@ -66,6 +78,7 @@ public class Effect {
 		return !stopped;
 	}
 	
+	//Spielt einen Animierten Effekt ab
 	public void play() {
 		if(a != null) {
 			a.start(false);
@@ -74,6 +87,7 @@ public class Effect {
 		EffectManager.addEffect(this);
 	}
 	
+	//Stopt einen Effekt
 	public void stop() {
 		if(a != null) {
 			a.stop();

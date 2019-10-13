@@ -6,6 +6,8 @@ import org.joml.Vector4f;
 import de.Luca.Main.SkyFightEngine;
 
 public class TextShader extends ShaderProgramm{
+	
+	//Shader für den Text
 
 	private int location_projectionMatrix;
 	private int location_transformationMatrix;

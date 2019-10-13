@@ -6,13 +6,21 @@ import de.Luca.Models.RenderModel;
 
 public class GScrollPanel extends GUIComponent{
 	
+	//ein Scrollpanel
+	
+	//panel
 	private GPanel panel;
+	//Slider Links oder Rechts
 	private GSlider sliderLR;
+	//Slider oben oder Unten
 	private GSlider sliderTB;
 	
+	//Sliderposition Links oder Rechts und Oben oder Unten
 	private SLIDER_POSITION LR, TB;
+	//Dicke der Slider
 	private int LRT, TBT;
 	
+	//Elemente des Scrollpanels
 	private ArrayList<GUIComponent> items;
 	
 	public GScrollPanel(int x, int y, int width, int height) {
@@ -37,6 +45,7 @@ public class GScrollPanel extends GUIComponent{
 		RIGHT
 	}
 	
+	//Callbacks für die Funktion des ScrollPanels
 	private void setCallbacks(){
 		sliderLR.addValueChangeCallback(new ValueChangeCallback() {
 			
@@ -93,40 +102,52 @@ public class GScrollPanel extends GUIComponent{
 		return width;
 	}
 	
+	//Berechnet das Panel, das angezeigt wird
 	private void calcPanel() {
 		ArrayList<GUIComponent> added = new ArrayList<GUIComponent>();
+		//insgesammte Höhe
 		int height = 0;
+		//Angezeigte Höhe
 		int yHeight = 0;
 		
 		int skippedHeight = (int) ((getHightAll() - (getHeight() - sliderTB.getHeight())) * sliderLR.getValue());
 				
+		//Jedes Item wird bearbeitet
 		for(GUIComponent item : items) {
 						
 			item.setY(0);
 			item.setX(0);
 			
+			//es wird geschaut, ob das Element angezeigt wird oder zu weit oben ist
 			if(height < skippedHeight) {
 				height += item.getHeight();
 				continue;
 			}
 			
+			//Es wird geschaut, ob genug Elemente untereinander angezeigt werden
 			if((getHeight() - sliderTB.getHeight()) < (yHeight + item.getHeight() - skippedHeight)) {
+				//Ist das Panel in vertikaler Richtung voll, wird die Schleife beendet
 				break;
 			}
 			
+			//Die Position des Elements wird entsprechende gesetzt und zum Hinzufügen markiert.
 			item.setY(item.getY() + (yHeight));
 			added.add(item);
+			//Die Höhe wird aktulisiert
 			height += item.getHeight();
 			yHeight += item.getHeight();
 		}
 		
+		//Wie viele Pixel links übersprungen werden.
 		int skippedWidth = (int) ((getWidthAll() - (getWidth() - sliderLR.getWidth())) * sliderTB.getValue());
 		for(GUIComponent add : added) {
 			int width = 0;
 			int subWidth = 0;
+			//Ist ein Element zu breit wird dieses bearbeitet
 			if(add.getWidth() > getWidth() - sliderLR.getWidth()) {
 				GUIComponent[] compos = add.getComponents();
 				for(int i = 0; i < compos.length; i++) {
+					//Es wird für jedes Element des Elements überprüft, ob es in das Panel passt und je nach dem angezeigt oder versteckt.
 					if(width < skippedWidth) {
 						width += compos[i].getWidth();
 						compos[i].setVisible(false);
@@ -145,8 +166,10 @@ public class GScrollPanel extends GUIComponent{
 			add.setX(-(width - subWidth));
 		}
 		
+		//Alle alten Element werden unsichtbargemacht und entfernt
 		panel.setVisible(false);
 		panel.removeAll();
+		//Die zum Hinzufügen markierten Elemente werden hinzugefügt und die x- und y-Koordinate wird angepasst
 		for(GUIComponent c : added) {
 			if(sliderLR.getWidth() != 0 && sliderLR.getX() == 0) {
 				c.setX(c.getX() + sliderLR.getWidth());
@@ -157,6 +180,7 @@ public class GScrollPanel extends GUIComponent{
 			}
 			panel.addComponent(c);
 		}
+		//das Panel wird angezeigt, falls das GUI sichtbar ist.
 		panel.setVisible(isVisible());
 		if(getGUI() != null) {
 			panel.setVisible(getGUI().isVisible());
@@ -168,6 +192,7 @@ public class GScrollPanel extends GUIComponent{
 		return items;
 	}
 	
+	//Fügt ein Element hinzu
 	public void addItem(GUIComponent item) {
 		item.setVisible(false);
 		items.add(item);
@@ -175,6 +200,7 @@ public class GScrollPanel extends GUIComponent{
 		calcSliderPercentage();		
 	}
 	
+	//Berechnet wie breit der Slider sein soll.
 	private void calcSliderPercentage() {
 		int width = getWidthAll();
 		int height = getHightAll();
@@ -186,6 +212,7 @@ public class GScrollPanel extends GUIComponent{
 		items.remove(item);
 	}
 	
+	//Set den Slider, abhängig von der Position
 	public void setSlider(SLIDER_POSITION sliderPos, int thickness) {
 				
 		if(sliderPos == SLIDER_POSITION.LEFT || sliderPos == SLIDER_POSITION.RIGHT) {

@@ -5,7 +5,10 @@ import org.joml.Vector4f;
 import de.Luca.Models.Texture;
 
 public class GButton extends GLabel{
+	
+	//Stellt ein Button dar
 		
+	//Verschiedene Texturen für die Zustände
 	private Texture defaultTexture;
 	private Texture hoverTexture;
 	private Texture pressTexture;

@@ -14,19 +14,26 @@ import org.lwjgl.opengl.GL20;
 
 public abstract class ShaderProgramm {
 	
+	//Shaderprogramm
+	
 	private int vertexShader;
 	private int fragmentShader;
 	private int programmID;
 	
 	public ShaderProgramm(InputStream vertexFile, InputStream fragmentFile) {
+		//lädt die Shader
 		vertexShader = loadShader(vertexFile, GL20.GL_VERTEX_SHADER);
 		fragmentShader = loadShader(fragmentFile, GL20.GL_FRAGMENT_SHADER);
+		//erstellt ein Shaderprogramm
 		programmID = GL20.glCreateProgram();
+		//Shader werden an das Programm gebunden
 		GL20.glAttachShader(programmID, vertexShader);
 		GL20.glAttachShader(programmID, fragmentShader);
+		//Die Attribute werden gebunden
 		bindAttributes();
 		GL20.glLinkProgram(programmID);
 		GL20.glValidateProgram(programmID);
+		//die Uniformlocations werden geladen
 		getAllUniformLocations();
 	}
 	
@@ -43,10 +50,7 @@ public abstract class ShaderProgramm {
 	protected abstract void getAllUniformLocations();
 	
 	public void start() {
-		long nano = System.nanoTime();
 		GL20.glUseProgram(programmID);
-		if((System.nanoTime() - nano) / 1000000f > 1)
-			System.out.println("Bound Shader: " + ((System.nanoTime() - nano) / 1000000f) + "ms");
 	}
 	
 	public void stop() {
@@ -84,6 +88,7 @@ public abstract class ShaderProgramm {
 		GL20.glUniform1f(location, toLoad);
 	}
 	
+	//bereinigt ein Shaderprogramm
 	public void cleanUP() {
 		stop();
 		GL20.glDetachShader(programmID, vertexShader);
@@ -93,6 +98,7 @@ public abstract class ShaderProgramm {
 		GL20.glDeleteProgram(programmID);
 	}
 	
+	//lädt eine Matrix in den Shader
 	protected void loadMatrix(int location, Matrix4f matrix) {
 		long nano = System.nanoTime();
 		float[] matrixBuffer = new float[16];
@@ -103,6 +109,7 @@ public abstract class ShaderProgramm {
 		
 	}
 	
+	//Lädt einen SHader
 	private static int loadShader(InputStream file, int type){
 		StringBuilder shaderSource = new StringBuilder();
 		try{
@@ -116,9 +123,12 @@ public abstract class ShaderProgramm {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		//shader wird eingelesen
 		
+		//Shader wird erstellt
 		int shaderID = GL20.glCreateShader(type);
 		GL20.glShaderSource(shaderID, shaderSource);
+		//Shader wird compiled
 		GL20.glCompileShader(shaderID);
 		if(GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE){
 			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));

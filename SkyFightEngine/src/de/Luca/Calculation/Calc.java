@@ -8,6 +8,8 @@ import de.Luca.Window.Window;
 
 public class Calc {
 	
+	//Eine statische Klasse zur Berechnung der Matrizen
+	
 	public static Matrix4f projectionMatrix;
 	public static Matrix4f ZoomProjectionMatrix;
 	public static Matrix4f viewMatrix;
@@ -22,6 +24,8 @@ public class Calc {
 		return zoom;
 	}
 	
+	
+	//Berechnung der Projectionmatrix (https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/orthographic-projection-matrix)
 	public static void calcProjectionMatrix() {
 		
 
@@ -53,6 +57,7 @@ public class Calc {
 		projectionMatrix = matrix;
 	}
 	
+	//Berechnung der Projectionmatrix mit Zoom
 	public static void calcZoomProjectionMatrix() {
 		
 
@@ -91,6 +96,7 @@ public class Calc {
 		return viewMatrix;
 	}
 	
+	//Berechnung der Viewmatrix (Kamerasimulation)
 	public static void calcViewMatrix() {
 		Matrix4f viewMatrix = new Matrix4f();
 		viewMatrix.identity();
@@ -100,6 +106,7 @@ public class Calc {
 		Calc.viewMatrix = viewMatrix;
 	}
 	
+	//Berechnung der Transformationmatrix für ein Block/Entity/GUI-Element/Charakter/...
 	public static Matrix4f getTransformationMatrix(Vector2f pos, Vector2f scale, float rotationZ) {
 		Matrix4f matrix = new Matrix4f();
 		matrix = matrix.identity();

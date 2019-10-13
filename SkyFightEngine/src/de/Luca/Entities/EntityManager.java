@@ -12,6 +12,9 @@ import de.Luca.Shader.EntityShader;
 
 public class EntityManager {
 	
+	//eine statische Klasse, die die Entities verwaltet
+	//Der Aufbau ähnelt dem BlockManager und dem EffektMangaer (siehe de.Luca.Blocks.BlockManager.java
+	
 	private static CopyOnWriteArrayList<Entity> entities;
 	private static EntityShader shader;
 	private static boolean firstRun = true;

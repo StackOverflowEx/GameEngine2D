@@ -8,9 +8,11 @@ import de.Luca.Window.Window;
 
 public class RenderLoop implements Runnable{
 	
+	//Runnable für den Render-Thread
 
 	@Override
 	public void run() {
+		//Kontext wird an den Render-Thread gebunden
 		GLFW.glfwMakeContextCurrent(Window.getWindowID());
 		GL.createCapabilities();
 				
@@ -18,6 +20,7 @@ public class RenderLoop implements Runnable{
 			MasterRenderer.render();
 			Window.updateWindow();
 		}
+		//SkyFightEngine wird beendet, wenn das Fenster geschlossen wird.
 		SkyFightEngine.stop();
 	}
 

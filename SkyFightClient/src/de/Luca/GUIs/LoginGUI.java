@@ -39,6 +39,7 @@ public class LoginGUI extends GUI {
 	}
 
 	public void calc() {
+				
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
 	}
 

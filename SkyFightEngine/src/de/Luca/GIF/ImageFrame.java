@@ -4,6 +4,8 @@ import java.awt.image.BufferedImage;
 
 public class ImageFrame {
 	
+	//ein Imageframe mit den entsprechenden Attributen
+	
 	private final int delay;
 	private final BufferedImage image;
 	private final String disposal;

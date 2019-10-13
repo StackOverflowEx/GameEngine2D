@@ -9,6 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.Luca.Events.Event;
 
 public class EventManager {
+	
+	//eine statische klasse, die die Events und die Eventlistener verwaltet
+	//Dieser Code ist größteneteils vom Eventsystem von Spigot (Minecraftserver) kopiert
 		
 	private static ConcurrentHashMap<Listener, HashMap<Class<? extends Event>, List<Method>>> listeners = new ConcurrentHashMap<Listener, HashMap<Class<? extends Event>, List<Method>>>();
 	

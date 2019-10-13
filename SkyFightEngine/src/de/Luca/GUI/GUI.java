@@ -4,8 +4,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public abstract class GUI {
 	
+	//ein GUI
+	
+	//Bounds des GUIS
 	private int x, y, width, height;
+	//Componenten
 	private CopyOnWriteArrayList<GUIComponent> components;
+	//Sichbarkeit
 	private boolean visible;
 	
 	public GUI(int x, int y, int width, int height) {

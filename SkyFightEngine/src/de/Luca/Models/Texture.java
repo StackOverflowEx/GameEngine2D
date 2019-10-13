@@ -4,10 +4,15 @@ import java.nio.ByteBuffer;
 
 public class Texture {
 	
+	//OpenGL-ID
 	private int textureID;
+	//Buffer
 	private ByteBuffer buffer;
+	//size
 	private int width, height;
+	//type
 	private String textureType;
+	//File
 	private String file;
 	
 	public Texture(ByteBuffer buffer, int width, int height, String textureType, String file) {
@@ -39,8 +44,10 @@ public class Texture {
 		return buffer;
 	}
 	
+	//Ist eine Textur erfolgreich geladen, wird der Buffer gelöscht
 	public void setTextureID(int textureID) {
 		this.textureID = textureID;
+		buffer.clear();
 		buffer = null;
 	}
 	

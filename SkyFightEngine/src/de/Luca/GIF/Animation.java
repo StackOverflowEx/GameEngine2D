@@ -12,13 +12,21 @@ import javax.imageio.stream.ImageInputStream;
 import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
 
+//Repräsentiert eine Animation
+
 public class Animation {
 
+	//Die einzelenen Frames der GIF-Animation
 	private LinkedHashMap<Texture, Integer> textures;
+	//boolean, ob die Animaiton läuft
 	private boolean running;
+	//Gif
 	private String gif;
+	//Zeit, als die Animation gestartet wurde
 	private long start;
+	//Boolean, ob die Animation wiederholt werden soll
 	private boolean loop;
+	//Titel der Animaiton zur identifikation
 	private String title;
 
 	public Animation(String gif, String title) {
@@ -48,22 +56,18 @@ public class Animation {
 		this.title = title;
 	}
 	
+	//Kopiert die Animation und gibt eine neue Instanz zurück
 	public Animation copy() {
 		return new Animation(gif, running, start, loop, textures, title);
 	}
 
+	//Liest die Frames aus einem Gif aus und speichert diese
 	private void getTextures() throws IOException {
-		System.out.println("FRAME1 " + title);
 		ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();
-		System.out.println("FRAME2 " + title);
 		File input = new File(gif);
-		System.out.println("FRAME3 " + title);
 		ImageInputStream stream = ImageIO.createImageInputStream(input);
-		System.out.println("FRAME4 " + title);
 		reader.setInput(stream);
-		System.out.println("FRAME5 " + title);
 		ImageFrame[] frames = GIFReader.readGIF(reader);
-		System.out.println("FRAME6 " + title);
 
 		for (ImageFrame frame : frames) {
 			BufferedImage img = frame.getImage();
@@ -81,6 +85,7 @@ public class Animation {
 		}
 	}
 
+	//Gibt den Frame zurück, der gerade angezeigt werden soll (basiert auf der vergangen Zeit der Animaiton)
 	public Texture getFrame() {
 		if(!running) {
 			return null;

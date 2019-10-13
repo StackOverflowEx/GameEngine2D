@@ -1,16 +1,17 @@
 package de.Luca.Loading;
 
-import java.util.List;
 import java.util.UUID;
-
-import de.Luca.Models.RenderModel;
 
 public class Frame {
 	
+	//ein Frame
+	
+	//id
 	private UUID frameID;
-	private List<RenderModel> entities;
+	//die beiden Buffer
 	private float[] verticies;
 	private float[] textureCoords;
+	//die VAO-ID
 	private int vaoID;
 	
 	public Frame(float[] verticies, float[] textureCoords) {
@@ -39,13 +40,4 @@ public class Frame {
 	public UUID getFrameID() {
 		return frameID;
 	}
-	
-	public List<RenderModel> getEntities(){
-		return entities;
-	}
-	
-	public int getBufferedEntities() {
-		return entities.size();
-	}
-
 }

@@ -10,12 +10,18 @@ import de.Luca.Sound.SoundData;
 
 public class BlockData {
 	
+	//Objekte dieser Klasse repräsentieren einen Blocktyp und enthalten die Attribute
+	
+	//Größe eines Blocks
 	public static final float BLOCK_SCALE = 0.05f;
 	
+	//Wert (wie viele Coins man beim Abbauen bekommt)
 	private float value;
+	//Härte = Zeit zum Abbauen in Sekunden mit einer Spitzhacke
 	private float hardness;
 	private String name;
 	private RenderModel blockModel;
+	//Verschiedene Soundeffekte
 	private SoundData placeSound, breakSound, walkSound;
 	
 	public BlockData(float value, float hardness, String name, Texture blockTexture, String breakSound, String placeSound, String walkSound) {
@@ -23,6 +29,8 @@ public class BlockData {
 		this.value = value;
 		this.hardness = hardness;
 		this.name = name;
+		
+		//Nur wenn ein Soundeffekt verfügbar ist, wird dieser geladen.
 		if(placeSound != null) {
 			this.placeSound = AudioManager.loadSound(placeSound, "block");
 		}
