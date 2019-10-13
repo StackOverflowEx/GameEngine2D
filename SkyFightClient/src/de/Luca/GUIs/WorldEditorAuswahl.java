@@ -18,6 +18,7 @@ import de.Luca.GUI.GTextBox.INPUT_MODE;
 import de.Luca.Main.SkyFightClient;
 import de.Luca.Text.Paragraph.TEXT_ALIGN;
 import de.Luca.Utils.Calc;
+import de.Luca.Window.Window;
 import de.Luca.World.WorldEditorListener;
 import de.Luca.World.WorldLoader;
 
@@ -125,6 +126,12 @@ public class WorldEditorAuswahl extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(Calc.getPixelHeight(0.14167f));
+		setWidth(Calc.getPixelWidth(0.4328125f));
+		setHeight(Calc.getPixelHeight(0.44723f));
+		
+		
 		UmrahmungA.setBounds(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.09167f));
 		Suchen.setBounds(0, Calc.getPixelHeight(0.09167f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.05f));

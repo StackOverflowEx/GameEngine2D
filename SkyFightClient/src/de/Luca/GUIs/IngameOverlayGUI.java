@@ -45,6 +45,12 @@ public class IngameOverlayGUI extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(0);
+		setWidth((int) Window.getWindowSize().x);
+		setHeight((int) Window.getWindowSize().y);			
+		
+		
 		statsPicture.setBounds(0, 0, Calc.getPixelWidth(0.2f), Calc.getPixelHeight(0.15f));
 		statsName.setBounds(Calc.getPixelWidth(0.075f), 0, Calc.getPixelWidth(0.1f), Calc.getPixelHeight(0.08f));
 		statsHeart.setBounds(Calc.getPixelWidth(0.075f), Calc.getPixelHeight(0.055f), Calc.getPixelWidth(0.019f),

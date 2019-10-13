@@ -79,6 +79,12 @@ public class WorldEditorErstellen extends GUI {
 	}
 
 	public void calc() {
+		setX(Calc.getPixelWidth(0.5251875f));
+		setY(Calc.getPixelHeight(0.056f));
+		setWidth(Calc.getPixelWidth(0.4328125f));
+		setHeight(Calc.getPixelHeight(0.7728f));
+		
+		
 		Fenster1.setBounds(0, 0, Calc.getPixelWidth(0.4328125f), Calc.getPixelHeight(0.245f));
 		Fenster2.setBounds(0, Calc.getPixelHeight(0.245f), Calc.getPixelWidth(0.4328125f),
 				Calc.getPixelHeight(0.5278f));

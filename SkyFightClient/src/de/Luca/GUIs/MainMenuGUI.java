@@ -31,7 +31,26 @@ public class MainMenuGUI extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(0);
+		setWidth((int) Window.getWindowSize().x);
+		setHeight((int) Window.getWindowSize().y);	
+		
+		
 		background.setBounds(0, 0, (int) Window.getWindowSize().x, (int) Window.getWindowSize().y);
+		spiel.setBounds(Calc.getPixelWidth(0.6f), Calc.getPixelHeight(0.23f), Calc.getPixelWidth(0.34f),
+				Calc.getPixelHeight(0.11f));
+		spielSuchen.setBounds(Calc.getPixelWidth(0.725f), Calc.getPixelHeight(0.24f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		world.setBounds(Calc.getPixelWidth(0.6f), Calc.getPixelHeight(0.23f), Calc.getPixelWidth(0.34f),
+				Calc.getPixelHeight(0.11f));
+		worldEditor.setBounds(Calc.getPixelWidth(0.725f), Calc.getPixelHeight(0.4f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		einst.setBounds(Calc.getPixelWidth(0.6f), Calc.getPixelHeight(0.55f), Calc.getPixelWidth(0.34f),
+				Calc.getPixelHeight(0.11f));
+		einstellungen.setBounds(Calc.getPixelWidth(0.725f), Calc.getPixelHeight(0.56f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+
 	}
 
 	private void init() {

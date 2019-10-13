@@ -27,10 +27,18 @@ public class EndscreenOverlayGUI extends GUI {
 	}
 
 	public void calc() {
+		setX(0);
+		setY(0);
+		setWidth((int) Window.getWindowSize().x);
+		setHeight((int) Window.getWindowSize().y);	
+		
+		
 		gewonnen.setBounds(Calc.getPixelWidth(0.0625f), Calc.getPixelHeight(0.334f), Calc.getPixelWidth(0.875f), Calc.getPixelHeight(0.26f));
 		verloren.setBounds(Calc.getPixelWidth(0.0625f), Calc.getPixelHeight(0.334f), Calc.getPixelWidth(0.875f), Calc.getPixelHeight(0.26f));
 		abbruch.setBounds(Calc.getPixelWidth(0.0625f), Calc.getPixelHeight(0.334f), Calc.getPixelWidth(0.875f), Calc.getPixelHeight(0.26f));
 		weitermachen.setBounds(Calc.getPixelWidth(0.45f), Calc.getPixelHeight(0.669f), Calc.getPixelWidth(0.1f),
+				Calc.getPixelHeight(0.1f));
+		weitermachenText.setBounds(Calc.getPixelWidth(0.45f), Calc.getPixelHeight(0.669f), Calc.getPixelWidth(0.1f),
 				Calc.getPixelHeight(0.1f));
 	}
 

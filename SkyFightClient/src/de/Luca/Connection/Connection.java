@@ -288,7 +288,6 @@ public class Connection {
 		}
 	}
 	
-	//seindet einen String
 	public void send(String msg) {
 		try {
 			byte[] enMSG = null;
