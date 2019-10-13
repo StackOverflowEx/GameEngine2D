@@ -1,5 +1,7 @@
 package de.Luca.Networking;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import org.joml.Vector2f;
@@ -151,12 +153,27 @@ public class GameServerHandler {
 		}
 	}
 	
+	private static HashMap<Integer, ArrayList<String>> set = new HashMap<Integer, ArrayList<String>>();
+	
 	private static void processBlockChanges(String blocks) {
 		JSONArray changes = new JSONArray(blocks);
 		for(int i = 0; i < changes.length(); i++) {
 			JSONObject blockData = changes.getJSONObject(i);
 			int x = blockData.getInt("x");
 			int y = blockData.getInt("y");
+			
+			if(set.containsKey(x)) {
+				if(set.get(x).contains(y + "")) {
+					continue;
+				}
+			}
+			
+			if(!set.containsKey(x)) {
+				ArrayList<String> newA = new ArrayList<String>();
+				set.put(x, newA);
+			}
+			set.get(x).add(y + "");
+			
 			float breakPercent = blockData.getFloat("breakPercent");
 			String name = blockData.getString("name");
 			Block b = BlockManager.getBlock(new Vector2f(x, y));

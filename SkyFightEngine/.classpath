@@ -16,12 +16,6 @@
 	<classpathentry kind="lib" path="lib/lwjgl.jar"/>
 	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
 	<classpathentry kind="lib" path="lib/joml-1.9.9.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-nuklear-natives-windows.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl-nuklear.jar" sourcepath="lib/lwjgl-nuklear-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/SkyFightEngine/lib/lwjgl-nuklear-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/FreeTypeWrapper.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
