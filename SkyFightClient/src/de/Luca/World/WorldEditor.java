@@ -72,7 +72,6 @@ public class WorldEditor {
 		SkyFightClient.p.setFlying(true);
 		SkyFightClient.pother.setVisible(false);
 		
-		SkyFightClient.worldEditorAuswahl.init();
 		SkyFightClient.worldEditorOverlay.setVisible(true);
 	}
 	
@@ -105,8 +104,8 @@ public class WorldEditor {
 		SkyFightClient.p.setFlying(true);
 		SkyFightClient.pother.setVisible(false);
 		
-		SkyFightClient.worldEditorAuswahl.init();
 		SkyFightClient.worldEditorOverlay.setVisible(true);
+		SkyFightClient.worldEditorAuswahl.init();
 	}
 	
 	public static boolean isMirroring() {

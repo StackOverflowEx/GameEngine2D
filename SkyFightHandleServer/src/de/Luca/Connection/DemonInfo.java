@@ -1,5 +1,7 @@
 package de.Luca.Connection;
 
+import de.Luca.MySQL.DatabaseManager;
+
 public class DemonInfo {
 
 	private int ping;
@@ -37,6 +39,7 @@ public class DemonInfo {
 		this.load = load;
 	}
 	
+	private static long last = -1;
 	public static void requestLoopStart() {
 		Thread th = new Thread(new Runnable() {
 			
@@ -45,6 +48,14 @@ public class DemonInfo {
 				while(true) {
 					for(DemonConnectionHandler dch : DemonConnectionHandler.getHandler()) {
 						dch.requestDemonInfo();
+					}
+					if(last == -1) {
+						last = System.currentTimeMillis();
+					}else {
+						if((System.currentTimeMillis() - last) > 1000*60*15) {
+							DatabaseManager.keepAlive();
+							last = System.currentTimeMillis();
+						}
 					}
 					try {
 						Thread.sleep(1000*10);
