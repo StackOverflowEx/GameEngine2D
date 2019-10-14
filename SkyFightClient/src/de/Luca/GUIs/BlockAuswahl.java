@@ -56,6 +56,8 @@ public class BlockAuswahl extends GUI {
 		GPanel row = new GPanel(0 ,0, 0, 0);
 		for (BlockData bdp : WorldLoader.getBlockData().values()) {
 			
+			System.out.println("ADDED: " + bdp.getName());
+			
 			if(!bdp.getName().toLowerCase().contains(Suchen.getText().toLowerCase())) {
 				continue;
 			}
