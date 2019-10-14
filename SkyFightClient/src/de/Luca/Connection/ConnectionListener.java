@@ -71,6 +71,7 @@ public class ConnectionListener implements Listener{
 			if(SkyFightClient.gameState == GameState.RUNNING) {
 				ServerTicker.stopTicking();
 				SkyFightClient.gameState = GameState.MENUE;
+				SkyFightClient.blockSelect.setVisible(false);
 				SkyFightClient.endGUI.setVisible(true);
 				SkyFightClient.endGUI.showAbort();
 			}
