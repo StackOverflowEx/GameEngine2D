@@ -61,11 +61,11 @@ public class WorldLoader {
 		loadBlocks(map);
 		//Der Hintergrund wird geladen
 		laodBackground(map);
-		//DIe Blockauswahl menüs werden aktualisiert
-		SkyFightClient.worldEditorAuswahl.init();
-		SkyFightClient.blockSelect.init();
-		System.out.println("Map " + mapName + " has successfully been loaded.");
 		loading = false;
+		//DIe Blockauswahl menüs werden aktualisiert
+		SkyFightClient.blockSelect.init();
+		SkyFightClient.worldEditorAuswahl.init();
+		System.out.println("Map " + mapName + " has successfully been loaded.");
 	}
 	
 	public static HashMap<String, BlockData> getBlockData(){
