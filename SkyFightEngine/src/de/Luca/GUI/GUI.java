@@ -58,9 +58,9 @@ public abstract class GUI {
 	
 	public void removeComponent(GUIComponent c) {
 		components.remove(c);
-		if(c != null) {
-			c.setGUI(null);
-		}
+//		if(c != null) {
+//			c.setGUI(null);
+//		}
 	}
 
 	public int getX() {

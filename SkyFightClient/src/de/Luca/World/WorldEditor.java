@@ -105,7 +105,7 @@ public class WorldEditor {
 		SkyFightClient.pother.setVisible(false);
 		
 		SkyFightClient.worldEditorOverlay.setVisible(true);
-		SkyFightClient.worldEditorAuswahl.init();
+		SkyFightClient.worldEditorAuswahl.addBlock();
 	}
 	
 	public static boolean isMirroring() {

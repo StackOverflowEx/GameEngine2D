@@ -133,6 +133,9 @@ public class GPanel extends GUIComponent{
 	@Override
 	public void dispose() {
 		for(GUIComponent c : components) {
+			if(c == this) {
+				return;
+			}
 			c.dispose();
 		}
 		GUIListener.removeComponent(this);

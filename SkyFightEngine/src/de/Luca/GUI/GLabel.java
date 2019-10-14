@@ -216,6 +216,7 @@ public class GLabel extends GUIComponent{
 	public void removeText() {
 		if(p != null) {
 			TextManager.removeParagraph(p);
+			p = null;
 		}
 	}
 	
@@ -246,7 +247,6 @@ public class GLabel extends GUIComponent{
 
 	@Override
 	public void dispose() {
-		setVisible(false);
 		removeText();
 		GUIListener.removeComponent(this);
 		if(this.getGUI() != null) {

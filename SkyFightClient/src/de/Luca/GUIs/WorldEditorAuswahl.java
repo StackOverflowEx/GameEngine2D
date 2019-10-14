@@ -124,7 +124,9 @@ public class WorldEditorAuswahl extends GUI {
 	}
 	
 	public void addBlock() {
-		scroll.dispose();
+//		scroll.dispose();
+		scroll.setVisible(false);
+		removeComponent(scroll);
 		this.addComponent(getScrollPanel());
 	}
 
@@ -167,7 +169,6 @@ public class WorldEditorAuswahl extends GUI {
 		
 		for (GUIComponent c : getComponents()) {
 			c.dispose();
-			removeComponent(c);
 		}
 				
 		title = new GLabel(Calc.getPixelWidth(0.17f), Calc.getPixelHeight(0.005f), Calc.getPixelWidth(0.1f),
