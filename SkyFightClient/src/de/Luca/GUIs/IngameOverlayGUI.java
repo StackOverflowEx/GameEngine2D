@@ -268,16 +268,27 @@ public class IngameOverlayGUI extends GUI {
 		hotbarHover.setTexture(SkyFightClient.IngameOverlayHotbarHover);
 		this.addComponent(hotbarHover);
 
-		System.out.println("INIT");
 
 	}
 
 	private BlockData selectedBlock;
 
 	public void setBlock(BlockData data) {
-		hotbarBlockStoneNumber.setText(data.getValue() + "", SkyFightClient.Alba18, new Vector4f(1f, 1f, 1f, 1f),
+		if(data == null) {
+			hotbarBlockStone.setTexture(SkyFightClient.IngameOverlayHotbarBlockStone);
+			hotbarBlockStoneNumber.setText("--", SkyFightClient.Alba18, new Vector4f(1f, 1f, 1f, 1f),
+					TEXT_ALIGN.LEFT, 0);
+			return;
+		}
+		
+		float value = data.getValue();
+		value = Math.abs(value);
+		if(value == 0) {
+			value = 1;
+		}
+		
+		hotbarBlockStoneNumber.setText(value + "", SkyFightClient.Alba18, new Vector4f(1f, 1f, 1f, 1f),
 				TEXT_ALIGN.LEFT, 0);
-		System.out.println("BLOCK");
 		hotbarBlockStone.setTexture(data.getBlockModel().getModel().getTexture());
 		selectedBlock = data;
 	}

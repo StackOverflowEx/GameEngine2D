@@ -66,7 +66,7 @@ public class BlockAuswahl extends GUI {
 			int w = Calc.getPixelWidth(0.05f);
 			GButton block = new GButton(spacing*2, spacing, w, h);
 			GButton name = new GButton(spacing*2, h + spacing, w, Calc.getPixelHeight(0.05f));
-			name.setText(bdp.getName(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.CENTER, 0);
+			name.setTextCut(bdp.getName(), SkyFightClient.Impact20, new Vector4f(0, 0, 0, 1), TEXT_ALIGN.CENTER, 0);
 			name.setColor(new Vector4f(0, 0, 0, 0));
 			block.setTexture(bdp.getBlockModel().getModel().getTexture());
 			

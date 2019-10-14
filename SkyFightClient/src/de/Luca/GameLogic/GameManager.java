@@ -43,6 +43,8 @@ public class GameManager {
 		SkyFightClient.ingameOverlay.setCoins(value);
 		SkyFightClient.ingameOverlay.setUsername(HandelServerPacketHandler.username);
 		SkyFightClient.ingameOverlay.setVisible(true);
+		SkyFightClient.ingameOverlay.setSelectedSlot(HOTBARSLOT.SWORD);
+		SkyFightClient.ingameOverlay.setBlock(null);
 	}
 	
 	public enum HOTBARSLOT{
