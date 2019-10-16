@@ -326,7 +326,7 @@ public class WorldEditor {
 		try {
 			Files.copy(file.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
-			delete(maps);
+			delete(maps, "preview.png");
 			new PopUp("Ein Fehler ist beim Kopieren der " + data.getName() + " Textur aufgetreten.", new Vector4f(1, 0, 0, 1));
 			e.printStackTrace();
 			return false;
@@ -363,6 +363,18 @@ public class WorldEditor {
 			for(File f : dir.listFiles()) {
 				delete(f);
 			}
+		}
+		dir.delete();
+	}
+	
+	public static void delete(File dir, String exceptName) {
+		if(dir.isDirectory()) {
+			for(File f : dir.listFiles()) {
+				delete(f);
+			}
+		}
+		if(dir.getName().equals(exceptName)) {
+			return;
 		}
 		dir.delete();
 	}

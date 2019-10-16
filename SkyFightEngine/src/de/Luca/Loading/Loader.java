@@ -116,6 +116,7 @@ public class Loader {
 		if (file == null || !new File(file).exists()) {
 			Texture texture = new Texture(buffer, width, height, textureType, file);
 			MasterRenderer.queueTexture(texture);
+			return texture;
 		}
 
 		try {

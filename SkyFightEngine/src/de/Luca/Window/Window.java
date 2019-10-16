@@ -311,6 +311,9 @@ public class Window {
 			}
 
 			//Speichert den Screenshot als PNG
+			if(!save.getParentFile().exists()) {
+				save.getParentFile().mkdirs();
+			}
 			ImageIO.write(screenshot, "png", save);
 		} catch (IOException ex) {
 			ex.printStackTrace();

@@ -116,6 +116,14 @@ public class ArrowCalc {
 						b.getBlockData().getName(), 1f);
 				a.playSound(SkyFightClient.arrowHit, 50, false);
 				return;
+			}else {
+				if(a.getShooter().equals(SkyFightClient.p) && a.isVisible() && b.getBlockData().getHardness() > 4) {
+					a.setVisible(false);
+					EntityManager.removeEntity(a);
+					ServerTicker.addArrowChange(0, 0, 0, 0, a.getUUID(), false, false);
+					a.playSound(SkyFightClient.arrowHit, 50, false);
+					return;
+				}
 			}
 			continue;
 		}

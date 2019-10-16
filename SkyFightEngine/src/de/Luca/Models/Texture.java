@@ -47,8 +47,10 @@ public class Texture {
 	//Ist eine Textur erfolgreich geladen, wird der Buffer gelöscht
 	public void setTextureID(int textureID) {
 		this.textureID = textureID;
-		buffer.clear();
-		buffer = null;
+		if(buffer != null) {
+			buffer.clear();
+			buffer = null;
+		}
 	}
 	
 	public int getTextureID() {

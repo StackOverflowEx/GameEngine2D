@@ -63,7 +63,7 @@ public class WeltenAuswahlGUI extends GUI {
 				Calc.getPixelHeight(0.1f));
 		back.setBounds(0, 0, Calc.getPixelWidth(0.056f), Calc.getPixelHeight(0.047f));
 		panel.setBounds(Calc.getPixelWidth(0.125f), Calc.getPixelHeight(0.05f), Calc.getPixelWidth(0.842f),
-				Calc.getPixelHeight(0.9f));;
+				Calc.getPixelHeight(0.9f));
 	}
 
 	private void setUpScrollpanel() {
@@ -191,6 +191,12 @@ public class WeltenAuswahlGUI extends GUI {
 				size += getFolderSize(file);
 		}
 		return size;
+	}
+	
+	public void addMap() {
+		panel.dispose();
+		this.removeComponent(panel);
+		setUpScrollpanel();
 	}
 
 	public void init() {
