@@ -44,6 +44,7 @@ public class GameServerHandler {
 		//es werden immer nur die neuesten Packete akzeptiert
 		
 		GamePacket gp = new GamePacket(packet.toJSONString());
+		System.out.println("Gamepacket RECIEVED");
 		
 		//Läuft das Spiel und ein Info-Pakcet wird erhalten ist dies das End-Packet
 		if(gp.getGamePacketType() == GamePacket.INFO) {
@@ -105,9 +106,7 @@ public class GameServerHandler {
 			
 		//Verarbeitung eines Positon-Packets (enthält position des Gegners, eigene Leben, Blockupdates, Pfeilupdates, Hotbarslot des Gegners)
 		}else if(gp.getGamePacketType() == GamePacket.POSITION){
-			
-			System.out.println("RECIEVED");
-			
+						
 			
 			if(gp.e != null) {
 				processBlockChanges(gp.e.toString());
@@ -164,6 +163,7 @@ public class GameServerHandler {
 				PlayerCalc.setOtherData(xSpeed, ySpeed, toFinish, new Vector2f(x, y));
 			}
 		}
+		System.out.println("PACKET PROCESSED");
 	}
 	
 	private static HashMap<Integer, ArrayList<String>> set = new HashMap<Integer, ArrayList<String>>();

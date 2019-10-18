@@ -64,10 +64,10 @@ public class PlayerCalc {
 			}else if(upSpeed < 0){
 				//Der Spieler erhält Fallschaden, wenn die y-Geschwindigkeit mehr als 10 Blöcke nach Unten pro Sekunde beträgt.
 				if(upSpeed < -10) {
-					float fallDmg = Math.abs(upSpeed) / 10 * 2;
+					float fallDmg = Math.abs(upSpeed) * 3;
 					fallDmg = Math.round(fallDmg * 10f) / 10f;
 					GameManager.setHealth(GameManager.getHealth() - fallDmg);
-					ServerTicker.addDmgTaken(Math.abs(upSpeed) / 10 * 2);
+					ServerTicker.addDmgTaken(fallDmg);
 				}
 				upSpeed = 0;
 			}
