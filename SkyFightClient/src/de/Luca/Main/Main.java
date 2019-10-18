@@ -6,7 +6,6 @@ import de.Luca.GameLogic.LoopHandler;
 public class Main {
 
 	public static void main(String[] args) {
-				
 		//eine Verbindung zum Handle-Server wird aufgebaut
 		Thread th = new Thread(new Runnable() {
 			

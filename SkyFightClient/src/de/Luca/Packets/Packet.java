@@ -25,7 +25,7 @@ public class Packet {
 	public static final int MATCH_CANCELLED = 11;
 	public static final int CONNECT = 12;
 	public static final int PASSWORD_RESET = 13;
-	public static final int PACKET_LOST = 15;
+	public static final int PACKET_CLIENT_ERROR = 15;
 	
 	public static final int DEMON_HANDSHAKE = 0;
 	public static final int DEMON_ERROR = 1;

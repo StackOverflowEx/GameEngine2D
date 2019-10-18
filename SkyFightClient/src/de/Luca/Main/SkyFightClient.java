@@ -1,6 +1,7 @@
 package de.Luca.Main;
 
 import java.io.File;
+import java.io.PrintStream;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -23,6 +24,7 @@ import de.Luca.GUIs.WorldEditorSettings;
 import de.Luca.GameLogic.GameState;
 import de.Luca.Loading.Loader;
 import de.Luca.Models.Texture;
+import de.Luca.Networking.HandelServerPacketHandler;
 import de.Luca.Sound.AudioManager;
 import de.Luca.Sound.SoundData;
 import de.Luca.Sound.Source;
@@ -423,5 +425,17 @@ public class SkyFightClient {
 		ingameOverlay = new IngameOverlayGUI();
 		blockSelect = new BlockAuswahl();
 	}
+	
+	private static HandleOutputStream hos;
+	public static void setUpErrorHandling() {		
+		hos = new HandleOutputStream(System.err);
+		System.setErr(new PrintStream(hos));
+	}
 
+	public static void updateErrorHandling() {
+		if(HandelServerPacketHandler.loggedIn) {
+			hos.update();
+		}
+	}
+	
 }

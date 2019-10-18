@@ -1,17 +1,24 @@
 package de.Luca.Connection;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 
+import de.Luca.Main.Main;
 import de.Luca.MySQL.DatabaseManager;
 import de.Luca.Packets.Packet;
 import de.Luca.Security.Encryption;
@@ -30,6 +37,7 @@ public class ConnectionHandler implements Runnable {
 	private String clientPublicKey;
 	private String AESKey;
 	private String username;
+	private File errorFile;
 
 	public ConnectionHandler(Socket socket) {
 		this.socket = socket;
@@ -178,9 +186,24 @@ public class ConnectionHandler implements Runnable {
 				}
 				if (packet.packetType == Packet.SEARCHING) {
 					handleSearch(packet);
+				}else if (packet.packetType == Packet.PACKET_CLIENT_ERROR) {
+					handleClientError(packet);
 				}
 			}
 			
+		}
+	}
+	
+	private void handleClientError(Packet packet) {
+		String errorLine = packet.a.toString();
+		System.out.println(errorLine);
+		try {
+			PrintWriter pw = new PrintWriter(new FileOutputStream(errorFile, true));
+			pw.println(errorLine);
+			pw.flush();
+			pw.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -309,6 +332,18 @@ public class ConnectionHandler implements Runnable {
 		if(status == 0) {
 			send(genSuccess(packet.packetType));
 			this.username = username.toLowerCase();
+			System.out.println(this.username + "(" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + ") logged in");
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
+			Date date = new Date(System.currentTimeMillis());
+			String identifier = formatter.format(date);
+			File f = new File(Main.root + "/errors/" + this.username + "/");
+			if(!f.exists()) {
+				f.mkdirs();
+			}
+			errorFile = new File(f.getPath() + "/" + identifier + ".txt");
+			
+			
 		}
 		
 		send(genErrorPacket(status));

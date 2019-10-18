@@ -23,6 +23,7 @@ public class LoopHandler implements BeatHandler {
 	@Override
 	public void init() {
 		
+		SkyFightClient.setUpErrorHandling();
 		//Fügt einen Librarypfad hinzu und lädt die freetype.dll
 		System.setProperty("java.library.path",
 				SkyFightClient.root + "\\res\\dlls;" + System.getProperty("java.library.path"));
@@ -88,6 +89,7 @@ public class LoopHandler implements BeatHandler {
 		//Berechnet die Popups und die Gamedaten
 		PopUp.update();
 		GameManager.calcGameData();
+		SkyFightClient.updateErrorHandling();
 	}
 
 	private void loadFonts() {

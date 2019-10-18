@@ -44,7 +44,6 @@ public class GameServerHandler {
 		//es werden immer nur die neuesten Packete akzeptiert
 		
 		GamePacket gp = new GamePacket(packet.toJSONString());
-		System.out.println("Gamepacket RECIEVED");
 		
 		//Läuft das Spiel und ein Info-Pakcet wird erhalten ist dies das End-Packet
 		if(gp.getGamePacketType() == GamePacket.INFO) {
@@ -163,7 +162,6 @@ public class GameServerHandler {
 				PlayerCalc.setOtherData(xSpeed, ySpeed, toFinish, new Vector2f(x, y));
 			}
 		}
-		System.out.println("PACKET PROCESSED");
 	}
 	
 	private static HashMap<Integer, ArrayList<String>> set = new HashMap<Integer, ArrayList<String>>();
@@ -174,6 +172,9 @@ public class GameServerHandler {
 		set.clear();
 		for(int i = 0; i < changes.length(); i++) {
 			JSONObject blockData = changes.getJSONObject(i);
+			if(blockData == null) {
+				continue;
+			}
 			int x = blockData.getInt("x");
 			int y = blockData.getInt("y");
 			float breakPercent = blockData.getFloat("breakPercent");
@@ -230,6 +231,9 @@ public class GameServerHandler {
 		JSONArray changes = new JSONArray(arrows);
 		for(int i = 0; i < changes.length(); i++) {
 			JSONObject arrowData = changes.getJSONObject(i);
+			if(arrowData == null) {
+				continue;
+			}
 			float x = arrowData.getFloat("x");
 			float y = arrowData.getFloat("y");
 			float xVel = arrowData.getFloat("xVel");
@@ -238,7 +242,6 @@ public class GameServerHandler {
 			String uuid = arrowData.getString("uuid");
 			boolean playerHit = arrowData.getBoolean("player");
 			
-			System.out.println(added);
 			if(added) {
 				Arrow a = new Arrow(new Vector2f(x, y), SkyFightClient.arrow, yVel, xVel, SkyFightClient.pother);
 				a.setUUID(uuid);

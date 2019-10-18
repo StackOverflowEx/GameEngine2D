@@ -113,8 +113,6 @@ public class ServerTicker {
 
 	//es wird ein Gamepacket erstellt und an den Server gesendet.
 	private static void executeTick() {
-
-		System.out.println("Sendet Tick");
 		
 		GamePacket send = new GamePacket();
 		send.packetType = Packet.GAME_DATA;

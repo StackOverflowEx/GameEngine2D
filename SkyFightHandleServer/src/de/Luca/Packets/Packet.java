@@ -22,6 +22,7 @@ public class Packet {
 	public static final int CONNECT = 12;
 	public static final int PASSWORD_RESET = 13;
 	public static final int GAME_DATA = 14;
+	public static final int PACKET_CLIENT_ERROR = 15;
 	
 	public static final int DEMON_HANDSHAKE = 0;
 	public static final int DEMON_ERROR = 1;

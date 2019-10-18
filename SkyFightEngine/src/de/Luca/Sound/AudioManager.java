@@ -4,6 +4,7 @@ import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.joml.Vector2f;
 import org.lwjgl.openal.AL;
@@ -28,9 +29,9 @@ public class AudioManager {
 	//Sounddata (geladene OGG-Soundfiles)
 	private static ConcurrentHashMap<String, ArrayList<SoundData>> buffers;
 	//Alle Soundquellen
-	private static ArrayList<Source> sources;
+	private static CopyOnWriteArrayList<Source> sources;
 	//Soundquellen, die gelöscht werden sollen
-	private static ArrayList<Source> deleteFinishd;
+	private static CopyOnWriteArrayList<Source> deleteFinishd;
 	//Position des Listeners
 	private static Vector2f listenerPos;
 
@@ -50,8 +51,8 @@ public class AudioManager {
 		
 		AL.createCapabilities(alcc);
 		buffers = new ConcurrentHashMap<String, ArrayList<SoundData>>();
-		deleteFinishd = new ArrayList<Source>();
-		sources = new ArrayList<Source>();
+		deleteFinishd = new CopyOnWriteArrayList<Source>();
+		sources = new CopyOnWriteArrayList<Source>();
 		
 		AL10.alDistanceModel(AL10.AL_INVERSE_DISTANCE_CLAMPED);
 		

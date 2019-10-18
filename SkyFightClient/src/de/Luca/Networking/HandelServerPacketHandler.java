@@ -14,6 +14,7 @@ public class HandelServerPacketHandler {
 	//verarbeitet die Packete, die vom Handle-Server empfangen werden
 	
 	public static String username = "UNKNOWN";
+	public static boolean loggedIn = false;
 
 	public static void handlePacket(Packet packet) {
 		if (packet.packetType == Packet.PING) {
@@ -22,6 +23,7 @@ public class HandelServerPacketHandler {
 			System.out.println("Ping: " + ms);
 		} else if (packet.packetType == Packet.SUCCESS) {
 			if ((int) packet.a == Packet.LOGIN) {
+				loggedIn = true;
 				SkyFightClient.loginGUI.transitionToMain();
 			} else if ((int) packet.a == Packet.REGISTRATION) {
 				SkyFightClient.registerGUI.setVisible(false);
@@ -67,6 +69,8 @@ public class HandelServerPacketHandler {
 			} else if (errorCode == Packet.ERROR_COULD_NOT_RESET_PASSWORD) {
 				SkyFightClient.loginGUI.setVisible(true);
 				new PopUp("Dein Passwort kann nicht zurückgesetzt werden.", new Vector4f(1, 0, 0, 1));
+			} else if (errorCode == Packet.ERROR_MATCHES_NOT_AVALIABLE) {
+				new PopUp("Die Spielesuche ist nicht verfügbar", new Vector4f(1, 0, 0, 1));
 			} else {
 				System.out.println("Unknown error recieved (ID: " + errorCode + ")");
 			}
