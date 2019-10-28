@@ -193,7 +193,7 @@ public class DemonConnectionHandler implements Runnable {
 
 	private void handleDeamonInfo(Packet packet) {
 		int ping = (int) (System.currentTimeMillis() - (long) packet.a);
-		double l = (double) packet.b;
+		double l = Double.parseDouble(packet.b.toString());
 		float load = (float) l;
 		int freeRamMB = (int) packet.c;
 		if (info == null) {
